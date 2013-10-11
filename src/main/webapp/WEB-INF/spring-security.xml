@@ -1,0 +1,88 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:oauth="http://www.springframework.org/schema/security/oauth2"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans     
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-3.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+        http://www.springframework.org/schema/security/oauth2 
+        http://www.springframework.org/schema/security/spring-security-oauth2-1.0.xsd
+        http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-3.1.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	
+	<!-- Protected paths and login form -->
+
+	<http use-expressions="true" access-denied-page="/login.jsp?authorization_error=true"
+		xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/login.jsp" access="permitAll" />
+		<intercept-url pattern="/css/**" access="permitAll" />
+		<intercept-url pattern="/account/**" access="hasRole('ROLE_ADMIN')" /> 
+		<intercept-url pattern="/**" access="hasAnyRole('ROLE_CM','ROLE_ADMIN')" />
+
+		<form-login authentication-failure-url="/login.jsp?authentication_error=true"
+			default-target-url="/home" login-page="/login.jsp"
+			login-processing-url="/login.do" />
+		<logout logout-success-url="/index.jsp" logout-url="/logout.do" />
+		<anonymous />
+		<custom-filter ref="oauthFilter" after="EXCEPTION_TRANSLATION_FILTER" />
+	</http>
+	
+	<!-- Authentication manager for web application login (authenticates against 
+		the ST API) -->
+
+	<authentication-manager
+		xmlns="http://www.springframework.org/schema/security">
+		<authentication-provider ref="APIAuthenticationProvider" />
+	</authentication-manager>
+
+	<!-- Default OAuth client -->
+
+	<oauth:client id="oauthFilter" />
+
+	<!-- OAuth resource (Password flow) used in REST template -->
+	<!-- The bean has HTTP "session" scope (one template is created for each 
+		session) because it uses the credentials of the current user. Credentials 
+		for are set dynamically in APIAuthenticationProvider.class -->
+
+	<bean id="oauthResource"
+		class="org.springframework.security.oauth2.client.token.grant.password.ResourceOwnerPasswordResourceDetails"
+		scope="session">
+		<property name="grantType" value="password"></property>
+		<property name="clientId" value="${oauth.clientid}"></property>
+		<property name="clientSecret" value="${oauth.clientsecret}"></property>
+		<property name="accessTokenUri" value="${oauth.accesstokenuri}"></property>
+		<property name="scope" value="#{{'read','write'}}"></property>
+		<aop:scoped-proxy /> <!-- required for scope "session" -->
+	</bean>
+
+	<!-- REST template to make secured HTTP requests to the API -->
+	<!-- The bean has HTTP "session" scope (one template is created for each 
+		session) because it uses the credentials of the current user -->
+
+	<bean id="secureRestTemplate"
+		class="com.spatialtranscriptomics.auth.CustomOAuth2RestTemplate"
+		scope="session">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.BufferedImageHttpMessageConverter" />
+				<bean
+					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+					<property name="supportedMediaTypes" value="application/json" />
+				</bean>
+			</list>
+		</property>
+		<property name="errorHandler" ref="jsonErrorHandler" />
+		<aop:scoped-proxy />  <!-- required for scope "session" -->
+	</bean>
+
+</beans>
