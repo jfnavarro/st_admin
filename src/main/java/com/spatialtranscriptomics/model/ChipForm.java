@@ -16,8 +16,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  * Does data validation using Hibernate validator constraints.
  * 
  * */
-
-
 public class ChipForm {
 
 	@NotEmpty

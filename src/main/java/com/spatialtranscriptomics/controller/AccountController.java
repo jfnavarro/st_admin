@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -37,6 +36,7 @@ import javax.validation.Valid;
 @RequestMapping("/account")
 public class AccountController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(AccountController.class);
 

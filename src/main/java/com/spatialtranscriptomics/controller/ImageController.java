@@ -36,6 +36,7 @@ import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
 @RequestMapping("/image")
 public class ImageController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(ImageController.class);
 

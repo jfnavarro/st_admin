@@ -34,6 +34,7 @@ import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 @RequestMapping("/chip")
 public class ChipController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(ChipController.class);
 
 	@Autowired

@@ -19,8 +19,7 @@ import javax.validation.constraints.NotNull;
  * This bean class maps the Dataset data retrieved from the ST API to the application data model. 
  * This data model has to be aligned with the ST API data model.
  * Does data validation using Hibernate validator constraints.
- * 
- * */
+ */
 
 public class Dataset implements IDataset {
 

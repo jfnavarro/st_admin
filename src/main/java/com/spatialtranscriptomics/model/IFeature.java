@@ -8,7 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 /**
- * This interface defines the Feature model. Must to the same as the Feature model in ST API
+ * This interface defines the Feature model. Should reflect the corresponding model in ST API.
  */
 
 public interface IFeature {

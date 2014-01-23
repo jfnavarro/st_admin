@@ -25,6 +25,7 @@ import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 
 public class JsonResponseErrorHandler implements ResponseErrorHandler {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(JsonResponseErrorHandler.class);
 

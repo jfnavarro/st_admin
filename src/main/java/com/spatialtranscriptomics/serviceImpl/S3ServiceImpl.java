@@ -37,6 +37,7 @@ import com.spatialtranscriptomics.util.EMROutputParser;
 @Service
 public class S3ServiceImpl implements S3Service {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(S3ServiceImpl.class);
 
 	@Autowired

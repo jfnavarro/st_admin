@@ -30,6 +30,7 @@ import com.spatialtranscriptomics.util.NDFParser;
 @Service
 public class ChipServiceImpl implements ChipService {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(ChipServiceImpl.class);
 

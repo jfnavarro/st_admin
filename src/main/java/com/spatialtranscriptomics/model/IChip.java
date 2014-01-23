@@ -8,7 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 /**
- * This interface defines the Chip model. Must to the same as the Chip model in ST API
+ * This interface defines the Chip model. Should reflect the corresponding model in ST API.
  */
 
 public interface IChip {

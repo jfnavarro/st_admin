@@ -27,6 +27,7 @@ import com.spatialtranscriptomics.service.ExperimentService;
 @Service
 public class ExperimentServiceImpl implements ExperimentService {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(ExperimentServiceImpl.class);
 

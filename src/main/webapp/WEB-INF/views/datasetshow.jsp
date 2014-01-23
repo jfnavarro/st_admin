@@ -79,31 +79,26 @@
 				</table>
 			</dd>
 
-			<dt>Stat Barcodes</dt>
-			<dd>${dataset.stat_barcodes}&nbsp;</dd>
-			<dt>Stat Genes</dt>
-			<dd>${dataset.stat_genes}&nbsp;</dd>
-			<dt>Stat Unique Barcodes</dt>
-			<dd>${dataset.stat_unique_barcodes}&nbsp;</dd>
-			<dt>Stat Unique Genes</dt>
-			<dd>${dataset.stat_unique_genes}&nbsp;</dd>
-			<dt>Stat Tissue</dt>
+			<dt># of barcodes (unique)</dt>
+			<dd>${dataset.stat_barcodes}&nbsp;&nbsp;(${dataset.stat_unique_barcodes})</dd>
+			<dt># of genes (unique)</dt>
+			<dd>${dataset.stat_genes}&nbsp;&nbsp;${dataset.stat_unique_genes}</dd>
+			<dt>Tissue</dt>
 			<dd>${dataset.stat_tissue}&nbsp;</dd>
-			<dt>Stat Specie</dt>
+			<dt>Species</dt>
 			<dd>${dataset.stat_specie}&nbsp;</dd>
-			<dt>Stat Comments</dt>
+			<dt>Comments</dt>
 			<dd>${dataset.stat_comments}&nbsp;</dd>
 			<dt>Features</dt>
 			<dd>
 				<a href="<c:url value="/dataset/"/>${dataset.id}/features">Show</a>
 			</dd>
-
+			<dt>Detailed hit statistics</dt>
+			<dd>
+				<a href="<c:url value="/dataset/"/>${dataset.id}/statistics">Show</a>
+			</dd>
 
 		</dl>
-
-
-
-
 
 
 	</div>

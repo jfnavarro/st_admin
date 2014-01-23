@@ -10,7 +10,7 @@ package com.spatialtranscriptomics.model;
 import java.util.List;
 
 /**
- * This interface defines the Account model. Must to the same as the Account model in ST API
+ * This interface defines the Account model. Should reflect the corresponding model in ST API.
  */
 
 public interface IAccount {

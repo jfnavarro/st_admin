@@ -49,6 +49,7 @@ import com.spatialtranscriptomics.model.Feature;
  */
 public class EMROutputParser {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(EMROutputParser.class);
 
@@ -176,6 +177,7 @@ public class EMROutputParser {
 		int x;
 		int y;
 
+		@SuppressWarnings("unused")
 		public String getBarcode() {
 			return barcode;
 		}
@@ -184,6 +186,7 @@ public class EMROutputParser {
 			this.barcode = barcode;
 		}
 
+		@SuppressWarnings("unused")
 		public String getGene() {
 			return gene;
 		}
@@ -192,6 +195,7 @@ public class EMROutputParser {
 			this.gene = gene;
 		}
 
+		@SuppressWarnings("unused")
 		public int getHits() {
 			return hits;
 		}
@@ -200,6 +204,7 @@ public class EMROutputParser {
 			this.hits = hits;
 		}
 
+		@SuppressWarnings("unused")
 		public int getX() {
 			return x;
 		}
@@ -208,6 +213,7 @@ public class EMROutputParser {
 			this.x = x;
 		}
 
+		@SuppressWarnings("unused")
 		public int getY() {
 			return y;
 		}

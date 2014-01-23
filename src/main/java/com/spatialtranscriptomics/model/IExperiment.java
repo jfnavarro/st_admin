@@ -10,7 +10,7 @@ package com.spatialtranscriptomics.model;
 import java.util.Date;
 
 /**
- * This interface defines the Experiment model. Must to the same as the Experiment model in ST API
+ * This interface defines the Experiment model. Should reflect the corresponding model in ST API.
  */
 
 public interface IExperiment {

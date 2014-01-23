@@ -43,7 +43,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * This class is a custom implementations of a RestTemplate which also implements the OAuth2RestOperations interface.
+ * This class is a custom implementation of a Spring RestTemplate which also implements the OAuth2RestOperations interface.
  * It is almost similar to OAuth2RestTemplate of the spring Oauth framework. 
  * 
  * The customization allows to Autowire a ResourceOwnerPasswordResourceDetails object and set its credentials dynamically. 

@@ -22,7 +22,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
-import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.service.FeatureService;
 

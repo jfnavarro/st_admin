@@ -22,6 +22,7 @@ import com.spatialtranscriptomics.model.Chip;
  */
 public class NDFParser {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger.getLogger(NDFParser.class);
 
 	private InputStream fis;

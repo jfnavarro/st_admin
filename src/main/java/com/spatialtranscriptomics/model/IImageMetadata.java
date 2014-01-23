@@ -10,7 +10,7 @@ package com.spatialtranscriptomics.model;
 import java.util.Date;
 
 /**
- * This interface defines the ImageMetadata model. Must to the same as the ImageMetadata model in ST API
+ * This interface defines the ImageMetadata model. Should reflect the corresponding model in ST API.
  */
 
 public interface IImageMetadata {

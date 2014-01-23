@@ -28,11 +28,13 @@ import com.spatialtranscriptomics.model.Chip;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.DatasetAddForm;
 import com.spatialtranscriptomics.model.DatasetEditForm;
+import com.spatialtranscriptomics.model.DatasetStatistics;
 import com.spatialtranscriptomics.model.Experiment;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetStatisticsServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
@@ -46,6 +48,7 @@ import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 @RequestMapping("/dataset")
 public class DatasetController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(DatasetController.class);
 
@@ -67,6 +70,9 @@ public class DatasetController {
 	@Autowired
 	S3ServiceImpl s3Service;
 
+	@Autowired
+	DatasetStatisticsServiceImpl datasetStatisticsService;
+	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
@@ -288,5 +294,18 @@ public class DatasetController {
 
 		return choices;
 	}
-
+	
+	
+	/**
+	 * Get Dataset stats.
+	 * @param id the id.
+	 * @return the MV.
+	 */
+	@RequestMapping(value = "/{id}/statistics", method = RequestMethod.GET)
+	public ModelAndView getStatistics(@PathVariable String id) {
+		DatasetStatistics stats = datasetStatisticsService.find(id);
+//		logger.debug(stats.getHitsMin());
+		ModelAndView success = new ModelAndView("datasetstatisticsshow", "datasetstatistics", stats);
+		return success;
+	}
 }

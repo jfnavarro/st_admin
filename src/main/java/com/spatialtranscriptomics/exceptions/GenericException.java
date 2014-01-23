@@ -14,7 +14,9 @@ package com.spatialtranscriptomics.exceptions;
  */
 
 public class GenericException extends RuntimeException {
-
+	
+	private static final long serialVersionUID = -1905068296555489554L;
+	
 	private GenericExceptionResponse errorResponse;
 
 	public GenericException(GenericExceptionResponse errorResponse) {

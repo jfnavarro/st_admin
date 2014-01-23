@@ -36,6 +36,7 @@ import com.spatialtranscriptomics.model.Account;
 @Service
 public class APIAuthenticationProvider implements AuthenticationProvider {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(APIAuthenticationProvider.class);
 

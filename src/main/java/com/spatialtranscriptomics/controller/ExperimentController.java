@@ -48,6 +48,7 @@ import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 @RequestMapping("/experiment")
 public class ExperimentController {
 
+	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(ExperimentController.class);
 
