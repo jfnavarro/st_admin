@@ -38,7 +38,6 @@ public class DatasetServiceImpl implements DatasetService {
 	Properties appConfig;
 
 	public Dataset find(String id) {
-
 		String url = appConfig.getProperty("url.dataset");
 		url += id;
 		Dataset dataset = secureRestTemplate.getForObject(url, Dataset.class);
@@ -46,16 +45,21 @@ public class DatasetServiceImpl implements DatasetService {
 	}
 
 	public List<Dataset> list() {
-
 		String url = appConfig.getProperty("url.dataset");
 		Dataset[] dsArray = secureRestTemplate.getForObject(url,
 				Dataset[].class);
 		List<Dataset> dsList = Arrays.asList(dsArray);
 		return dsList;
 	}
+	
+	public List<Dataset> listForAccount(String accountId) {
+		String url = appConfig.getProperty("url.dataset") + "?account=" + accountId;
+		Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
+		List<Dataset> dsList = Arrays.asList(dsArray);
+		return dsList;
+	}
 
 	public Dataset add(Dataset dataset) {
-
 		String url = appConfig.getProperty("url.dataset");
 		Dataset dsResponse = secureRestTemplate.postForObject(url, dataset,
 				Dataset.class);
@@ -63,14 +67,12 @@ public class DatasetServiceImpl implements DatasetService {
 	}
 
 	public void update(Dataset dataset) {
-
 		String url = appConfig.getProperty("url.dataset");
 		String id = dataset.getId();
 		secureRestTemplate.put(url + id, dataset);
 	}
 
 	public void delete(String id) {
-
 		String url = appConfig.getProperty("url.dataset");
 		secureRestTemplate.delete(url + id);
 	}

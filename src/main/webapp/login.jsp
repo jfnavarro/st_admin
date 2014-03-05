@@ -74,7 +74,7 @@ body {
 		<form class="form-signin" id="loginForm" name="loginForm"
 			action="<c:url value="/login.do"/>" method="post">
 			<h2 class="form-signin-heading">Please sign in</h2>
-			<input type="text" class="input-block-level" placeholder="Username"
+			<input type="text" class="input-block-level" placeholder="Username (email)"
 				name='j_username'> <input type="password"
 				class="input-block-level" placeholder="Password" name='j_password'>
 

@@ -16,6 +16,8 @@ public interface DatasetService {
 	public Dataset find(String id);
 
 	public List<Dataset> list();
+	
+	public List<Dataset> listForAccount(String accountId);
 
 	public Dataset add(Dataset dataset);
 

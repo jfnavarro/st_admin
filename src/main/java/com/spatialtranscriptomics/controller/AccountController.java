@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.controller;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +29,7 @@ import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 import javax.validation.Valid;
 
 /**
- * This class is Spring MVC controller class for the URL "/account". It implements the methods available at this URL and returns views (.jsp pages) with models .
+ * This class is Spring MVC controller class for the URL "/account". It implements the methods available at this URL and returns views (.jsp pages) with models.
  */
 @Controller
 @RequestMapping("/account")
@@ -46,57 +45,44 @@ public class AccountController {
 	@Autowired
 	DatasetServiceImpl datasetService;
 
+	
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
-
 		Account acc = accountService.find(id);
-
 		ModelAndView success = new ModelAndView("accountshow", "account", acc);
 
-		// this is a bit ugly, maybe implement a
-		// datasetService.list(list<String> datasetIds) in serviceImpl and ST
-		// API
-		List<Dataset> datasets = datasetService.list();
-		List<Dataset> grantedDatasets = new ArrayList<Dataset>();
-		if (acc.getGrantedDatasets() != null) {
-			for (Dataset ds : datasets) {
-				if (acc.getGrantedDatasets().contains(ds.getId())) {
-					grantedDatasets.add(ds);
-				}
-			}
-		}
+		List<Dataset> datasets = datasetService.listForAccount(id);
+		success.addObject("datasets", datasets);
 
-		success.addObject("datasets", grantedDatasets);
 		return success;
 	}
 
+	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-
 		return new ModelAndView("accountlist", "accountList",
 				accountService.list());
 	}
 
+	
 	// add
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add() {
-
 		return new ModelAndView("accountadd", "account", new Account());
 	}
 
+	
 	// add submit
 	@RequestMapping(value = "/submitadd", method = RequestMethod.POST)
 	public ModelAndView submitAdd(
 			@ModelAttribute("account") @Valid Account acc, BindingResult result) {
-
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("accountadd", "account", acc);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
-
 		accountService.add(acc);
 		ModelAndView success = new ModelAndView("accountlist", "accountList",
 				accountService.list());
@@ -105,19 +91,19 @@ public class AccountController {
 
 	}
 
+	
 	// edit
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@PathVariable String id) {
-
 		return new ModelAndView("accountedit", "account",
 				accountService.find(id));
 	}
 
+	
 	// edit submit
 	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
 	public ModelAndView submitEdit(
 			@ModelAttribute("account") @Valid Account acc, BindingResult result) {
-
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("accountedit", "account", acc);
 			model.addObject("errors", result.getAllErrors());
@@ -130,6 +116,7 @@ public class AccountController {
 		return success;
 	}
 
+	
 	// delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
@@ -141,18 +128,15 @@ public class AccountController {
 		return success;
 	}
 
+	
 	// populate Choice fields for form
-
 	@ModelAttribute("datasetChoices")
 	public Map<String, String> populateDatasetChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<Dataset> l = datasetService.list();
-
 		for (Dataset t : l) {
 			choices.put(t.getId(), t.getName());
 		}
-
 		return choices;
 	}
 

@@ -46,30 +46,31 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	Properties appConfig;
 
+	
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
-		String name = authentication.getName();
+		String username = authentication.getName();
 		String password = authentication.getCredentials().toString();
 
-		String role = authenticateAgainstAPI(name, password);
+		String role = authenticateAgainstAPI(username, password);
 		
-		if (role!=null) {
+		if (role != null) {
 			List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
 			grantedAuths.add(new SimpleGrantedAuthority(role));
-			Authentication auth = new UsernamePasswordAuthenticationToken(name,
-					password, grantedAuths);
+			Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
 			return auth;
 		} else {
-			throw new BadCredentialsException("Bad Credentials");
+			throw new BadCredentialsException("Bad credentials");
 		}
 	}
 
+	
 	public boolean supports(Class<?> authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
+	
 	private String authenticateAgainstAPI(String username, String password) {
-
 		try {
 
 			// set the given credentials to the secureRestTemplate
@@ -78,8 +79,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 			// authenticate and authorize against API through secureRestTemplate
 			String url = appConfig.getProperty("url.account");
 			url += "current/user";
-			Account account = secureRestTemplate.getForObject(url,
-					Account.class);
+			Account account = secureRestTemplate.getForObject(url, Account.class);
 
 			// authorize if user has role ROLE_CM or ROLE_ADMIN (at API)
 			String role = account.getRole();
@@ -89,8 +89,6 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 			else{
 				return null;
 			}
-			
-			
 
 		} catch (Exception e) {
 			e.printStackTrace();

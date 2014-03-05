@@ -66,9 +66,16 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Username</th>
+					<th>Username (email)</th>
 					<th>Role</th>
 					<th>Enabled</th>
+					<th>Institution</th>
+					<th>First name</th>
+					<th>Last name</th>
+					<th>Street address</th>
+					<th>City</th>
+					<th>Post code</th>
+					<th>Country</th>
 					<th></th>
 				</tr>
 
@@ -79,6 +86,13 @@
 						<td><a href="<c:url value="/account/"/>${account.id}">${account.username}</a></td>
 						<td>${account.role}</td>
 						<td>${account.enabled}</td>
+						<td>${account.institution}</td>
+						<td>${account.first_name}</td>
+						<td>${account.last_name}</td>
+						<td>${account.street_address}</td>
+						<td>${account.city}</td>
+						<td>${account.postcode}</td>
+						<td>${account.country}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>

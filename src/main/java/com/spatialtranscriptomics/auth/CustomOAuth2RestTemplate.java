@@ -51,8 +51,7 @@ import org.springframework.web.client.RestTemplate;
  * with a session scope (see spring-security.xml), so that one instance exists per user.
  */
 
-public class CustomOAuth2RestTemplate extends RestTemplate implements
-		OAuth2RestOperations {
+public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2RestOperations {
 
 	@Autowired
 	private ResourceOwnerPasswordResourceDetails oauthResource;
@@ -82,7 +81,6 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements
 	 * @param password the password to set
 	 */
 	public void setResourceCredentials(String username, String password) {
-		
 		oauthResource.setUsername(username);
 		oauthResource.setPassword(password);
 		context = new DefaultOAuth2ClientContext();

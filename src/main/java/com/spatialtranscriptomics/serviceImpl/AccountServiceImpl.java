@@ -49,17 +49,15 @@ public class AccountServiceImpl implements AccountService {
 	Properties appConfig;
 
 	public Account find(String id) {
-
 		String url = appConfig.getProperty("url.account");
 		url += id;
 
 		Account acc = secureRestTemplate.getForObject(url, Account.class);
 		return acc;
-
 	}
 
+	
 	public List<Account> list() {
-
 		String url = appConfig.getProperty("url.account");
 		Account[] accountArray = secureRestTemplate.getForObject(url,
 				Account[].class);
@@ -67,23 +65,23 @@ public class AccountServiceImpl implements AccountService {
 		return accountList;
 	}
 
+	
 	public Account add(Account acc) {
-
 		String url = appConfig.getProperty("url.account");
 		Account accResponse = secureRestTemplate.postForObject(url, acc,
 				Account.class);
 		return accResponse;
 	}
 
+	
 	public void update(Account acc) {
-
 		String url = appConfig.getProperty("url.account");
 		String id = acc.getId();
 		secureRestTemplate.put(url + id, acc);
 	}
 
+	
 	public void delete(String id) {
-
 		String url = appConfig.getProperty("url.account");
 		secureRestTemplate.delete(url + id);
 	}
