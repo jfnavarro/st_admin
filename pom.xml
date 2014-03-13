@@ -4,7 +4,7 @@
 	<groupId>spatialtranscriptomics</groupId>
 	<artifactId>admin</artifactId>
 	<packaging>war</packaging>
-	<version>0.4</version>
+	<version>0.2</version>
 	<name>Spatial Transcriptomics Admin Console</name>
 	<url>http://maven.apache.org</url>
 
