@@ -13,21 +13,25 @@ import java.util.Date;
  * This interface defines the Experiment model. Should reflect the corresponding model in ST API.
  */
 
-public interface IExperiment {
+public interface IPipelineExperiment {
 
 	public String getId();
 
 	public void setId(String id);
 
-	public String getEmr_Jobflow_id();
+	public String getEmr_jobflow_id();
 
-	public void setEmr_Jobflow_id(String emrJobflowId);
+	public void setEmr_jobflow_id(String emrJobflowId);
 
 	public String getName();
 
 	public void setName(String name);
+	
+	public String getAccount_id();
 
-	public Date getCreated();
+	public void setAccount_id(String id);
 
-	public void setCreated(Date date);
+	public Date getLast_modified();
+
+	public void setLast_modified(Date date);
 }

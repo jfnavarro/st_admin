@@ -40,7 +40,7 @@
 
 		<div class="page-header">
 			<h1>
-				Edit Account <small>${account.username}</small>
+				Edit account <small>${account.username}</small>
 			</h1>
 		</div>
 

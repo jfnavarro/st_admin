@@ -21,8 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spatialtranscriptomics.form.ChipForm;
 import com.spatialtranscriptomics.model.Chip;
-import com.spatialtranscriptomics.model.ChipForm;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 
 
@@ -63,23 +63,17 @@ public class ChipController {
 
 	// import submit
 	@RequestMapping(value = "/submitimport", method = RequestMethod.POST)
-	public ModelAndView submitImport(
-			@ModelAttribute("chipform") @Valid ChipForm chipForm, BindingResult result) {
-
+	public ModelAndView submitImport(@ModelAttribute("chipform") @Valid ChipForm chipForm, BindingResult result) {
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("chipimport", "chipform",
 					chipForm);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
-
-		chipService.addFromFile(chipForm.getChipFile(),
-				chipForm.getName());
-		ModelAndView success = new ModelAndView("chiplist", "chipList",
-				chipService.list());
+		chipService.addFromFile(chipForm.getChipFile(), chipForm.getName());
+		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
 		success.addObject("msg", "Chip created.");
 		return success;
-
 	}
 
 	// edit 
@@ -91,17 +85,14 @@ public class ChipController {
 	// edit submit
 	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
 	public @ResponseBody
-	ModelAndView submitEdit(@ModelAttribute("chip") @Valid Chip chip,
-			BindingResult result) {
-
+	ModelAndView submitEdit(@ModelAttribute("chip") @Valid Chip chip, BindingResult result) {
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("chipedit", "chip", chip);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
 		chipService.update(chip);
-		ModelAndView success = new ModelAndView("chiplist", "chipList",
-				chipService.list());
+		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
 		success.addObject("msg", "Chip saved.");
 		return success;
 	}
@@ -110,13 +101,9 @@ public class ChipController {
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
 		chipService.delete(id);
-
-		ModelAndView success = new ModelAndView("chiplist", "chipList",
-				chipService.list());
+		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
 		success.addObject("msg", "Chip deleted.");
 		return success;
 	}
-
-
 
 }

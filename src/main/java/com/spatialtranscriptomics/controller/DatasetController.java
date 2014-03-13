@@ -7,9 +7,7 @@
 
 package com.spatialtranscriptomics.controller;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -24,20 +22,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.spatialtranscriptomics.model.Chip;
+import com.spatialtranscriptomics.form.DatasetAddForm;
+import com.spatialtranscriptomics.form.DatasetEditForm;
 import com.spatialtranscriptomics.model.Dataset;
-import com.spatialtranscriptomics.model.DatasetAddForm;
-import com.spatialtranscriptomics.model.DatasetEditForm;
-import com.spatialtranscriptomics.model.DatasetStatistics;
-import com.spatialtranscriptomics.model.Experiment;
 import com.spatialtranscriptomics.model.Feature;
-import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.DatasetStatisticsServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.ExperimentServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 
 /**
@@ -60,25 +53,21 @@ public class DatasetController {
 
 	@Autowired
 	ChipServiceImpl chipService;
+	
+	@Autowired
+	ImageAlignmentServiceImpl imageAlignmentService;
 
 	@Autowired
-	ImageServiceImpl imageService;
-
-	@Autowired
-	ExperimentServiceImpl experimentService;
+	PipelineExperimentServiceImpl experimentService;
 
 	@Autowired
 	S3ServiceImpl s3Service;
-
-	@Autowired
-	DatasetStatisticsServiceImpl datasetStatisticsService;
 	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	ModelAndView list() {
-		return new ModelAndView("datasetlist", "datasetList",
-				datasetService.list());
+		return new ModelAndView("datasetlist", "datasetList", datasetService.list());
 	}
 
 	// get
@@ -86,19 +75,15 @@ public class DatasetController {
 	public @ResponseBody
 	ModelAndView get(@PathVariable String id) {
 		Dataset dataset = datasetService.find(id);
-
-		ModelAndView success = new ModelAndView("datasetshow", "dataset",
-				dataset);
-
-		Chip chip = new Chip();
-		try {
-			chip = chipService.find(dataset.getChipid());
-		} catch (Exception ex) {
-			chip.setName("CHIP MISSING");
-		}
-
-		success.addObject("chip", chip);
-
+		ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
+//		Chip chip = new Chip();
+//		try {
+//			ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
+//			chip = chipService.find(imal.getChip_id());
+//		} catch (Exception ex) {
+//			chip.setName("CHIP MISSING");
+//		}
+//		success.addObject("chip", chip);
 		return success;
 
 	}
@@ -106,44 +91,31 @@ public class DatasetController {
 	// add
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add() {
-
 		return new ModelAndView("datasetadd", "datasetform",
 				new DatasetAddForm());
 	}
 
 	// add submit
 	@RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-	public ModelAndView submitAdd(
-			@ModelAttribute("datasetform") @Valid DatasetAddForm datasetAddForm,
-			BindingResult result) {
-
+	public ModelAndView submitAdd(@ModelAttribute("datasetform") @Valid DatasetAddForm datasetAddForm, BindingResult result) {
 		// form validation
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("datasetadd", "datasetform",
-					datasetAddForm);
+			ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
-
 		List<Feature> features = null;
 		Dataset dsResult = null;
-
-		// validate if either feature file of experiment is selected (exactly
-		// one of them).
+		// validate if either feature file of experiment is selected (exactly one of them).
 		if (datasetAddForm.getFeatureFile().isEmpty()
 				&& datasetAddForm.getExperimentId().isEmpty()) {
-			ModelAndView model = new ModelAndView("datasetadd", "datasetform",
-					datasetAddForm);
-			model.addObject("featureerror",
-					"Select either a file or an experiment for feature import.");
+			ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
+			model.addObject("featureerror", "Select either a file or an experiment for feature import.");
 			return model;
 		} else if (!datasetAddForm.getFeatureFile().isEmpty()
 				&& !datasetAddForm.getExperimentId().isEmpty()) {
-			ModelAndView model = new ModelAndView("datasetadd", "datasetform",
-					datasetAddForm);
-			model.addObject(
-					"featureerror",
-					"Select either a file or an experiment for feature import. You cannot select both.");
+			ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
+			model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
 			return model;
 		}
 
@@ -155,14 +127,12 @@ public class DatasetController {
 		}
 		// or: parse features from experiment output bucket
 		else if (datasetAddForm.getExperimentId() != null) {
-			features = s3Service.getFeaturesAsList(datasetAddForm
-					.getExperimentId());
+			features = s3Service.getFeaturesAsList(datasetAddForm.getExperimentId());
 			dsResult = datasetService.add(datasetAddForm.getDataset());
 			featureService.add(features, dsResult.getId());
 		}
 
-		ModelAndView success = new ModelAndView("datasetlist", "datasetList",
-				datasetService.list());
+		ModelAndView success = new ModelAndView("datasetlist", "datasetList", datasetService.list());
 		success.addObject("msg", "Dataset created.");
 		return success;
 
@@ -171,21 +141,16 @@ public class DatasetController {
 	// edit
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@PathVariable String id) {
-
-		return new ModelAndView("datasetedit", "datasetform",
-				new DatasetEditForm(datasetService.find(id)));
+		return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(datasetService.find(id)));
 	}
 
 	// edit submit
 	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-	public ModelAndView submitEdit(
-			@ModelAttribute("datasetform") @Valid DatasetEditForm datasetEditForm,
-			BindingResult result) {
+	public ModelAndView submitEdit(@ModelAttribute("datasetform") @Valid DatasetEditForm datasetEditForm, BindingResult result) {
 
 		// form validation
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("datasetedit", "datasetform",
-					datasetEditForm);
+			ModelAndView model = new ModelAndView("datasetedit", "datasetform",	datasetEditForm);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
@@ -193,39 +158,30 @@ public class DatasetController {
 		// validate if only one feature input is selected.
 		if (!datasetEditForm.getFeatureFile().isEmpty()
 				&& !datasetEditForm.getExperimentId().isEmpty()) {
-			ModelAndView model = new ModelAndView("datasetadd", "datasetform",
-					datasetEditForm);
-			model.addObject(
-					"featureerror",
-					"Select either a file or an experiment for feature import. You cannot select both.");
+			ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetEditForm);
+			model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
 			return model;
 		}
 
 		// parse, update features and update dataset
 		if (!datasetEditForm.getFeatureFile().isEmpty()) {
-
-			List<Feature> features = featureService.parse(datasetEditForm
-					.getFeatureFile());
+			List<Feature> features = featureService.parse(datasetEditForm.getFeatureFile());
 			datasetService.update(datasetEditForm.getDataset());
-			featureService.update(features, datasetEditForm.getDataset()
-					.getId());
+			featureService.update(features, datasetEditForm.getDataset().getId());
 
 		}
 		// or: parse features from experiment output bucket
 		else if (!datasetEditForm.getExperimentId().isEmpty()) {
-			List<Feature> features = s3Service
-					.getFeaturesAsList(datasetEditForm.getExperimentId());
+			List<Feature> features = s3Service.getFeaturesAsList(datasetEditForm.getExperimentId());
 			datasetService.update(datasetEditForm.getDataset());
-			featureService.update(features, datasetEditForm.getDataset()
-					.getId());
+			featureService.update(features, datasetEditForm.getDataset().getId());
 		}
 		// or: update dataset without features
 		else {
 			datasetService.update(datasetEditForm.getDataset());
 		}
 
-		ModelAndView success = new ModelAndView("datasetlist", "datasetList",
-				datasetService.list());
+		ModelAndView success = new ModelAndView("datasetlist", "datasetList", datasetService.list());
 		success.addObject("msg", "Dataset saved.");
 		return success;
 
@@ -236,9 +192,7 @@ public class DatasetController {
 	public ModelAndView delete(@PathVariable String id) {
 		featureService.deleteAll(id);
 		datasetService.delete(id);
-
-		ModelAndView success = new ModelAndView("datasetlist", "datasetList",
-				datasetService.list());
+		ModelAndView success = new ModelAndView("datasetlist", "datasetList", datasetService.list());
 		success.addObject("msg", "Dataset deleted.");
 		return success;
 	}
@@ -246,66 +200,21 @@ public class DatasetController {
 	// get feature list for dataset
 	@RequestMapping(value = "/{id}/features", method = RequestMethod.GET)
 	public ModelAndView getFeatures(@PathVariable String id) {
-
 		List<Feature> features = featureService.find(id);
-		ModelAndView success = new ModelAndView("featurelist", "featureList",
-				features);
+		ModelAndView success = new ModelAndView("featurelist", "featureList", features);
 		success.addObject("dataset", datasetService.find(id));
 		return success;
 	}
 
-	// populate Choice fields for form
-
-	@ModelAttribute("chipChoices")
-	public Map<String, String> populateChipChoices() {
-		Map<String, String> choices = new LinkedHashMap<String, String>();
-
-		List<Chip> l = chipService.list();
-
-		for (Chip t : l) {
-			choices.put(t.getId(), t.getName());
-		}
-
-		return choices;
-	}
-
-	@ModelAttribute("imageChoices")
-	public Map<String, String> populateImageChoices() {
-		Map<String, String> choices = new LinkedHashMap<String, String>();
-
-		List<ImageMetadata> l = imageService.list();
-
-		for (ImageMetadata t : l) {
-			choices.put(t.getFilename(), t.getFilename());
-		}
-
-		return choices;
-	}
-
-	@ModelAttribute("experimentChoices")
-	public Map<String, String> populateExperimentChoices() {
-		Map<String, String> choices = new LinkedHashMap<String, String>();
-
-		List<Experiment> l = experimentService.list();
-
-		for (Experiment t : l) {
-			choices.put(t.getId(), t.getName());
-		}
-
-		return choices;
-	}
 	
+//	@ModelAttribute("experimentChoices")
+//	public Map<String, String> populateExperimentChoices() {
+//		Map<String, String> choices = new LinkedHashMap<String, String>();
+//		List<Experiment> l = experimentService.list();
+//		for (Experiment t : l) {
+//			choices.put(t.getId(), t.getName());
+//		}
+//		return choices;
+//	}
 	
-	/**
-	 * Get Dataset stats.
-	 * @param id the id.
-	 * @return the MV.
-	 */
-	@RequestMapping(value = "/{id}/statistics", method = RequestMethod.GET)
-	public ModelAndView getStatistics(@PathVariable String id) {
-		DatasetStatistics stats = datasetStatisticsService.find(id);
-//		logger.debug(stats.getHitsMin());
-		ModelAndView success = new ModelAndView("datasetstatisticsshow", "datasetstatistics", stats);
-		return success;
-	}
 }

@@ -7,10 +7,7 @@
 
 package com.spatialtranscriptomics.controller;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,10 +48,8 @@ public class AccountController {
 	public ModelAndView get(@PathVariable String id) {
 		Account acc = accountService.find(id);
 		ModelAndView success = new ModelAndView("accountshow", "account", acc);
-
 		List<Dataset> datasets = datasetService.listForAccount(id);
 		success.addObject("datasets", datasets);
-
 		return success;
 	}
 
@@ -62,8 +57,7 @@ public class AccountController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		return new ModelAndView("accountlist", "accountList",
-				accountService.list());
+		return new ModelAndView("accountlist", "accountList", accountService.list());
 	}
 
 	
@@ -76,16 +70,14 @@ public class AccountController {
 	
 	// add submit
 	@RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-	public ModelAndView submitAdd(
-			@ModelAttribute("account") @Valid Account acc, BindingResult result) {
+	public ModelAndView submitAdd(@ModelAttribute("account") @Valid Account acc, BindingResult result) {
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("accountadd", "account", acc);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
 		accountService.add(acc);
-		ModelAndView success = new ModelAndView("accountlist", "accountList",
-				accountService.list());
+		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account created.");
 		return success;
 
@@ -95,8 +87,7 @@ public class AccountController {
 	// edit
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@PathVariable String id) {
-		return new ModelAndView("accountedit", "account",
-				accountService.find(id));
+		return new ModelAndView("accountedit", "account", accountService.find(id));
 	}
 
 	
@@ -110,8 +101,7 @@ public class AccountController {
 			return model;
 		}
 		accountService.update(acc);
-		ModelAndView success = new ModelAndView("accountlist", "accountList",
-				accountService.list());
+		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account saved.");
 		return success;
 	}
@@ -121,23 +111,21 @@ public class AccountController {
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
 		accountService.delete(id);
-
-		ModelAndView success = new ModelAndView("accountlist", "accountList",
-				accountService.list());
+		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account deleted.");
 		return success;
 	}
 
 	
-	// populate Choice fields for form
-	@ModelAttribute("datasetChoices")
-	public Map<String, String> populateDatasetChoices() {
-		Map<String, String> choices = new LinkedHashMap<String, String>();
-		List<Dataset> l = datasetService.list();
-		for (Dataset t : l) {
-			choices.put(t.getId(), t.getName());
-		}
-		return choices;
-	}
+//	// populate dataset choice fields for form
+//	@ModelAttribute("datasetChoices")
+//	public Map<String, String> populateDatasetChoices() {
+//		Map<String, String> choices = new LinkedHashMap<String, String>();
+//		List<Dataset> l = datasetService.list();
+//		for (Dataset t : l) {
+//			choices.put(t.getId(), t.getName());
+//		}
+//		return choices;
+//	}
 
 }

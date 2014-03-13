@@ -5,7 +5,7 @@
 * 
 */
 
-package com.spatialtranscriptomics.model;
+package com.spatialtranscriptomics.form;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -15,7 +15,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  * This class implements the model for the "import image form" (used to import image files). 
  * Does validation using Hibernate validator constraints.
  * 
- * */
+ */
 
 public class ImageForm {
 

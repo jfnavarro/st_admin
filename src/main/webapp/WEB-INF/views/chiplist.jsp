@@ -55,7 +55,7 @@
 		</c:if>
 
 		<div>
-			<a href="<c:url value="/chip/import"/>">Import Chip</a>
+			<a href="<c:url value="/chip/import"/>">Import chip</a>
 		</div>
 
 		<!--  <div>
@@ -93,7 +93,7 @@
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete Chip</h3>
+			<h3 id="deleteModalLabel">Delete chip</h3>
 		</div>
 		<div class="modal-body">
 			<div>Are you sure you want to delete the chip?</div>

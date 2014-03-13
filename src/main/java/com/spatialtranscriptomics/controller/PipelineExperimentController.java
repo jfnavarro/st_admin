@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.controller;
 
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,26 +33,26 @@ import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
-import com.spatialtranscriptomics.model.Experiment;
-import com.spatialtranscriptomics.model.ExperimentForm;
+import com.spatialtranscriptomics.form.PipelineExperimentForm;
+import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.ExperimentServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 
 /**
- * This class is Spring MVC controller class for the URL "/experiment". It implements the methods available at this URL and returns views (.jsp pages) with models.
+ * This class is Spring MVC controller class for the URL "/pipelineexperiment". It implements the methods available at this URL and returns views (.jsp pages) with models.
  */
 
 @Controller
-@RequestMapping("/experiment")
-public class ExperimentController {
+@RequestMapping("/pipelineexperiment")
+public class PipelineExperimentController {
 
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
-			.getLogger(ExperimentController.class);
+			.getLogger(PipelineExperimentController.class);
 
 	@Autowired
-	ExperimentServiceImpl experimentService;
+	PipelineExperimentServiceImpl experimentService;
 
 	@Autowired
 	EMRServiceImpl emrService;
@@ -64,14 +63,10 @@ public class ExperimentController {
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
-
-		Experiment exp = experimentService.find(id);
-		ModelAndView success = new ModelAndView("experimentshow", "experiment",
-				exp);
-
-		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_Jobflow_id());
+		PipelineExperiment exp = experimentService.find(id);
+		ModelAndView success = new ModelAndView("experimentshow", "experiment", exp);
+		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
 		success.addObject("jobflow", jobFlow);
-
 		return success;
 	}
 
@@ -79,36 +74,28 @@ public class ExperimentController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	ModelAndView list() {
-
-		return new ModelAndView("experimentlist", "experimentList",
-				experimentService.list());
+		return new ModelAndView("experimentlist", "experimentList", experimentService.list());
 	}
 
 	// create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-
-		return new ModelAndView("experimentcreate", "experimentform",
-				new ExperimentForm());
+		return new ModelAndView("experimentcreate", "experimentform", new PipelineExperimentForm());
 	}
 
 	// create submit
 	@RequestMapping(value = "/submitcreate", method = RequestMethod.POST)
-	public ModelAndView submitCreate(
-			@ModelAttribute("experimentform") @Valid ExperimentForm form,
-			BindingResult result) {
-
+	public ModelAndView submitCreate(@ModelAttribute("experimentform") @Valid PipelineExperimentForm form, BindingResult result) {
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("experimentcreate",
-					"experimentform", form);
+			ModelAndView model = new ModelAndView("experimentcreate", "experimentform", form);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
 
 		// create experiment
-		Experiment experiment = new Experiment();
+		PipelineExperiment experiment = new PipelineExperiment();
 		experiment.setName(form.getExperimentName());
-		experiment.setCreated(new Date());
+		//experiment.setCreated(new Date());
 		experiment = experimentService.add(experiment);
 
 		// create EMR jobflow
@@ -117,40 +104,32 @@ public class ExperimentController {
 		// Delete experiment and return error if EMR jobflow could not be
 		// started
 		if (emrJobFlowId == null) {
-			ModelAndView awsFail = new ModelAndView("experimentcreate",
-					"experimentform", form);
+			ModelAndView awsFail = new ModelAndView("experimentcreate",	"experimentform", form);
 			experimentService.delete(experiment.getId());
 			awsFail.addObject("errors", "Could not start EMR Job. Try again.");
 			return awsFail;
 		}
 
 		// update experiment with Jobflow ID
-		experiment.setEmr_Jobflow_id(emrJobFlowId);
+		experiment.setEmr_jobflow_id(emrJobFlowId);
 		experimentService.update(experiment);
 
-		ModelAndView success = new ModelAndView("experimentlist",
-				"experimentList", experimentService.list());
+		ModelAndView success = new ModelAndView("experimentlist", "experimentList", experimentService.list());
 		success.addObject("msg", "Experiment started.");
-
 		return success;
-
 	}
 
+	
 	// stop and delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
-
-		Experiment exp = experimentService.find(id);
-
-		if (exp.getEmr_Jobflow_id() != null) {
-			emrService.stopJobFlow(exp.getEmr_Jobflow_id());
+		PipelineExperiment exp = experimentService.find(id);
+		if (exp.getEmr_jobflow_id() != null) {
+			emrService.stopJobFlow(exp.getEmr_jobflow_id());
 		}
-
 		s3Service.deleteExperimentData(id);
 		experimentService.delete(id);
-
-		ModelAndView success = new ModelAndView("experimentlist",
-				"experimentList", experimentService.list());
+		ModelAndView success = new ModelAndView("experimentlist", "experimentList", experimentService.list());
 		success.addObject("msg", "Experiment deleted.");
 		return success;
 	}
@@ -158,29 +137,21 @@ public class ExperimentController {
 	// download output
 	@RequestMapping(value = "/{id}/output", method = RequestMethod.GET, produces = "text/json")
 	public @ResponseBody
-	HttpEntity<byte[]> getOutput(
-			@RequestParam(value = "format", required = true) String format,
-			@PathVariable String id) {
+	HttpEntity<byte[]> getOutput(@RequestParam(value = "format", required = true) String format, @PathVariable String id) {
 		try {
 			HttpHeaders header = new HttpHeaders();
 			byte[] wb;
 
 			if (format.equals("json")) {
-
 				wb = IOUtils.toByteArray(s3Service.getFeaturesAsJson(id));
 				header.setContentType(new MediaType("text", "json"));
-				header.set("Content-Disposition",
-						"attachment; filename=output_" + id + ".json");
+				header.set("Content-Disposition", "attachment; filename=output_" + id + ".json");
 			} else {
-
 				wb = IOUtils.toByteArray(s3Service.getFeaturesAsCSV(id));
 				header.setContentType(new MediaType("text", "csv"));
-				header.set("Content-Disposition",
-						"attachment; filename=output_" + id + ".csv");
+				header.set("Content-Disposition", "attachment; filename=output_" + id + ".csv");
 			}
-
 			header.setContentLength(wb.length);
-
 			return new HttpEntity<byte[]>(wb, header);
 
 		} catch (Exception e) {
@@ -192,106 +163,84 @@ public class ExperimentController {
 //		return null;
 	}
 
+	
 	// Populate Choice fields here
-
 	@ModelAttribute("numNodesChoices")
 	public Map<String, String> populateNumNodesChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		for (int i = 1; i <= 30; i++) {
 			choices.put(String.valueOf(i), String.valueOf(i));
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("nodeTypeChoices")
 	public Map<String, String> populateNodeTypeChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
-		InstanceType[] instanceTypes = com.amazonaws.services.ec2.model.InstanceType
-				.values();
-
+		InstanceType[] instanceTypes = com.amazonaws.services.ec2.model.InstanceType.values();
 		for (InstanceType t : instanceTypes) {
 			choices.put(t.toString(), t.name());
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("folderChoices")
 	public Map<String, String> populateFolderChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<String> l = s3Service.getInputFolders();
-
 		for (String t : l) {
 			choices.put(t, t);
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("idFileChoices")
 	public Map<String, String> populateIdFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<String> l = s3Service.getIDFiles();
-
 		for (String t : l) {
 			choices.put(t, t);
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("refAnnotationChoices")
 	public Map<String, String> populateRefAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<String> l = s3Service.getReferenceAnnotation();
-
 		for (String t : l) {
 			choices.put(t, t);
 		}
-
 		return choices;
 	}
 
+	
 	@ModelAttribute("refGenomeChoices")
 	public Map<String, String> populateRefGenomeChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<String> l = s3Service.getReferenceGenome();
-
 		for (String t : l) {
 			choices.put(t, t);
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("bowtieFileChoices")
 	public Map<String, String> populateBowtieFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		List<String> l = s3Service.getBowtieFiles();
-
 		for (String t : l) {
 			choices.put(t, t);
 		}
-
 		return choices;
 	}
 
 	@ModelAttribute("htseqAnnotationChoices")
 	public Map<String, String> populateHtseqAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
-
 		choices.put("union", "union"); 
 		//choices.put("intersection-nonempty", "intersection-nonempty"); //hardcoded in jsp view, for pre-selection
 		choices.put("intersection-strict", "intersection-strict");
-
 		return choices;
 	}
 

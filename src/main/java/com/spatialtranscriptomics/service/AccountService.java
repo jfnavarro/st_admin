@@ -17,6 +17,8 @@ public interface AccountService {
 	public Account find(String id);
 
 	public List<Account> list();
+	
+	public List<Account> findForDataset(String datasetId);
 
 	public Account add(Account acc);
 

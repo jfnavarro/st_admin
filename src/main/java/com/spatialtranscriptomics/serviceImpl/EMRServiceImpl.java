@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.spatialtranscriptomics.model.ExperimentForm;
+import com.spatialtranscriptomics.form.PipelineExperimentForm;
 import com.spatialtranscriptomics.service.EMRService;
-
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient;
@@ -87,7 +86,7 @@ public class EMRServiceImpl implements EMRService {
 
 	// see
 	// http://stackoverflow.com/questions/9283929/how-to-specify-mapred-configurations-java-options-with-custom-jar-in-cli-using
-	public String startJobFlow(ExperimentForm j, String experimentId) {
+	public String startJobFlow(PipelineExperimentForm j, String experimentId) {
 
 		// set args for Pipeline mapper script
 		List<String> mapperArgs = new ArrayList<String>();

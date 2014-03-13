@@ -9,27 +9,28 @@ package com.spatialtranscriptomics.model;
 
 import java.util.Date;
 
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 
 /**
- * This bean class maps the Experiment data retrieved from the ST API to the application data model. 
+ * This bean class maps the PipelineExperiment data retrieved from the ST API to the application data model. 
  * This data model has to be aligned with the ST API data model.
  * Does data validation using Hibernate validator constraints.
  * 
  * */
 
-public class Experiment implements IExperiment {
+public class PipelineExperiment implements IPipelineExperiment {
 
 	String id;
-
-	@NotEmpty
+	
+	@NotBlank(message = "Name must not be blank.")
 	String name;
-
+	
 	String emr_jobflow_id;
+	String account_id;
+	Date last_modified;
 
-	Date created;
-
+	// id is set automatically by MongoDB
 	public String getId() {
 		return id;
 	}
@@ -38,12 +39,13 @@ public class Experiment implements IExperiment {
 		this.id = id;
 	}
 
-	public String getEmr_Jobflow_id() {
+	public String getEmr_jobflow_id() {
 		return this.emr_jobflow_id;
 	}
 
-	public void setEmr_Jobflow_id(String emrJobflowId) {
+	public void setEmr_jobflow_id(String emrJobflowId) {
 		this.emr_jobflow_id = emrJobflowId;
+		
 	}
 
 	public String getName() {
@@ -52,14 +54,23 @@ public class Experiment implements IExperiment {
 
 	public void setName(String name) {
 		this.name = name;
+		
 	}
 
-	public Date getCreated() {
-		return created;
+	public String getAccount_id() {
+		return account_id;
 	}
 
-	public void setCreated(Date created) {
-		this.created = created;
+	public void setAccount_id(String id) {
+		this.account_id = id;
+	}
+
+	public Date getLast_modified() {
+		return this.last_modified;
+	}
+
+	public void setLast_modified(Date date) {
+		this.last_modified = date;
 	}
 
 }

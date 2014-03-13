@@ -42,23 +42,23 @@ public class FeatureServiceImpl implements FeatureService {
 	@Autowired
 	Properties appConfig;
 
+	
 	public List<Feature> find(String datasetId){
 		String url = appConfig.getProperty("url.feature");
-		 url += "?dataset="+datasetId;
-		 logger.debug("Feature URL: "+url);
+		 url += "?dataset=" + datasetId;
+		 logger.debug("Feature URL: " + url);
 		Feature[] features = secureRestTemplate.getForObject(url, Feature[].class);
 		return Arrays.asList(features);
 	}
 
+	
 	public List<Feature> parse(CommonsMultipartFile featureFile) {
 		Feature[] features;
-
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			features = (Feature[]) mapper.readValue(featureFile.getBytes(),
 					Feature[].class);
 			logger.debug(" features in file: " + features.length);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			GenericExceptionResponse resp = new GenericExceptionResponse();
@@ -70,6 +70,7 @@ public class FeatureServiceImpl implements FeatureService {
 
 	}
 
+	
 	public List<Feature> add(List<Feature> features, String datasetId) {
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;
@@ -78,20 +79,19 @@ public class FeatureServiceImpl implements FeatureService {
 		return Arrays.asList(featuresResponse);
 	}
 
+	
 	public List<Feature> update(List<Feature> features, String datasetId) {
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;
-
 		// delete features for dataset
 		this.deleteAll(datasetId);
 		// add new features for dataset
-		Feature[] featuresResponse = secureRestTemplate.postForObject(url,
-				features, Feature[].class);
+		Feature[] featuresResponse = secureRestTemplate.postForObject(url, features, Feature[].class);
 		return Arrays.asList(featuresResponse);
 	}
 	
+	
 	public void deleteAll(String datasetId) {
-
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;
 		secureRestTemplate.delete(url);

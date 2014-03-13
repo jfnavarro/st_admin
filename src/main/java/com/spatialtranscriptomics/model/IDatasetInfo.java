@@ -2,6 +2,9 @@ package com.spatialtranscriptomics.model;
 
 import java.util.Date;
 
+/**
+ * This interface defines the DatasetInfo model. Should reflect the corresponding model in ST API.
+ */
 public interface IDatasetInfo {
 
 	public String getId();

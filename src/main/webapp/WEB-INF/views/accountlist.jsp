@@ -60,7 +60,7 @@
 
 
 		<div>
-			<a href="<c:url value="/account/add"/>">Create Account</a>
+			<a href="<c:url value="/account/add"/>">Create account</a>
 		</div>
 
 		<table class="table">
@@ -76,6 +76,7 @@
 					<th>City</th>
 					<th>Post code</th>
 					<th>Country</th>
+					<th>Last modified</th>
 					<th></th>
 				</tr>
 
@@ -93,6 +94,7 @@
 						<td>${account.city}</td>
 						<td>${account.postcode}</td>
 						<td>${account.country}</td>
+						<td>${account.last_modified}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>

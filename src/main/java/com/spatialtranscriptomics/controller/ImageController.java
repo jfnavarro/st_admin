@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.spatialtranscriptomics.model.ImageForm;
+import com.spatialtranscriptomics.form.ImageForm;
 import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
 
@@ -62,20 +62,16 @@ public class ImageController {
 	// add
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add() {
-
 		return new ModelAndView("imageadd", "imageform", new ImageForm());
 	}
 
+	
 	// add submit
 	@RequestMapping(value = "/submitadd", method = RequestMethod.POST)
 	public// @ResponseBody
-	ModelAndView submitAdd(
-			@ModelAttribute("imageform") @Valid ImageForm imageForm,
-			BindingResult result) {
-
+	ModelAndView submitAdd(@ModelAttribute("imageform") @Valid ImageForm imageForm, BindingResult result) {
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("imageadd", "imageform",
-					imageForm);
+			ModelAndView model = new ModelAndView("imageadd", "imageform", imageForm);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
@@ -87,22 +83,16 @@ public class ImageController {
 			imageNames.add(im.getFilename());
 		}
 		if (imageNames.contains(imageForm.getFileName())) {
-			ModelAndView model = new ModelAndView("imagelist", "imagemetadata",
-					imd);
-			model.addObject(
-					"err",
-					"An image with this name already exists. Choose another name or delete existing image.");
+			ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
+			model.addObject("err", "An image with this name already exists. Choose another name or delete existing image.");
 			return model;
 		}
-
 		else {
 			imageService.addFromFile(imageForm.getImageFile());
-			ModelAndView model = new ModelAndView("imagelist", "imagemetadata",
-					imageService.list());
+			ModelAndView model = new ModelAndView("imagelist", "imagemetadata",	imageService.list());
 			model.addObject("msg", "Image imported.");
 			return model;
 		}
-
 	}
 
 	// delete
@@ -110,8 +100,7 @@ public class ImageController {
 	public ModelAndView delete(@PathVariable String id) {
 		imageService.delete(id);
 		List<ImageMetadata> imageMetadata = imageService.list();
-		ModelAndView success = new ModelAndView("imagelist", "imagemetadata",
-				imageMetadata);
+		ModelAndView success = new ModelAndView("imagelist", "imagemetadata", imageMetadata);
 		success.addObject("msg", "Image deleted.");
 		return success;
 	}

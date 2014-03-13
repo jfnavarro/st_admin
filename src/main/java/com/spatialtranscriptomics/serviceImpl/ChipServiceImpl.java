@@ -40,6 +40,7 @@ public class ChipServiceImpl implements ChipService {
 	@Autowired
 	Properties appConfig;
 
+	
 	public Chip find(String id) {
 
 		String url = appConfig.getProperty("url.chip");
@@ -48,24 +49,24 @@ public class ChipServiceImpl implements ChipService {
 		return chip;
 	}
 
+	
 	public List<Chip> list() {
-
 		String url = appConfig.getProperty("url.chip");
 		Chip[] chipArray = secureRestTemplate.getForObject(url, Chip[].class);
 		List<Chip> chipList = Arrays.asList(chipArray);
 		return chipList;
 	}
 
+	
 	public Chip create(Chip chip) {
-
 		String url = appConfig.getProperty("url.chip");
 		Chip chipResponse = secureRestTemplate.postForObject(url, chip,
 				Chip.class);
 		return chipResponse;
 	}
 
+	
 	public Chip addFromFile(CommonsMultipartFile chipFile, String name) {
-
 		try {
 			// parse ndf file to get Values
 			NDFParser parser = new NDFParser(chipFile.getInputStream());
@@ -83,15 +84,15 @@ public class ChipServiceImpl implements ChipService {
 		}
 	}
 
+	
 	public void update(Chip chip) {
-
 		String url = appConfig.getProperty("url.chip");
 		String id = chip.getId();
 		secureRestTemplate.put(url + id, chip);
 	}
 
+	
 	public void delete(String id) {
-
 		String url = appConfig.getProperty("url.chip");
 		secureRestTemplate.delete(url + id);
 	}

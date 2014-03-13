@@ -6,7 +6,7 @@
 <head>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
-<title>Account Details</title>
+<title>Account details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
 <script
@@ -39,7 +39,7 @@
 
 		<div>
 			<a href="<c:url value="/account/"/>">Back</a> | <a
-				href="<c:url value="/account/"/>${account.id}/edit">Edit Account</a>
+				href="<c:url value="/account/"/>${account.id}/edit">Edit account</a>
 		</div>
 
 
@@ -51,23 +51,40 @@
 			<dt>Enabled</dt>
 			<dd>${account.enabled}&nbsp;
 			</dd>
+			<dt>Institution</dt>
+			<dd>${account.institution}&nbsp;
+			</dd>
+			<dt>First name</dt>
+			<dd>${account.first_name}&nbsp;
+			</dd>
+			<dt>Last name</dt>
+			<dd>${account.last_name}&nbsp;
+			</dd>
+			<dt>Street address</dt>
+			<dd>${account.street_address}&nbsp;
+			</dd>
+			<dt>City</dt>
+			<dd>${account.city}&nbsp;
+			</dd>
+			<dt>Post code</dt>
+			<dd>${account.postcode}&nbsp;
+			</dd>
+			<dt>Country</dt>
+			<dd>${account.country}&nbsp;
+			</dd>
+			<dt>Last modified</dt>
+			<dd>${account.last_modified}&nbsp;
+			</dd>
 		</dl>
 
-
-
-		<dl class="dl-horizontal">
+		<!-- dl class="dl-horizontal">
 			<dt>Granted Datasets</dt>
 			<dd>
 				<c:forEach var="dataset" items="${datasets}">
 				${dataset.name} <br />
 				</c:forEach>
 			</dd>
-		</dl>
-
-
-
-
-
+		</dl -->
 
 	</div>
 

@@ -9,11 +9,7 @@ package com.spatialtranscriptomics.model;
 
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
-
-
-import javax.validation.constraints.NotNull;
 
 /**
  * This bean class maps the Dataset data retrieved from the ST API to the application data model. 
@@ -24,72 +20,30 @@ import javax.validation.constraints.NotNull;
 public class Dataset implements IDataset {
 
 	String id;
-
-	@NotBlank
+	
+	@NotBlank(message = "Name must not be blank.")
 	String name;
-
-	@NotBlank
-	String chipid;
-
-	@NotBlank
-	String figure_blue;
 	
-	@NotBlank
-	String figure_red;
+	String image_alignment_id;
+	String tissue;
+	String species;
 	
-	int figure_status;
-	double[] alignment_matrix;
-
-	@NotNull
-	int stat_barcodes;
+	int overall_gene_count;
+	int unique_gene_count;
+	int overall_barcode_count;
+	int unique_barcode_count;
+	int overall_hit_count;
+	double[] overall_hit_quartiles;
+	double[] gene_pooled_hit_quartiles;
+	String[] obo_foundry_terms;
+	String comment;
+	Date last_modified;	
 	
-	@NotNull
-	int stat_genes;
-	
-	@NotNull
-	int stat_unique_barcodes;
-	
-	@NotNull
-	int stat_unique_genes;
-	
-	String stat_tissue;
-	String stat_specie;
-	String stat_comments;
-	Date stat_created;
-	
-	@JsonIgnore
-	Double alignment_field1;
-	
-	@JsonIgnore
-	Double alignment_field2;
-	
-	@JsonIgnore 
-	Double alignment_field3;
-	
-	@JsonIgnore 
-	Double alignment_field4;
-	
-	@JsonIgnore
-	Double alignment_field5;
-	
-	@JsonIgnore 
-	Double alignment_field6;
-	
-	@JsonIgnore
-	Double alignment_field7;
-	
-	@JsonIgnore 
-	Double alignment_field8;
-	
-	@JsonIgnore 
-	Double alignment_field9;
-	
-
-
 	public String getId() {
 		return id;
 	}
-
+	
+	// id is set automatically by MongoDB
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -102,259 +56,109 @@ public class Dataset implements IDataset {
 		this.name = name;
 	}
 
-	public String getChipid() {
-		return chipid;
+	public String getImage_alignment_id() {
+		return this.image_alignment_id;
 	}
 
-	public void setChipid(String chipid) {
-		this.chipid = chipid;
+	public void setImage_alignment_id(String imal) {
+		this.image_alignment_id = imal;
 	}
 
-	public String getFigure_blue() {
-		return figure_blue;
+	public String getTissue() {
+		return this.tissue;
 	}
 
-	public void setFigure_blue(String figure_blue) {
-		this.figure_blue = figure_blue;
+	public void setTissue(String tissue) {
+		this.tissue = tissue;
 	}
 
-	public String getFigure_red() {
-		return figure_red;
+	public String getSpecies() {
+		return this.species;
 	}
 
-	public void setFigure_red(String figure_red) {
-		this.figure_red = figure_red;
+	public void setSpecies(String species) {
+		this.species = species;
 	}
 
-	public int getFigure_status() {
-//		return figure_status;
-		return 1; // this is a temp workaround. Field is deprecated and should be removed in data model.
+	public int getOverall_gene_count() {
+		return overall_gene_count;
 	}
 
-	public void setFigure_status(int figure_status) {
-//		this.figure_status = figure_status;
-		this.figure_status = 1; // this is a temp workaround. Field is deprecated and should be removed in data model.
+	public void setOverall_gene_count(int count) {
+		this.overall_gene_count = count;
 	}
 
-	public double[] getAlignment_matrix() {
-		return alignment_matrix;
+	public int getUnique_gene_count() {
+		return this.unique_gene_count;
 	}
 
-	public void setAlignment_matrix(double[] alignment_matrix) {
-		this.alignment_matrix = alignment_matrix;
+	public void setUnique_gene_count(int count) {
+		this.unique_gene_count = count;
 	}
 
-	public int getStat_barcodes() {
-		return this.stat_barcodes;
+	public int getOverall_barcode_count() {
+		return overall_barcode_count;
 	}
 
-	public void setStat_barcodes(int stat_barcodes) {
-		this.stat_barcodes = stat_barcodes;
+	public void setOverall_barcode_count(int count) {
+		this.overall_barcode_count = count;
 	}
 
-	public int getStat_genes() {
-		return this.stat_genes;
+	public int getUnique_barcode_count() {
+		return this.unique_barcode_count;
 	}
 
-	public void setStat_genes(int stat_genes) {
-		this.stat_genes = stat_genes;
+	public void setUnique_barcode_count(int count) {
+		this.unique_barcode_count = count;
 	}
 
-	public int getStat_unique_barcodes() {
-		return this.stat_unique_barcodes;
+	public int getOverall_hit_count() {
+		return this.overall_hit_count;
 	}
 
-	public void setStat_unique_barcodes(int stat_unique_barcodes) {
-		this.stat_unique_barcodes = stat_unique_barcodes;
+	public void setOverall_hit_count(int count) {
+		this.overall_hit_count = count;
 	}
 
-	public int getStat_unique_genes() {
-		return this.stat_unique_genes;
+	public double[] getOverall_hit_quartiles() {
+		return this.overall_hit_quartiles;
 	}
 
-	public void setStat_unique_genes(int stat_unique_genes) {
-		this.stat_unique_genes = stat_unique_genes;
+	public void setOverall_hit_quartiles(double[] quartiles) {
+		this.overall_hit_quartiles = quartiles;
 	}
 
-	public String getStat_tissue() {
-		return this.stat_tissue;
+	public double[] getGene_pooled_hit_quartiles() {
+		return this.gene_pooled_hit_quartiles;
 	}
 
-	public void setStat_tissue(String stat_tissue) {
-		this.stat_tissue = stat_tissue;
+	public void setGene_pooled_hit_quartiles(double[] quartiles) {
+		this.gene_pooled_hit_quartiles = quartiles;
 	}
 
-	public String getStat_specie() {
-		return this.stat_specie;
+		
+	public String[] getObo_foundry_terms() {
+		return obo_foundry_terms;
 	}
 
-	public void setStat_specie(String stat_specie) {
-		this.stat_specie = stat_specie;
+	public void setObo_foundry_terms(String[] obo_foundry_terms) {
+		this.obo_foundry_terms = obo_foundry_terms;
 	}
 
-	public Date getStat_created() {
-		return this.stat_created;
+	public String getComment() {
+		return this.comment;
 	}
 
-	public void setStat_created(Date stat_created) {
-		this.stat_created = stat_created;
+	public void setComment(String comm) {
+		this.comment = comm;
 	}
 
-	public String getStat_comments() {
-		return this.stat_comments;
+	public Date getLast_modified() {
+		return this.last_modified;
 	}
 
-	public void setStat_comments(String stat_comments) {
-		this.stat_comments = stat_comments;
-	}
-	
-
-	// individual matrix fields, used by the web form. 
-	// These fields are not being serialized to JSON.
-	
-	public double getAlignment_field1() {
-
-		if(this.alignment_matrix == null){
-			return 1.0d;
-		}
-		return this.alignment_matrix[0];
-	}
-
-	public void setAlignment_field1(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[0] = d;
-	}
-
-	
-	public double getAlignment_field2() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[1];
-	}
-
-	public void setAlignment_field2(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[1] = d;
-	}
-	
-	public double getAlignment_field3() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[2];
-	}
-
-	public void setAlignment_field3(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[2] = d;
-	}
-	
-	public double getAlignment_field4() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[3];
-	}
-
-	public void setAlignment_field4(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[3] = d;
-	}
-	
-	public double getAlignment_field5() {
-
-		if(this.alignment_matrix == null){
-			return 1.0d;
-		}
-		return this.alignment_matrix[4];
-	}
-
-	public void setAlignment_field5(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[4] = d;
-	}
-	
-	public double getAlignment_field6() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[5];
-	}
-
-	public void setAlignment_field6(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[5] = d;
-	}
-	
-	public double getAlignment_field7() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[6];
-	}
-
-	public void setAlignment_field7(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[6] = d;
-	}
-	
-	public double getAlignment_field8() {
-
-		if(this.alignment_matrix == null){
-			return 0.0d;
-		}
-		return this.alignment_matrix[7];
-	}
-
-	public void setAlignment_field8(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[7] = d;
-	}
-	
-	public double getAlignment_field9() {
-
-		if(this.alignment_matrix == null){
-			return 1.0d;
-		}
-		return this.alignment_matrix[8];
-	}
-
-	public void setAlignment_field9(double d) {
-
-		if(this.alignment_matrix == null){
-			this.alignment_matrix = new double[9];
-		}
-		this.alignment_matrix[8] = d;
+	public void setLast_modified(Date lastmod) {
+		this.last_modified = lastmod;
 	}
 
 }

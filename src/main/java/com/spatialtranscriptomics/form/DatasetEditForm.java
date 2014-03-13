@@ -5,37 +5,35 @@
 * 
 */
 
-package com.spatialtranscriptomics.model;
+package com.spatialtranscriptomics.form;
 
 import javax.validation.Valid;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import com.spatialtranscriptomics.model.Dataset;
+
+
 /**
- * This class implements the model for the "add dataset form" (used to add datasets). 
+ * This class implements the model for the "edit dataset form" (used to edit datasets). 
+ * Different from the DatasetAddForm, this form does not require a featureFile.
  * Does validation using Hibernate validator constraints.
  * 
- * */
+ */
 
-public class DatasetAddForm {
+public class DatasetEditForm {
 
 	@Valid
 	Dataset dataset;
+	
+	CommonsMultipartFile featureFile; // not required when editing a dataset
+	
+	String experimentId; // not required when editing a dataset
 
-	// either file or experimentId is required.
-	// TODO: Would be elegant to check this in a Hibernate validator if both
-	// options should be available. At the moment the check is done in the DatasetController
-
-	// @FileSelectedConstraint // this validator is not used anymore, because also experiment can
-	// be selected in stead of file.
-	CommonsMultipartFile featureFile;
-
-	String experimentId;
-
-	public DatasetAddForm() {
+	public DatasetEditForm() {
 	}
 
-	public DatasetAddForm(Dataset dataset) {
+	public DatasetEditForm(Dataset dataset) {
 		this.dataset = dataset;
 	}
 
@@ -46,12 +44,12 @@ public class DatasetAddForm {
 	public void setFeatureFile(CommonsMultipartFile featureFile) {
 		this.featureFile = featureFile;
 	}
-
-	public String getExperimentId() {
+	
+	public String getExperimentId(){
 		return experimentId;
 	}
-
-	public void setExperimentId(String experimentId) {
+	
+	public void setExperimentId(String experimentId){
 		this.experimentId = experimentId;
 	}
 

@@ -8,13 +8,13 @@
 package com.spatialtranscriptomics.service;
 
 import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
-import com.spatialtranscriptomics.model.ExperimentForm;
+import com.spatialtranscriptomics.form.PipelineExperimentForm;
 
 public interface EMRService {
 
 	public JobFlowDetail findJobFlow(String jobFlowId);
 
-	public String startJobFlow(ExperimentForm j, String experimentId);
+	public String startJobFlow(PipelineExperimentForm j, String experimentId);
 
 	public void stopJobFlow(String jobFlowId);
 

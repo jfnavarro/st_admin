@@ -4,9 +4,9 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Features</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
+<title>Chip Details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
 <script
@@ -17,10 +17,9 @@
 <!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuDataset").addClass("active");
+		$("#menuImageAlignment").addClass("active");
 	});
 </script>
-
 </head>
 <body>
 
@@ -29,51 +28,36 @@
 	<div class="container">
 
 
-
 		<div class="page-header">
 			<h1>
-				Features <small>Dataset ${dataset.name}</small>
+				Image alignment <small>${imagealignment.name}</small>
 			</h1>
 		</div>
-
-
 		<div>
-			<a href="<c:url value="/dataset/"/>${dataset.id}">Back</a>
+			<a href="<c:url value="/imagealignment/"/>">Back</a> | <a
+				href="<c:url value="/imagealignment/"/>${imagealignment.id}/edit">Edit image alignment</a>
 		</div>
 
+		<dl class="dl-horizontal">
 
+			<dt>Name</dt>
+			<dd>${imagealignment.name}&nbsp;</dd>
+			<dt>Chip ID</dt>
+			<dd>${imagealignment.chip_id}&nbsp;</dd>
+			<dt>Figure red</dt>
+			<dd>${imagealignment.figure_red}&nbsp;</dd>
+			<dt>Figure blue</dt>
+			<dd>${imagealignment.figure_blue}&nbsp;</dd>
+			<dt>Alignment matrix</dt>
+			<dd>${imagealignment.alignment_matrix}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${imagealignment.last_modified}&nbsp;</dd>
+		</dl>
 
-		<table class="table table-condensed">
-			<thead>
-				<tr>
-					<th>Gene nomenclature</th>
-					<th>Annotation</th>
-					<th>Barcode</th>
-					<th>Hits</th>
-					<th>X</th>
-					<th>Y</th>
-				</tr>
-
-			</thead>
-			<tbody>
-				<c:forEach var="feature" items="${featureList}">
-					<tr>
-						<td>${feature.gene}</td>
-						<td>${feature.annotation}</td>
-						<td>${feature.barcode}</td>
-						<td>${feature.hits}</td>
-						<td>${feature.x}</td>
-						<td>${feature.y}</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
-
-
+		<div></div>
 
 	</div>
 	<!-- /container -->
-
 
 </body>
 </html>

@@ -9,17 +9,19 @@ package com.spatialtranscriptomics.service;
 
 import java.util.List;
 
-import com.spatialtranscriptomics.model.Experiment;
+import com.spatialtranscriptomics.model.Task;
 
-public interface ExperimentService {
+public interface TaskService {
 
-	public Experiment find(String id);
+	public Task find(String id);
 
-	public List<Experiment> list();
+	public List<Task> list();
+	
+	public List<Task> findForAccount(String accountId);
 
-	public Experiment add(Experiment experiment);
+	public Task add(Task task);
 
-	public void update(Experiment experiment);
+	public void update(Task task);
 
 	public void delete(String id);
 	

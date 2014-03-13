@@ -11,7 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+
 //import javax.servlet.http.HttpServletResponse;
+
 
 
 import org.apache.log4j.Logger;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 //import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestOperations;
 //import org.springframework.web.client.RestTemplate;
+
 
 
 //import org.springframework.http.HttpStatus;
@@ -51,7 +54,6 @@ public class AccountServiceImpl implements AccountService {
 	public Account find(String id) {
 		String url = appConfig.getProperty("url.account");
 		url += id;
-
 		Account acc = secureRestTemplate.getForObject(url, Account.class);
 		return acc;
 	}
@@ -84,6 +86,14 @@ public class AccountServiceImpl implements AccountService {
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.account");
 		secureRestTemplate.delete(url + id);
+	}
+
+
+	public List<Account> findForDataset(String datasetId) {
+		String url = appConfig.getProperty("url.account")  + "?dataset=" + datasetId;
+		Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
+		List<Account> accountList = Arrays.asList(accountArray);
+		return accountList;
 	}
 
 }

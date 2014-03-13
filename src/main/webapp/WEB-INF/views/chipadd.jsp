@@ -33,7 +33,7 @@
 	<div class="container">
 
 		<div class="page-header">
-			<h1>Create Chip</h1>
+			<h1>Create chip</h1>
 		</div>
 
 

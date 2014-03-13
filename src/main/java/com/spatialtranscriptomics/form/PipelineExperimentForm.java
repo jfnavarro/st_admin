@@ -5,18 +5,18 @@
 * 
 */
 
-package com.spatialtranscriptomics.model;
+package com.spatialtranscriptomics.form;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
 /**
- * This class implements the model for the "create experiment form". 
+ * This class implements the model for the "create pipeline experiment form". 
  * Does validation using Hibernate validator constraints.
  * 
  * */
 
-public class ExperimentForm {
+public class PipelineExperimentForm {
 	
 	@NotBlank
 	private String experimentName;
