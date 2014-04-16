@@ -7,8 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 /**
  * This interface defines the Experiment model. Should reflect the corresponding model in ST API.
  */
@@ -31,7 +29,4 @@ public interface IPipelineExperiment {
 
 	public void setAccount_id(String id);
 
-	public Date getLast_modified();
-
-	public void setLast_modified(Date date);
 }

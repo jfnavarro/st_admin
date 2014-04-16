@@ -54,12 +54,5 @@ public class DatasetInfo implements IDatasetInfo {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
-	public Date getLast_modified() {
-		return last_modified;
-	}
-
-	public void setLast_modified(Date last_modified) {
-		this.last_modified = last_modified;
-	}	
+	
 }

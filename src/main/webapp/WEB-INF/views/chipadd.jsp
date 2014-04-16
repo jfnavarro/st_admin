@@ -36,8 +36,6 @@
 			<h1>Create chip</h1>
 		</div>
 
-
-
 		<div>
 			<form:form method="POST" commandName="chip"
 				action="${contextPath}/chip/submitadd" class="form-horizontal">

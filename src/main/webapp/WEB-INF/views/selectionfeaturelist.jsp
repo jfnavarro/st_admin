@@ -17,7 +17,7 @@
 <!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuDataset").addClass("active");
+		$("#menuSelection").addClass("active");
 	});
 </script>
 
@@ -28,17 +28,15 @@
 
 	<div class="container">
 
-
-
 		<div class="page-header">
 			<h1>
-				Features <small>Dataset ${dataset.name}</small>
+				Features <small>Selection ${selection.name}</small>
 			</h1>
 		</div>
 
 
 		<div>
-			<a href="<c:url value="/dataset/"/>${dataset.id}">Back</a>
+			<a href="<c:url value="/selection/"/>${selection.id}">Back</a>
 		</div>
 
 
@@ -58,7 +56,7 @@
 			<tbody>
 				<c:forEach var="feature" items="${featureList}">
 					<tr>
-						<td>${feature.gene}</td>
+						<td>${feature.gene_nomenclature}</td>
 						<td>${feature.annotation}</td>
 						<td>${feature.barcode}</td>
 						<td>${feature.hits}</td>
@@ -69,11 +67,8 @@
 			</tbody>
 		</table>
 
-
-
 	</div>
 	<!-- /container -->
-
 
 </body>
 </html>

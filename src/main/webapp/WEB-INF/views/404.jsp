@@ -20,15 +20,11 @@
 
 	<c:import url="header.jsp"></c:import>
 
-
 	<div class="container">
 
 		<div class="page-header">
 			<h1>Sorry, this page doesn't exist...</h1>
 		</div>
-
-
-
 
 	</div>
 

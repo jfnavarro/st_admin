@@ -7,8 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 /**
  * This interface defines the Account model. Should reflect the corresponding model in ST API.
  */
@@ -55,15 +53,12 @@ public interface IAccount {
 
 	public void setCity(String city);
 
-	public int getPostcode();
+	public String getPostcode();
 
-	public void setPostcode(int postcode);
+	public void setPostcode(String postcode);
 
 	public String getCountry();
 
 	public void setCountry(String country);
 
-	public Date getLast_modified();
-
-	public void setLast_modified(Date lastModified);
 }

@@ -1,7 +1,5 @@
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -16,15 +14,17 @@ public class ImageAlignment implements IImageAlignment {
 	@NotBlank(message = "Name must not be blank.")
 	String name;
 	
+	@NotBlank(message = "Chip must not be blank.")
 	String chip_id;
 	
+	@NotBlank(message = "Figure red must not be blank.")
 	String figure_red;
 	
+	@NotBlank(message = "Figure blue must not be blank.")
 	String figure_blue;
 	
+	@NotBlank(message = "Alignment matrix must not be blank.")
 	double[] alignment_matrix;
-	
-	Date last_modified;
 	
 	public String getId() {
 		return id;
@@ -72,14 +72,6 @@ public class ImageAlignment implements IImageAlignment {
 
 	public void setAlignment_matrix(double[] arr) {
 		this.alignment_matrix = arr;
-	}
-
-	public Date getLast_modified() {
-		return last_modified;
-	}
-
-	public void setLast_modified(Date d) {
-		this.last_modified = d;
 	}
 
 }

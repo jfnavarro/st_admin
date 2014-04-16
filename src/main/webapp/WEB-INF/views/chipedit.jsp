@@ -34,7 +34,7 @@
 
 		<div class="page-header">
 			<h1>
-				Edit Chip <small>${chip.name}</small>
+				Edit chip <small>${chip.name}</small>
 			</h1>
 		</div>
 

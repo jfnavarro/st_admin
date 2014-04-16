@@ -27,7 +27,7 @@ import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
  */
 
 @Controller
-@RequestMapping("/imagealignmentcontroller")
+@RequestMapping("/imagealignment")
 public class ImageAlignmentController {
 
 	@Autowired

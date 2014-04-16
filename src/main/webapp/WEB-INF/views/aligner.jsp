@@ -36,6 +36,42 @@
 
 		Coming soon...
 
+		<!-- dl class="dl-horizontal">
+
+		<dt>Image red</dt>
+			<dd>
+				<a href="<c:url value="/image/"/>${dataset.figure_red}"
+					target="_blank">${dataset.figure_red}</a>
+			</dd>
+			<dt>Image blue</dt>
+			<dd>
+				<a href="<c:url value="/image/"/>${dataset.figure_blue}"
+					target="_blank">${dataset.figure_blue}</a>
+			</dd>
+			
+			<dt>Alignment Matrix</dt>
+			<dd>
+
+				<table class="table table-bordered table-condensed">
+					<tr>
+						<td>${dataset.alignment_matrix[0]}</td>
+						<td>${dataset.alignment_matrix[1]}</td>
+						<td>${dataset.alignment_matrix[2]}</td>
+					</tr>
+					<tr>
+						<td>${dataset.alignment_matrix[3]}</td>
+						<td>${dataset.alignment_matrix[4]}</td>
+						<td>${dataset.alignment_matrix[5]}</td>
+					</tr>
+					<tr>
+						<td>${dataset.alignment_matrix[6]}</td>
+						<td>${dataset.alignment_matrix[7]}</td>
+						<td>${dataset.alignment_matrix[8]}</td>
+					</tr>
+				</table>
+			</dd>
+		</dl -->
+
 	</div>
 	<!-- /container -->
 

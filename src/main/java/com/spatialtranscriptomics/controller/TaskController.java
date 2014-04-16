@@ -18,14 +18,15 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Task;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.TaskServiceImpl;
 
 /**
- * This class is Spring MVC controller class for the URL "/task". It implements the methotask available at this URL and returns views (.jsp pages) with models .
+ * This class is Spring MVC controller class for the URL "/task". It implements the methods available at this URL and returns views (.jsp pages) with models .
  */
 
 @Controller
-@RequestMapping("/taskcontroller")
+@RequestMapping("/task")
 public class TaskController {
 
 	@Autowired
@@ -34,11 +35,16 @@ public class TaskController {
 	@Autowired
 	AccountServiceImpl accountService;
 	
+	@Autowired
+	SelectionServiceImpl selectionService;
+	
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
 		Task task = taskService.find(id);
 		ModelAndView success = new ModelAndView("taskshow", "task", task);
+		success.addObject("account", accountService.find(task.getAccount_id()));
+		success.addObject("selections",selectionService.findForTask(id));
 		return success;
 	}
 
@@ -46,7 +52,9 @@ public class TaskController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		return new ModelAndView("tasklist", "taskList", taskService.list());
+		ModelAndView success = new ModelAndView("tasklist", "taskList", taskService.list());
+		success.addObject("accounts", populateAccountChoices());
+		return success;
 	}
 
 	
@@ -115,5 +123,7 @@ public class TaskController {
 		}
 		return choices;
 	}
+	
+	
 	
 }

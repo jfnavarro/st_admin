@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Experiment Details</title>
+<title>Experiment details</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -17,7 +17,7 @@
 <!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuExperiment").addClass("active");
+		$("#menuPipelineExperiment").addClass("active");
 	});
 </script>
 
@@ -29,11 +29,11 @@
 	<div class="container">
 		<div class="page-header">
 			<h1>
-				Experiment <small>${experiment.name}</small>
+				Pipeline experiment <small>${pipelineexperiment.name}</small>
 			</h1>
 		</div>
 		<div>
-			<a href="<c:url value="/experiment/"/>">Back</a>
+			<a href="<c:url value="/pipelineexperiment/"/>">Back</a>
 		</div>
 
 		<div class="row">
@@ -49,40 +49,35 @@
 		</c:if>
 
 		<dl class="dl-horizontal">
-
-			<!--	<dt>EMR Job ID</dt>
-			<dd>${jobflow.jobFlowId}&nbsp;</dd> -->
-			<dt>Status</dt>
-			<dd>${jobflow.executionStatusDetail.state}&nbsp;</dd>
-			<dt>Created</dt>
+			<dt>Account</dt>
+			<dd>${account.username}&nbsp;</dd>
+			<dt>EMR job ID</dt>
+			<dd>${pipelineexperiment.emr_jobflow_id}&nbsp;</dd>
+			<dt>EMR job created</dt>
 			<dd>${jobflow.executionStatusDetail.creationDateTime}&nbsp;</dd>
-			<dt>Ended</dt>
+			<dt>EMR job ended</dt>
 			<dd>${jobflow.executionStatusDetail.endDateTime}&nbsp;</dd>
-			<dt>Last Message</dt>
+			<dt>EMR job last message</dt>
 			<dd>${jobflow.executionStatusDetail.lastStateChangeReason}&nbsp;</dd>
 		</dl>
 		<c:if test="${jobflow.executionStatusDetail.state == 'COMPLETED'}">
 			<dl class="dl-horizontal">
-				<dt>Output</dt>
+				<dt>EMR job output</dt>
 				<dd>
 					<a
-						href="<c:url value="/experiment/"/>${experiment.id}/output?format=json">Download
-						JSON</a> <br /> <a
-						href="<c:url value="/experiment/"/>${experiment.id}/output?format=csv">Download
-						CSV</a>
+						href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=json">Download JSON</a> <br /> <a
+						href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=csv">Download CSV</a>
 				</dd>
 			</dl>
 		</c:if>
-
-
 	</div>
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete experiment</h3>
+			<h3 id="deleteModalLabel">Delete pipeline experiment</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the experiment? This will
+			<div>Are you sure you want to delete the pipeline experiment? This will
 				stop the EMR job and delete all data.</div>
 		</div>
 		<div class="modal-footer">

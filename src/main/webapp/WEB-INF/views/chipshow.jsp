@@ -35,7 +35,7 @@
 		</div>
 		<div>
 			<a href="<c:url value="/chip/"/>">Back</a> | <a
-				href="<c:url value="/chip/"/>${chip.id}/edit">Edit Chip</a>
+				href="<c:url value="/chip/"/>${chip.id}/edit">Edit chip</a>
 		</div>
 
 		<dl class="dl-horizontal">
@@ -72,14 +72,8 @@
 
 		<div></div>
 
-
-
 	</div>
 	<!-- /container -->
-
-
-
-
 
 
 </body>

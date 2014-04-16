@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Accounts</title>
+<title>Selections</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -17,7 +17,7 @@
 	<!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuAccount").addClass("active");
+		$("#menuSelection").addClass("active");
 	});
 </script>
 
@@ -31,7 +31,7 @@
 						var theId = $(this).data('id');
 						$(".modal-footer #deleteBtn")
 								.html(
-										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/account/"/>'
+										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/selection/"/>'
 												+ theId
 												+ '/delete" class="btn btn-danger">Delete</a>');
 					});
@@ -42,14 +42,12 @@
 <body>
 
 
-
-
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
 
 		<div class="page-header">
-			<h1>Accounts</h1>
+			<h1>Selections</h1>
 		</div>
 
 		<c:if test="${not empty msg}">
@@ -60,50 +58,26 @@
 
 
 		<div>
-			<a href="<c:url value="/account/add"/>">Create account</a>
+			<a href="<c:url value="/selection/add"/>">Create selection</a>
 		</div>
 
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Username (email)</th>
-					<th>Role</th>
-					<th>Enabled</th>
-					<th>Institution</th>
-					<th>First name</th>
-					<th>Last name</th>
-					<th>Street address</th>
-					<th>City</th>
-					<th>Post code</th>
-					<th>Country</th>
-					<th></th>
+					<th>Name</th>
+					<th>Account</th>
+					<th>Dataset</th>
 				</tr>
 
 			</thead>
 			<tbody>
-				<c:forEach var="account" items="${accountList}">
+				<c:forEach var="selection" items="${selectionList}">
 					<tr>
-						<td><a href="<c:url value="/account/"/>${account.id}">${account.username}</a></td>
-						<td>${account.role}</td>					        
-                		<td>
-	                		<c:choose>
-	                			<c:when test="${account.enabled == true}">
-	                    			<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">
-	                			</c:when>
-	                			<c:otherwise>
-	                    			<input type="checkbox" name="chkEnabled" value="" onclick="return false">
-	                			</c:otherwise>
-            				</c:choose>
-						</td>
-						<td>${account.institution}</td>
-						<td>${account.first_name}</td>
-						<td>${account.last_name}</td>
-						<td>${account.street_address}</td>
-						<td>${account.city}</td>
-						<td>${account.postcode}</td>
-						<td>${account.country}</td>
+						<td><a href="<c:url value="/selection/"/>${selection.id}">${selection.name}</a></td>
+						<td>${accounts[selection.account_id]}</td>
+						<td>${datasets[selection.dataset_id]}</td>					        
 						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
+							data-id="${selection.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>
 					</tr>
 				</c:forEach>
@@ -114,11 +88,10 @@
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete account</h3>
+			<h3 id="deleteModalLabel">Delete selection</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the account?</div>
-
+			<div>Are you sure you want to delete the selection?</div>
 		</div>
 		<div class="modal-footer">
 			<div id="deleteBtn"></div>

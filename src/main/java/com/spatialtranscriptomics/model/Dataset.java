@@ -24,9 +24,13 @@ public class Dataset implements IDataset {
 	@NotBlank(message = "Name must not be blank.")
 	String name;
 	
-	String image_alignment_id;
+	@NotBlank(message = "Tissue must not be blank.")
 	String tissue;
+	
+	@NotBlank(message = "Species must not be blank.")
 	String species;
+	
+	String image_alignment_id;
 	
 	int overall_gene_count;
 	int unique_gene_count;
@@ -151,14 +155,6 @@ public class Dataset implements IDataset {
 
 	public void setComment(String comm) {
 		this.comment = comm;
-	}
-
-	public Date getLast_modified() {
-		return this.last_modified;
-	}
-
-	public void setLast_modified(Date lastmod) {
-		this.last_modified = lastmod;
 	}
 
 }

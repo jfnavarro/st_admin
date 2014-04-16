@@ -1,7 +1,5 @@
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 /**
  * This interface defines the Selection model. Should reflect the corresponding model in ST API.
  */
@@ -38,8 +36,8 @@ public interface ISelection {
 	public String getComment();
 
 	public void setComment(String comment);
-
-	public Date getLast_modified();
-
-	public void setLast_modified(Date last_modified);
+	
+	public String[] getObo_foundry_terms();
+	
+	public void setObo_foundry_terms(String[] obo_foundry_terms);
 }

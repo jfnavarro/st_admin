@@ -27,7 +27,6 @@ public class HomeController {
 	// show main page
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView show() {
-
 		return new ModelAndView("home");
 	}
 

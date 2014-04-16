@@ -1,7 +1,5 @@
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 /**
  * This interface defines the PipelineStats model. Should reflect the corresponding model in ST API.
  */
@@ -91,9 +89,5 @@ public interface IPipelineStats {
 	public String getLog_file();
 
 	public void setLog_file(String log_file);
-
-	public Date getLast_modified();
-
-	public void setLast_modified(Date last_modified);
 	
 }

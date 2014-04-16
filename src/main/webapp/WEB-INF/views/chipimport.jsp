@@ -38,7 +38,7 @@
 
 
 		<div class="page-header">
-			<h1>Import Chip</h1>
+			<h1>Import chip</h1>
 		</div>
 
 
@@ -57,7 +57,7 @@
 
 				<spring:bind path="name">
 					<div class="control-group ${status.error ? 'error' : ''}">
-						<label class="control-label">Chip Name</label>
+						<label class="control-label">Chip name</label>
 						<div class="controls">
 							<form:input id="name" path="name" type="text"
 								placeholder="Choose chip name" />
@@ -79,7 +79,7 @@
 				
 				<spring:bind path="fileName">
 					<div class="control-group  ${status.error ? 'error' : ''}">
-					<label class="control-label">Chip File</label>
+					<label class="control-label">Chip file</label>
 						<div class="controls">
 							<form:input id="chipFile" path="chipFile" type="file"
 								class="filestyle"></form:input>

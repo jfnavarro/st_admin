@@ -28,7 +28,6 @@
 
 	<div class="container">
 
-
 		<div class="page-header">
 			<h1>
 				Dataset <small>${dataset.name}</small>
@@ -36,75 +35,69 @@
 		</div>
 		<div>
 			<a href="<c:url value="/dataset/"/>">Back</a> | <a
-				href="<c:url value="/dataset/"/>${dataset.id}/edit">Edit Dataset</a>
+				href="<c:url value="/dataset/"/>${dataset.id}/edit">Edit dataset</a>
 		</div>
-
-
 
 		<dl class="dl-horizontal">
 
-			<dt>Chip</dt>
-			<dd>${chip.name}</dd>
-			<dt>Image red</dt>
-			<dd>
-				<a href="<c:url value="/image/"/>${dataset.figure_red}"
-					target="_blank">${dataset.figure_red}</a>
-			</dd>
-			<dt>Image blue</dt>
-			<dd>
-				<a href="<c:url value="/image/"/>${dataset.figure_blue}"
-					target="_blank">${dataset.figure_blue}</a>
-			</dd>
-			<!-- <dt>Image status</dt>
-			<dd>${dataset.figure_status}</dd>
-			<dt>Alignment Matrix</dt> -->
-			<dd>
-
-				<table class="table table-bordered table-condensed">
-					<tr>
-						<td>${dataset.alignment_matrix[0]}</td>
-						<td>${dataset.alignment_matrix[1]}</td>
-						<td>${dataset.alignment_matrix[2]}</td>
-					</tr>
-					<tr>
-						<td>${dataset.alignment_matrix[3]}</td>
-						<td>${dataset.alignment_matrix[4]}</td>
-						<td>${dataset.alignment_matrix[5]}</td>
-					</tr>
-					<tr>
-						<td>${dataset.alignment_matrix[6]}</td>
-						<td>${dataset.alignment_matrix[7]}</td>
-						<td>${dataset.alignment_matrix[8]}</td>
-					</tr>
-				</table>
-			</dd>
-
-			<dt># of barcodes (unique)</dt>
-			<dd>${dataset.stat_barcodes}&nbsp;&nbsp;(${dataset.stat_unique_barcodes})</dd>
-			<dt># of genes (unique)</dt>
-			<dd>${dataset.stat_genes}&nbsp;&nbsp;${dataset.stat_unique_genes}</dd>
 			<dt>Tissue</dt>
-			<dd>${dataset.stat_tissue}&nbsp;</dd>
+			<dd>${dataset.tissue}&nbsp;</dd>
+
 			<dt>Species</dt>
-			<dd>${dataset.stat_specie}&nbsp;</dd>
+			<dd>${dataset.species}&nbsp;</dd>
+						
+			<dt>Image alignment</dt>
+			<dd>${imagealignment.name}&nbsp;</dd>
+			
+			<dt>Overall # of genes</dt>
+			<dd>${dataset.overall_gene_count}&nbsp;</dd>
+			
+			<dt>Unique # of genes</dt>
+			<dd>${dataset.unique_gene_count}&nbsp;</dd>
+			
+			<dt>Overall # of barcodes</dt>
+			<dd>${dataset.overall_barcode_count}&nbsp;</dd>
+			
+			<dt>Unique # of barcodes</dt>
+			<dd>${dataset.unique_barcode_count}&nbsp;</dd>
+			
+			<dt>Overall # of hits</dt>
+			<dd>${dataset.overall_hit_count}&nbsp;</dd>
+			
+			<dt>Hit quartiles</dt>
+			<dd>[${dataset.overall_hit_quartiles[0]}, ${dataset.overall_hit_quartiles[1]}, ${dataset.overall_hit_quartiles[2]}, ${dataset.overall_hit_quartiles[3]}, ${dataset.overall_hit_quartiles[4]}]&nbsp;</dd>
+			
+			<dt>Gene-pooled hit quartiles</dt>
+			<dd>[${dataset.gene_pooled_hit_quartiles[0]}, ${dataset.gene_pooled_hit_quartiles[1]}, ${dataset.gene_pooled_hit_quartiles[2]}, ${dataset.gene_pooled_hit_quartiles[3]}, ${dataset.gene_pooled_hit_quartiles[4]}]&nbsp;</dd>
+			
+			<dt>OBO Foundry terms</dt>
+			<dd>
+			<c:forEach var="term" items="${dataset.obo_foundry_terms}">
+				${term}&nbsp;&nbsp;
+			</c:forEach>
+			&nbsp;
+			</dd>
+			
 			<dt>Comments</dt>
-			<dd>${dataset.stat_comments}&nbsp;</dd>
+			<dd>${dataset.comment}&nbsp;</dd>
+			
 			<dt>Features</dt>
 			<dd>
 				<a href="<c:url value="/dataset/"/>${dataset.id}/features">Show</a>
 			</dd>
-			<dt>Detailed hit statistics</dt>
-			<dd>
-				<a href="<c:url value="/dataset/"/>${dataset.id}/statistics">Show</a>
-			</dd>
-
 		</dl>
-
+		
+		<dl class="dl-horizontal">
+			<dt>Granted accounts</dt>
+			<dd>
+				<c:forEach var="account" items="${accounts}">
+				${account.username} <br/>
+				</c:forEach>
+			</dd>
+		</dl>
 
 	</div>
 	<!-- /container -->
-
-
 
 </body>
 </html>

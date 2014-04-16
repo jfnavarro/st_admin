@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Datasets</title>
+<title>Pipeline experiments</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -17,7 +17,7 @@
 <!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuDataset").addClass("active");
+		$("#menuPipelineExperiment").addClass("active");
 	});
 </script>
 
@@ -31,11 +31,12 @@
 						var theId = $(this).data('id');
 						$(".modal-footer #deleteBtn")
 								.html(
-										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/dataset/"/>'
+										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/pipelineexperiment/"/>'
 												+ theId
 												+ '/delete" class="btn btn-danger">Delete</a>');
 					});
 </script>
+
 
 </head>
 <body>
@@ -43,10 +44,14 @@
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
-
 		<div class="page-header">
-			<h1>Datasets</h1>
+			<h1>Pipeline experiments</h1>
 		</div>
+
+		<!--  <div class="row">
+        <div class="span2 pull-right"><a href="javascript:history.go(0)">Reload page</a></div>
+        </div>
+        -->
 
 		<c:if test="${not empty msg}">
 			<div class="alert alert-success">
@@ -54,27 +59,27 @@
 			</div>
 		</c:if>
 
+
 		<div>
-			<a href="<c:url value="/dataset/add"/>">Create dataset</a>
+			<a href="<c:url value="/pipelineexperiment/create/"/>">Create pipeline experiment</a>
 		</div>
+
 
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th>Tissue</th>
-					<th>Species</th>
+					<th>Account</th>
 				</tr>
 
 			</thead>
 			<tbody>
-				<c:forEach var="dataset" items="${datasetList}">
+				<c:forEach var="exp" items="${pipelineexperimentList}">
 					<tr>
-						<td><a href="<c:url value="/dataset/"/>${dataset.id}">${dataset.name}</a></td>
-						<td>${dataset.tissue}</td>
-						<td>${dataset.species}</td>
+						<td><a href="<c:url value="/pipelineexperiment/"/>${exp.id}">${exp.name}</a></td>
+						<td>${accounts[exp.account_id]}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${dataset.id}"
+							data-id="${exp.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
 					</tr>
 				</c:forEach>
@@ -82,16 +87,14 @@
 		</table>
 
 	</div>
-	<!-- /container -->
-
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete dataset</h3>
+			<h3 id="deleteModalLabel">Delete pipeline experiment</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the dataset?</div>
-
+			<div>Are you sure you want to delete the pipeline experiment? This will
+				stop the EMR job and delete all data.</div>
 		</div>
 		<div class="modal-footer">
 			<div id="deleteBtn"></div>

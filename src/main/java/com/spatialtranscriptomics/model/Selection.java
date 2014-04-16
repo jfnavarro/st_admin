@@ -29,6 +29,8 @@ public class Selection implements ISelection {
 	
 	String comment;
 	
+	String[] obo_foundry_terms;
+	
 	Date last_modified;
 
 	public String getId() {
@@ -95,6 +97,15 @@ public class Selection implements ISelection {
 		this.comment = comment;
 	}
 
+	public String[] getObo_foundry_terms() {
+		return obo_foundry_terms;
+	}
+
+	public void setObo_foundry_terms(String[] obo_foundry_terms) {
+		this.obo_foundry_terms = obo_foundry_terms;
+	}
+	
+	
 	public Date getLast_modified() {
 		return last_modified;
 	}

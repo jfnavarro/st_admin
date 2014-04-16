@@ -35,7 +35,6 @@
 
 	<c:import url="header.jsp"></c:import>
 
-
 	<div class="container">
 
 		<div class="page-header">
@@ -44,13 +43,11 @@
 			</h1>
 		</div>
 
-
 		<c:if test="${not empty errors}">
 			<div class="alert alert-error">
 				<strong>Error: </strong>Your input is not valid. Please check the values in the form below.
 			</div>
 		</c:if>
-
 
 		<div>
 			<form:form method="POST" commandName="account"
@@ -60,8 +57,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputUsername">Username (email)</label>
 						<div class="controls">
-							<form:input type="text" id="inputUsername" placeholder="Username"
-								path="username" />
+							<form:input type="text" id="inputUsername" placeholder="Username" path="username" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>
@@ -72,29 +68,17 @@
 					<div class="controls">
 						<form:select id="inputRole" path="role">
 							<form:option label="User (default)" value="ROLE_USER"></form:option>
-							<form:option label="Content Manager" value="ROLE_CM"></form:option>
+							<form:option label="Content manager" value="ROLE_CM"></form:option>
 							<form:option label="Administrator" value="ROLE_ADMIN"></form:option>
 						</form:select>
 					</div>
 				</div>
-
-				<!-- div class="control-group">
-					<label class="control-label" for="inputGrantedDatasets">Datasets</label>
-					<div class="controls">
-						<form:select id="inputGrantedDatasets" path="grantedDatasets"
-							class="multiselect" multiple="multiple">
-							<form:options items="${datasetChoices}"></form:options>
-						</form:select>
-					</div>
-				</div -->
-
 
 				<div class="control-group">
 					<label class="control-label">Account enabled</label>
 					<div class="controls">
 						<form:checkbox path="enabled" />
 					</div>
-
 				</div>
 
 				<spring:bind path="institution">
@@ -112,7 +96,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputFirst_name">First name</label>
 						<div class="controls">
-							<form:input type="text" id="inputFirst_name" placeholder="First_name"
+							<form:input type="text" id="inputFirst_name" placeholder="First name"
 								path="first_name" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
@@ -123,7 +107,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputLast_name">Last name</label>
 						<div class="controls">
-							<form:input type="text" id="inputLast_name" placeholder="Last_name"
+							<form:input type="text" id="inputLast_name" placeholder="Last name"
 								path="last_name" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
@@ -134,7 +118,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputStreet_address">Street address</label>
 						<div class="controls">
-							<form:input type="text" id="inputStreet_address" placeholder="Street_address"
+							<form:input type="text" id="inputStreet_address" placeholder="Street address"
 								path="street_address" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
@@ -156,7 +140,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputPostcode">Post code</label>
 						<div class="controls">
-							<form:input type="text" id="inputPostcode" placeholder="Postcode"
+							<form:input type="text" id="inputPostcode" placeholder="Post code"
 								path="postcode" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
@@ -167,13 +151,12 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputCountry">Country</label>
 						<div class="controls">
-							<form:input type="text" id="inputCountry" placeholder="Country"
-								path="country" />
+							<form:input type="text" id="inputCountry" placeholder="Country" path="country" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>
 				</spring:bind>
-
+				
 				<button type="submit" class="btn">Save</button>
 				<form:input type="hidden" path="id" />
 				<form:input type="hidden" path="password" />
@@ -183,8 +166,6 @@
 		<div>
 			<a href="<c:url value="/account/"/>${account.id}">Cancel</a>
 		</div>
-
-
 
 	</div>
 </body>

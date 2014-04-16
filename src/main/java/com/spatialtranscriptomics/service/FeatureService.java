@@ -15,7 +15,9 @@ import com.spatialtranscriptomics.model.Feature;
 
 public interface FeatureService {
 	
-	public List<Feature> find(String datasetId);
+	public List<Feature> findForDataset(String datasetId);
+	
+	public List<Feature> findForSelection(String selectionId);
 	
 	public List<Feature> parse(CommonsMultipartFile featureFile);
 

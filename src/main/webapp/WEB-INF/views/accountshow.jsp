@@ -25,7 +25,6 @@
 </head>
 <body>
 
-
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
@@ -42,14 +41,20 @@
 				href="<c:url value="/account/"/>${account.id}/edit">Edit account</a>
 		</div>
 
-
 		<dl class="dl-horizontal">
-			
 			<dt>Role</dt>
 			<dd>${account.role}&nbsp;
 			</dd>
 			<dt>Enabled</dt>
-			<dd>${account.enabled}&nbsp;
+			<dd>
+			<c:choose>
+    			<c:when test="${account.enabled == true}">
+        			<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">&nbsp;
+    			</c:when>
+    			<c:otherwise>
+        			<input type="checkbox" name="chkEnabled" value="" onclick="return false">&nbsp;
+    			</c:otherwise>
+			</c:choose>
 			</dd>
 			<dt>Institution</dt>
 			<dd>${account.institution}&nbsp;
@@ -72,19 +77,16 @@
 			<dt>Country</dt>
 			<dd>${account.country}&nbsp;
 			</dd>
-			<dt>Last modified</dt>
-			<dd>${account.last_modified}&nbsp;
-			</dd>
 		</dl>
 
-		<!-- dl class="dl-horizontal">
-			<dt>Granted Datasets</dt>
+		<dl class="dl-horizontal">
+			<dt>Granted datasets</dt>
 			<dd>
 				<c:forEach var="dataset" items="${datasets}">
-				${dataset.name} <br />
+				${dataset.name} <br/>
 				</c:forEach>
 			</dd>
-		</dl -->
+		</dl>
 
 	</div>
 

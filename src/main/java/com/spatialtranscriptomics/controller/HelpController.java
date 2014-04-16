@@ -27,7 +27,6 @@ public class HelpController {
 	// show help page
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView show() {
-
 		return new ModelAndView("help");
 	}
 

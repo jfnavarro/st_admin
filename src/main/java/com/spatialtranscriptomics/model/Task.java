@@ -14,8 +14,11 @@ public class Task implements ITask {
 
 	String id;
 	
-	@NotBlank(message = "name must not be blank.")
+	@NotBlank(message = "Name must not be blank.")
 	String name;
+	
+	@NotBlank(message = "Account must not be blank.")
+	String account_id;
 	
 	String status;
 	
@@ -25,11 +28,7 @@ public class Task implements ITask {
 	
 	String[] selection_ids;
 	
-	String account_id;
-	
 	String parameters;
-	
-	Date last_modified;
 
 	public String getId() {
 		return id;
@@ -93,14 +92,5 @@ public class Task implements ITask {
 
 	public void setParameters(String parameters) {
 		this.parameters = parameters;
-	}
-
-	public Date getLast_modified() {
-		return last_modified;
-	}
-
-	public void setLast_modified(Date last_modified) {
-		this.last_modified = last_modified;
-	}
-	
+	}	
 }

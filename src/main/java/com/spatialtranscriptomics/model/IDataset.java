@@ -7,8 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 /**
  * This interface defines the Dataset model. Should reflect the corresponding model in ST API.
  */
@@ -71,8 +69,5 @@ public interface IDataset {
 	
 	public void setComment(String comm);
 	
-	public Date getLast_modified();
-
-	public void setLast_modified(Date lastmod);
 
 }

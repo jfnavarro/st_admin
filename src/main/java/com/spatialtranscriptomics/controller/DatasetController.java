@@ -7,7 +7,9 @@
 
 package com.spatialtranscriptomics.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -24,8 +26,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spatialtranscriptomics.form.DatasetAddForm;
 import com.spatialtranscriptomics.form.DatasetEditForm;
+import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.Feature;
+import com.spatialtranscriptomics.model.ImageAlignment;
+import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
@@ -47,6 +52,9 @@ public class DatasetController {
 
 	@Autowired
 	DatasetServiceImpl datasetService;
+	
+	@Autowired
+	AccountServiceImpl accountService;
 
 	@Autowired
 	FeatureServiceImpl featureService;
@@ -76,14 +84,10 @@ public class DatasetController {
 	ModelAndView get(@PathVariable String id) {
 		Dataset dataset = datasetService.find(id);
 		ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
-//		Chip chip = new Chip();
-//		try {
-//			ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
-//			chip = chipService.find(imal.getChip_id());
-//		} catch (Exception ex) {
-//			chip.setName("CHIP MISSING");
-//		}
-//		success.addObject("chip", chip);
+		List<Account> accounts = accountService.findForDataset(id);
+		success.addObject("accounts", accounts);
+		ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
+		success.addObject("imagealignment", imal);
 		return success;
 
 	}
@@ -200,12 +204,22 @@ public class DatasetController {
 	// get feature list for dataset
 	@RequestMapping(value = "/{id}/features", method = RequestMethod.GET)
 	public ModelAndView getFeatures(@PathVariable String id) {
-		List<Feature> features = featureService.find(id);
-		ModelAndView success = new ModelAndView("featurelist", "featureList", features);
+		List<Feature> features = featureService.findForDataset(id);
+		ModelAndView success = new ModelAndView("datasetfeaturelist", "featureList", features);
 		success.addObject("dataset", datasetService.find(id));
 		return success;
 	}
 
+	
+	@ModelAttribute("imageAlignmentChoices")
+	public Map<String, String> populateImageAlignmentChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<ImageAlignment> l = imageAlignmentService.list();
+		for (ImageAlignment t : l) {
+			choices.put(t.getId(), t.getName());
+		}
+		return choices;
+	}
 	
 //	@ModelAttribute("experimentChoices")
 //	public Map<String, String> populateExperimentChoices() {

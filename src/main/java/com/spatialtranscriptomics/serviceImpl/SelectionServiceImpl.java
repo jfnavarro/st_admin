@@ -89,5 +89,12 @@ public class SelectionServiceImpl implements SelectionService {
 		List<Selection> list = Arrays.asList(arr);
 		return list;
 	}
+	
+	public List<Selection> findForTask(String taskId) {
+		String url = appConfig.getProperty("url.selection") + "?task=" + taskId;
+		Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
+		List<Selection> list = Arrays.asList(arr);
+		return list;
+	}
 
 }

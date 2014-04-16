@@ -27,7 +27,7 @@ import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
  */
 
 @Controller
-@RequestMapping("/datasetinfocontroller")
+@RequestMapping("/datasetinfo")
 public class DatasetInfoController {
 
 	@Autowired

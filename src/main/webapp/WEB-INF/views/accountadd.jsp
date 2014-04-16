@@ -43,7 +43,7 @@
 
 
 		<div class="page-header">
-			<h1>Create Account</h1>
+			<h1>Create account</h1>
 		</div>
 
 
@@ -85,17 +85,6 @@
 						</form:select>
 					</div>
 				</div>
-
-
-				<!--div class="control-group">
-					<label class="control-label" for="inputGrantedDatasets">Datasets</label>
-					<div class="controls">
-						<form:select id="inputGrantedDatasets" path="grantedDatasets"
-							class="multiselect" multiple="multiple">
-							<form:options items="${datasetChoices}"></form:options>
-						</form:select>
-					</div>
-				</div-->
 
 				<spring:bind path="password">
 					<div class="control-group  ${status.error ? 'error' : ''}">

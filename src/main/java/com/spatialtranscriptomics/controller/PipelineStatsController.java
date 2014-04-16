@@ -21,7 +21,7 @@ import com.spatialtranscriptomics.serviceImpl.PipelineStatsServiceImpl;
  */
 
 @Controller
-@RequestMapping("/pipelinestatscontroller")
+@RequestMapping("/pipelinestats")
 public class PipelineStatsController {
 
 	@Autowired

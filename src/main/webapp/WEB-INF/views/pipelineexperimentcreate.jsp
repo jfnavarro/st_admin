@@ -20,7 +20,7 @@
 <!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuExperiment").addClass("active");
+		$("#menuPipelineExperiment").addClass("active");
 	});
 </script>
 	
@@ -33,7 +33,7 @@
 	<div class="container">
 
 		<div class="page-header">
-			<h1>Create Experiment</h1>
+			<h1>Create pipeline experiment</h1>
 		</div>
 
 
@@ -46,8 +46,8 @@
 
 
 		<div>
-			<form:form method="POST" commandName="experimentform"
-				action="${contextPath}/experiment/submitcreate"
+			<form:form method="POST" commandName="pipelineexperimentform"
+				action="${contextPath}/pipelineexperiment/submitcreate"
 				class="form-horizontal">
 
 
@@ -58,11 +58,11 @@
 						<!-- TODO VALIDATION -->
 
 						<div class="control-group">
-							<label class="control-label" for="experimentName">Experiment
+							<label class="control-label" for="pipelineexperimentName">Pipeline experiment
 								name</label>
 							<div class="controls">
-								<form:input type="text" id="experimentName"
-									placeholder="Choose a name" path="experimentName" />
+								<form:input type="text" id="pipelineexperimentName"
+									placeholder="Choose a name" path="pipelineexperimentName" />
 							</div>
 						</div>
 
@@ -121,7 +121,7 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="idFile">Chip (ids) file</label>
+							<label class="control-label" for="idFile">Chip (IDs) file</label>
 							<div class="controls">
 								<form:select id="idFile" path="idFile">
 									<option></option>

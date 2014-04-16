@@ -9,8 +9,8 @@
 <title>Edit Dataset</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
-
-<!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
+	
+<!-- Bootstrap and JQuery libraries, for the logout button and other JS features -->
 <script
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script
@@ -34,16 +34,13 @@
 	<c:import url="header.jsp"></c:import>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-
 	<div class="container">
-
 
 		<div class="page-header">
 			<h1>
-				Edit Dataset <small>${datasetform.dataset.name}</small>
+				Edit dataset <small>${datasetform.dataset.name}</small>
 			</h1>
 		</div>
-
 
 		<c:if test="${not empty errors}">
 			<div class="alert alert-error">
@@ -67,7 +64,6 @@
 				action="${contextPath}/dataset/submitedit" class="form-horizontal"
 				enctype="multipart/form-data">
 
-
 				<fieldset>
 
 					<div class="span6">
@@ -83,15 +79,32 @@
 								</div>
 							</div>
 						</spring:bind>
-
-
 						
+						<spring:bind path="dataset.tissue">
+							<div class="control-group  ${status.error ? 'error' : ''}">
+								<label class="control-label" for="tissue">Tissue</label>
+								<div class="controls">
+									<form:input type="text" id="tissue" placeholder="tissue"
+										path="dataset.tissue" />
+									<span class='help-inline'>${status.errorMessage}</span>
+								</div>
+							</div>
+						</spring:bind>
+
+						<spring:bind path="dataset.species">
+							<div class="control-group  ${status.error ? 'error' : ''}">
+								<label class="control-label" for="species">Stat
+									Specie</label>
+								<div class="controls">
+									<form:input type="text" id="species" placeholder="species"
+										path="dataset.species" />
+									<span class='help-inline'>${status.errorMessage}</span>
+								</div>
+							</div>
+						</spring:bind>
 
 
-						<legend>
-							Features <small>(Leave both empty to keep the current
-								features)</small>
-						</legend>
+						<legend>Features <small>(leave both empty to keep the current features)</small></legend>
 
 						<!-- spring:bind path="experimentId">
 							<div class="control-group  ${status.error ? 'error' : ''}">
@@ -140,95 +153,99 @@
 								</div>
 							</div>
 						</spring:bind>
-
-
-
 					</div>
 
+
 					<div class="span4">
-						<legend>Stats</legend>
+						<legend>Statistics and comments</legend>
 
-						<spring:bind path="dataset.stat_barcodes">
+						<spring:bind path="dataset.overall_gene_count">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statBarcodes">Stat
-									Barcodes</label>
+								<label class="control-label" for="overall_gene_count">Overall # of genes</label>
 								<div class="controls">
-									<form:input type="text" id="statBarcodes"
-										placeholder="Barcodes" path="dataset.stat_barcodes" />
+									<form:input type="text" id="overall_gene_count" placeholder="overall_gene_count"
+										path="dataset.overall_gene_count" />
+									<span class='help-inline'>${status.errorMessage}</span>
+								</div>
+							</div>
+						</spring:bind>
+						
+						<spring:bind path="dataset.unique_gene_count">
+							<div class="control-group  ${status.error ? 'error' : ''}">
+								<label class="control-label" for="unique_gene_count">Unique # of genes</label>
+								<div class="controls">
+									<form:input type="text" id="unique_gene_count" placeholder="unique_gene_count"
+										path="dataset.unique_gene_count" />
+									<span class='help-inline'>${status.errorMessage}</span>
+								</div>
+							</div>
+						</spring:bind>
+				
+						<spring:bind path="dataset.overall_barcode_count">
+							<div class="control-group  ${status.error ? 'error' : ''}">
+								<label class="control-label" for="overall_barcode_count">Overall # of barcodes</label>
+								<div class="controls">
+									<form:input type="text" id="overall_barcode_count"
+										placeholder="overall_barcode_count" path="dataset.overall_barcode_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
 
-						<spring:bind path="dataset.stat_genes">
+						<spring:bind path="dataset.unique_barcode_count">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statGenes">Stat Genes</label>
+								<label class="control-label" for="unique_barcode_count">Unique # of barcodes</label>
 								<div class="controls">
-									<form:input type="text" id="statGenes" placeholder="Genes"
-										path="dataset.stat_genes" />
+									<form:input type="text" id="unique_barcode_count"
+										placeholder="unique_barcode_count"
+										path="dataset.unique_barcode_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
-
-						<spring:bind path="dataset.stat_unique_barcodes">
+						
+						<spring:bind path="dataset.overall_hit_count">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-
-								<label class="control-label" for="statUniqueBarcodes">Stat
-									Unique Barcodes</label>
+								<label class="control-label" for="overall_hit_count">Overall # of hits</label>
 								<div class="controls">
-									<form:input type="text" id="statUniqueBarcodes"
-										placeholder="Unique barcodes"
-										path="dataset.stat_unique_barcodes" />
+									<form:input type="text" id="overall_hit_count"
+										placeholder="overall_hit_count"
+										path="dataset.overall_hit_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
-
-						<spring:bind path="dataset.stat_unique_genes">
+						
+						<spring:bind path="dataset.overall_hit_quartiles">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statUniqueGenes">Stat
-									Unique Genes</label>
+								<label class="control-label" for="overall_hit_quartiles">Overall hit quartiles</label>
 								<div class="controls">
-									<form:input type="text" id="statUniqueGenes"
-										placeholder="Unique genes" path="dataset.stat_unique_genes" />
+									<form:input type="text" id="overall_hit_quartiles"
+										placeholder="overall_hit_quartiles"
+										path="dataset.overall_hit_quartiles" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
-
-
-						<spring:bind path="dataset.stat_tissue">
+						
+						<spring:bind path="dataset.gene_pooled_hit_quartiles">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statTissue">Stat
-									Tissue</label>
+								<label class="control-label" for="gene_pooled_hit_quartiles">Gene-pooled hit quartiles</label>
 								<div class="controls">
-									<form:input type="text" id="statTissue" placeholder="Tissue"
-										path="dataset.stat_tissue" />
+									<form:input type="text" id="gene_pooled_hit_quartiles"
+										placeholder="gene_pooled_hit_quartiles"
+										path="dataset.gene_pooled_hit_quartiles" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
-
-						<spring:bind path="dataset.stat_specie">
+						
+						<spring:bind path="dataset.comment">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statSpecie">Stat
-									Specie</label>
+								<label class="control-label" for="comment">Comments</label>
 								<div class="controls">
-									<form:input type="text" id="statSpecie" placeholder="Specie"
-										path="dataset.stat_specie" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-
-						<spring:bind path="dataset.stat_comments">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="statComments">Stat
-									Comments</label>
-								<div class="controls">
-									<form:textarea rows="5" id="statComments"
-										placeholder="Free comments" path="dataset.stat_comments"></form:textarea>
+									<form:textarea rows="5" id="comment"
+										placeholder="comment" path="dataset.comment"></form:textarea>
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
@@ -237,14 +254,11 @@
 					</div>
 				</fieldset>
 
-
 				<div class="control-group">
 					<button type="submit" class="btn">Save</button>
 				</div>
 
 				<form:input type="hidden" path="dataset.id" />
-
-
 
 			</form:form>
 		</div>
@@ -254,7 +268,6 @@
 
 	</div>
 
-
 	<!-- Load File upload style -->
 	<script>
 		$(":file").filestyle({
@@ -262,7 +275,6 @@
 			classInput : "input-small"
 		});
 	</script>
-
 
 </body>
 </html>

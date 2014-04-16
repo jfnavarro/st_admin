@@ -34,7 +34,9 @@ import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.form.PipelineExperimentForm;
+import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.PipelineExperiment;
+import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
@@ -52,69 +54,79 @@ public class PipelineExperimentController {
 			.getLogger(PipelineExperimentController.class);
 
 	@Autowired
-	PipelineExperimentServiceImpl experimentService;
+	PipelineExperimentServiceImpl pipelineexperimentService;
 
 	@Autowired
 	EMRServiceImpl emrService;
 
 	@Autowired
 	S3ServiceImpl s3Service;
+	
+	@Autowired
+	AccountServiceImpl accountService;
 
+	
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
-		PipelineExperiment exp = experimentService.find(id);
-		ModelAndView success = new ModelAndView("experimentshow", "experiment", exp);
+		PipelineExperiment exp = pipelineexperimentService.find(id);
+		ModelAndView success = new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
 		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
 		success.addObject("jobflow", jobFlow);
+		success.addObject("account", accountService.find(exp.getAccount_id()));
 		return success;
 	}
 
+	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	ModelAndView list() {
-		return new ModelAndView("experimentlist", "experimentList", experimentService.list());
+		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+		success.addObject("accounts", populateAccountChoices());
+		return success;
 	}
 
+	
 	// create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)
 	public ModelAndView create() {
-		return new ModelAndView("experimentcreate", "experimentform", new PipelineExperimentForm());
+		return new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", new PipelineExperimentForm());
 	}
 
+	
 	// create submit
 	@RequestMapping(value = "/submitcreate", method = RequestMethod.POST)
-	public ModelAndView submitCreate(@ModelAttribute("experimentform") @Valid PipelineExperimentForm form, BindingResult result) {
+	public ModelAndView submitCreate(@ModelAttribute("pipelineexperimentform") @Valid PipelineExperimentForm form, BindingResult result) {
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("experimentcreate", "experimentform", form);
+			ModelAndView model = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
 
-		// create experiment
-		PipelineExperiment experiment = new PipelineExperiment();
-		experiment.setName(form.getExperimentName());
-		//experiment.setCreated(new Date());
-		experiment = experimentService.add(experiment);
+		// create pipelineexperiment
+		PipelineExperiment pipelineexperiment = new PipelineExperiment();
+		pipelineexperiment.setName(form.getExperimentName());
+		//pipelineexperiment.setCreated(new Date());
+		pipelineexperiment = pipelineexperimentService.add(pipelineexperiment);
 
 		// create EMR jobflow
-		String emrJobFlowId = emrService.startJobFlow(form, experiment.getId());
+		String emrJobFlowId = emrService.startJobFlow(form, pipelineexperiment.getId());
 
-		// Delete experiment and return error if EMR jobflow could not be
+		// Delete pipelineexperiment and return error if EMR jobflow could not be
 		// started
 		if (emrJobFlowId == null) {
-			ModelAndView awsFail = new ModelAndView("experimentcreate",	"experimentform", form);
-			experimentService.delete(experiment.getId());
+			ModelAndView awsFail = new ModelAndView("pipelineexperimentcreate",	"pipelineexperimentform", form);
+			pipelineexperimentService.delete(pipelineexperiment.getId());
 			awsFail.addObject("errors", "Could not start EMR Job. Try again.");
 			return awsFail;
 		}
 
-		// update experiment with Jobflow ID
-		experiment.setEmr_jobflow_id(emrJobFlowId);
-		experimentService.update(experiment);
+		// update pipelineexperiment with Jobflow ID
+		pipelineexperiment.setEmr_jobflow_id(emrJobFlowId);
+		pipelineexperimentService.update(pipelineexperiment);
 
-		ModelAndView success = new ModelAndView("experimentlist", "experimentList", experimentService.list());
+		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		success.addObject("msg", "Experiment started.");
 		return success;
 	}
@@ -123,17 +135,18 @@ public class PipelineExperimentController {
 	// stop and delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
-		PipelineExperiment exp = experimentService.find(id);
+		PipelineExperiment exp = pipelineexperimentService.find(id);
 		if (exp.getEmr_jobflow_id() != null) {
 			emrService.stopJobFlow(exp.getEmr_jobflow_id());
 		}
 		s3Service.deleteExperimentData(id);
-		experimentService.delete(id);
-		ModelAndView success = new ModelAndView("experimentlist", "experimentList", experimentService.list());
+		pipelineexperimentService.delete(id);
+		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		success.addObject("msg", "Experiment deleted.");
 		return success;
 	}
 
+	
 	// download output
 	@RequestMapping(value = "/{id}/output", method = RequestMethod.GET, produces = "text/json")
 	public @ResponseBody
@@ -157,7 +170,7 @@ public class PipelineExperimentController {
 		} catch (Exception e) {
 			GenericExceptionResponse resp = new GenericExceptionResponse();
 			resp.setError("Parse error");
-			resp.setError_description("Could not parse experiment output. Does the output exist?");
+			resp.setError_description("Could not parse pipeline experiment output. Does the output exist?");
 			throw new GenericException(resp);
 		}
 //		return null;
@@ -174,6 +187,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("nodeTypeChoices")
 	public Map<String, String> populateNodeTypeChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -184,6 +198,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("folderChoices")
 	public Map<String, String> populateFolderChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -194,6 +209,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("idFileChoices")
 	public Map<String, String> populateIdFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -204,6 +220,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("refAnnotationChoices")
 	public Map<String, String> populateRefAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -225,6 +242,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("bowtieFileChoices")
 	public Map<String, String> populateBowtieFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -235,12 +253,25 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
+	
 	@ModelAttribute("htseqAnnotationChoices")
 	public Map<String, String> populateHtseqAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
 		choices.put("union", "union"); 
 		//choices.put("intersection-nonempty", "intersection-nonempty"); //hardcoded in jsp view, for pre-selection
 		choices.put("intersection-strict", "intersection-strict");
+		return choices;
+	}
+	
+	
+	// populate account choice fields for form
+	@ModelAttribute("accountChoices")
+	public Map<String, String> populateAccountChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<Account> l = accountService.list();
+		for (Account t : l) {
+			choices.put(t.getId(), t.getUsername());
+		}
 		return choices;
 	}
 

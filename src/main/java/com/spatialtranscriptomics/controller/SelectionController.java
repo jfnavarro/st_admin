@@ -17,17 +17,19 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
+import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.Selection;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 
 /**
- * This class is Spring MVC controller class for the URL "/selection". It implements the methosel available at this URL and returns views (.jsp pages) with models .
+ * This class is Spring MVC controller class for the URL "/selection". It implements the methods available at this URL and returns views (.jsp pages) with models .
  */
 
 @Controller
-@RequestMapping("/selectioncontroller")
+@RequestMapping("/selection")
 public class SelectionController {
 
 	@Autowired
@@ -39,12 +41,17 @@ public class SelectionController {
 	@Autowired
 	DatasetServiceImpl datasetService;
 
+	@Autowired
+	FeatureServiceImpl featureService;
+	
 	
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
 		Selection sel = selectionService.find(id);
 		ModelAndView success = new ModelAndView("selectionshow", "selection", sel);
+		success.addObject("account", accountService.find(sel.getAccount_id()));
+		success.addObject("dataset", datasetService.find(sel.getDataset_id()));
 		return success;
 	}
 
@@ -52,7 +59,23 @@ public class SelectionController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		return new ModelAndView("selectionlist", "selectionList", selectionService.list());
+		List<Selection> selections = selectionService.list();
+		ModelAndView success = new ModelAndView("selectionlist", "selectionList", selections);
+		// Probably more selections than accounts/datasets eventually, so we grab all items
+		// rather than filter out the ones having selections.
+		success.addObject("accounts", populateAccountChoices());
+		success.addObject("datasets", populateDatasetChoices());
+		return success;
+	}
+	
+	
+	// get feature list for selection
+	@RequestMapping(value = "/{id}/features", method = RequestMethod.GET)
+	public ModelAndView getFeatures(@PathVariable String id) {
+		List<Feature> features = featureService.findForSelection(id);
+		ModelAndView success = new ModelAndView("selectionfeaturelist", "featureList", features);
+		success.addObject("selection", selectionService.find(id));
+		return success;
 	}
 
 	

@@ -7,8 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -18,9 +16,7 @@ import org.hibernate.validator.constraints.Length;
  * This bean class maps the Account data retrieved from the ST API to the application data model. 
  * This data model has to be aligned with the ST API data model.
  * Does data validation using Hibernate validator constraints.
- * 
- * */
-
+ */
 public class Account implements IAccount {
 
 	public String id;
@@ -35,6 +31,7 @@ public class Account implements IAccount {
 	@NotBlank
 	public String role;
 
+	@NotBlank
 	public boolean enabled;
 	
 	public String institution;
@@ -47,11 +44,9 @@ public class Account implements IAccount {
 	
 	public String city;
 	
-	public int postcode;
+	public String postcode;
 	
 	public String country;
-	
-	public Date last_modified;
 	
 	// id is set automatically by MongoDB
 	public String getId() {
@@ -134,11 +129,11 @@ public class Account implements IAccount {
 		this.city = city;
 	}
 
-	public int getPostcode() {
+	public String getPostcode() {
 		return postcode;
 	}
 
-	public void setPostcode(int postcode) {
+	public void setPostcode(String postcode) {
 		this.postcode = postcode;
 	}
 
@@ -148,14 +143,6 @@ public class Account implements IAccount {
 
 	public void setCountry(String country) {
 		this.country = country;
-	}
-
-	public Date getLast_modified() {
-		return last_modified;
-	}
-
-	public void setLast_modified(Date last_modified) {
-		this.last_modified = last_modified;
 	}
 
 }

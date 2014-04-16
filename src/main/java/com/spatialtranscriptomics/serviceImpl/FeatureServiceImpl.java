@@ -7,6 +7,7 @@
 
 package com.spatialtranscriptomics.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -14,10 +15,8 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.spatialtranscriptomics.exceptions.GenericException;
@@ -43,12 +42,20 @@ public class FeatureServiceImpl implements FeatureService {
 	Properties appConfig;
 
 	
-	public List<Feature> find(String datasetId){
+	public List<Feature> findForDataset(String datasetId){
 		String url = appConfig.getProperty("url.feature");
 		 url += "?dataset=" + datasetId;
 		 logger.debug("Feature URL: " + url);
 		Feature[] features = secureRestTemplate.getForObject(url, Feature[].class);
 		return Arrays.asList(features);
+	}
+	
+	public List<Feature> findForSelection(String selectionId){
+		String url = appConfig.getProperty("url.feature");
+		 url += "?selection=" + selectionId;
+		 logger.debug("Feature URL: " + url);
+		Feature[] features = secureRestTemplate.getForObject(url, Feature[].class);
+		return (features == null ? new ArrayList<Feature>(0) : Arrays.asList(features));
 	}
 
 	
