@@ -6,7 +6,7 @@
 <head>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
-<title>Chip Details</title>
+<title>Chip details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
 <script
@@ -44,30 +44,28 @@
 			<dd>${chip.barcodes}&nbsp;</dd>
 			<dt>X1</dt>
 			<dd>${chip.x1}&nbsp;</dd>
-			<dt>X1 Border</dt>
+			<dt>X1 border</dt>
 			<dd>${chip.x1_border}&nbsp;</dd>
-			<dt>X1 Total</dt>
+			<dt>X1 total</dt>
 			<dd>${chip.x1_total}&nbsp;</dd>
 			<dt>X2</dt>
 			<dd>${chip.x2}&nbsp;</dd>
-			<dt>X2 Border</dt>
+			<dt>X2 border</dt>
 			<dd>${chip.x2_border}&nbsp;</dd>
-			<dt>X2 Total</dt>
+			<dt>X2 total</dt>
 			<dd>${chip.x2_total}&nbsp;</dd>
 			<dt>Y1</dt>
 			<dd>${chip.y1}&nbsp;</dd>
-			<dt>Y1 Border</dt>
+			<dt>Y1 border</dt>
 			<dd>${chip.y1_border}&nbsp;</dd>
-			<dt>Y1 Total</dt>
+			<dt>Y1 total</dt>
 			<dd>${chip.y1_total}&nbsp;</dd>
 			<dt>Y2</dt>
 			<dd>${chip.y2}&nbsp;</dd>
-			<dt>Y2 Border</dt>
+			<dt>Y2 border</dt>
 			<dd>${chip.y2_border}&nbsp;</dd>
-			<dt>Y2 Total</dt>
+			<dt>Y2 total</dt>
 			<dd>${chip.y2_total}&nbsp;</dd>
-			<dt>Last modified</dt>
-			<dd>${chip.last_modified}&nbsp;</dd>
 		</dl>
 
 		<div></div>

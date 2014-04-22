@@ -6,7 +6,7 @@
 <head>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
-<title>Chip Details</title>
+<title>Image alignment details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
 <script
@@ -42,19 +42,21 @@
 
 			<dt>Name</dt>
 			<dd>${imagealignment.name}&nbsp;</dd>
-			<dt>Chip ID</dt>
-			<dd>${imagealignment.chip_id}&nbsp;</dd>
+			<dt>Chip</dt>
+			<dd>${chip.name}&nbsp;</dd>
 			<dt>Figure red</dt>
 			<dd>${imagealignment.figure_red}&nbsp;</dd>
 			<dt>Figure blue</dt>
 			<dd>${imagealignment.figure_blue}&nbsp;</dd>
 			<dt>Alignment matrix</dt>
-			<dd>${imagealignment.alignment_matrix}&nbsp;</dd>
-			<dt>Last modified</dt>
-			<dd>${imagealignment.last_modified}&nbsp;</dd>
+			<dd>
+			  <table border="1">
+			    <tr><td>${imagealignment.alignment_matrix[0]}</td><td>${imagealignment.alignment_matrix[1]}</td><td>${imagealignment.alignment_matrix[2]}</td></tr>
+			    <tr><td>${imagealignment.alignment_matrix[3]}</td><td>${imagealignment.alignment_matrix[4]}</td><td>${imagealignment.alignment_matrix[5]}</td></tr>
+			    <tr><td>${imagealignment.alignment_matrix[6]}</td><td>${imagealignment.alignment_matrix[7]}</td><td>${imagealignment.alignment_matrix[8]}</td></tr>
+			  </table>
+			</dd>
 		</dl>
-
-		<div></div>
 
 	</div>
 	<!-- /container -->

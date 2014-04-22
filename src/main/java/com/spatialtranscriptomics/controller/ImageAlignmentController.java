@@ -44,7 +44,9 @@ public class ImageAlignmentController {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
 		ImageAlignment imal = imagealignmentService.find(id);
+		Chip chip = chipService.find(imal.getChip_id());
 		ModelAndView success = new ModelAndView("imagealignmentshow", "imagealignment", imal);
+		success.addObject("chip", chip);
 		return success;
 	}
 
@@ -52,7 +54,10 @@ public class ImageAlignmentController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		return new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+		ModelAndView success;
+		success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+		success.addObject("chips", populateChipChoices());
+		return success;
 	}
 
 	

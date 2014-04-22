@@ -60,6 +60,16 @@
 			<dt>EMR job last message</dt>
 			<dd>${jobflow.executionStatusDetail.lastStateChangeReason}&nbsp;</dd>
 		</dl>
+		
+		<c:if test="${not empty stats}">
+		<dl class="dl-horizontal">
+		  <dt>Statistics</dt>
+			<dd>
+				<a href="<c:url value="/pipelinestats/"/>${stats.id}">Show</a>
+			</dd>
+		</dl>
+		</c:if>
+		
 		<c:if test="${jobflow.executionStatusDetail.state == 'COMPLETED'}">
 			<dl class="dl-horizontal">
 				<dt>EMR job output</dt>

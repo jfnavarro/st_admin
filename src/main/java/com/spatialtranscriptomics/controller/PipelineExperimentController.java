@@ -36,9 +36,11 @@ import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.form.PipelineExperimentForm;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.PipelineExperiment;
+import com.spatialtranscriptomics.model.PipelineStats;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.PipelineStatsServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 
 /**
@@ -55,6 +57,9 @@ public class PipelineExperimentController {
 
 	@Autowired
 	PipelineExperimentServiceImpl pipelineexperimentService;
+	
+	@Autowired
+	PipelineStatsServiceImpl pipelinestatsService;
 
 	@Autowired
 	EMRServiceImpl emrService;
@@ -71,6 +76,8 @@ public class PipelineExperimentController {
 	public ModelAndView get(@PathVariable String id) {
 		PipelineExperiment exp = pipelineexperimentService.find(id);
 		ModelAndView success = new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
+		PipelineStats stats = pipelinestatsService.findForPipelineExperiment(id);
+		success.addObject("stats", stats);
 		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
 		success.addObject("jobflow", jobFlow);
 		success.addObject("account", accountService.find(exp.getAccount_id()));

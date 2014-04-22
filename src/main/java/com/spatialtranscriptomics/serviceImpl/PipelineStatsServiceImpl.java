@@ -56,7 +56,11 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 
 	
 	public PipelineStats findForPipelineExperiment(String expId) {
-		String url = appConfig.getProperty("url.pipelinestats") + "?pipelineexperiment=" + expId;
+		String url = appConfig.getProperty("url.pipelinestats");
+		if (url.endsWith("/")) {
+			url = url.substring(0, url.length() - 1);
+		}
+		url += "?pipelineexperiment=" + expId;
 		PipelineStats[] arr = secureRestTemplate.getForObject(url, PipelineStats[].class);
 		if (arr == null || arr.length == 0) {
 			return null;

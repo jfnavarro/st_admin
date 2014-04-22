@@ -52,7 +52,10 @@ public class DatasetInfoController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		return new ModelAndView("datasetinfolist", "datasetinfoList", datasetinfoService.list());
+		ModelAndView success = new ModelAndView("datasetinfolist", "datasetinfoList", datasetinfoService.list());
+		success.addObject("datasets", populateDatasetChoices());
+		success.addObject("accounts", populateAccountChoices());
+		return success;
 	}
 
 	

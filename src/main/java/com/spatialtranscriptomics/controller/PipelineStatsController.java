@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.model.PipelineStats;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineStatsServiceImpl;
@@ -33,8 +34,10 @@ public class PipelineStatsController {
 	// get
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView get(@PathVariable String id) {
-		PipelineStats ds = pipelinestatsService.find(id);
-		ModelAndView success = new ModelAndView("pipelinestatsshow", "pipelinestats", ds);
+		PipelineStats stats = pipelinestatsService.find(id);
+		PipelineExperiment exp = pipelineexperimentService.find(stats.getExperiment_id());
+		ModelAndView success = new ModelAndView("pipelinestatsshow", "pipelinestats", stats);
+		success.addObject("pipelineexperiment", exp);
 		return success;
 	}
 
