@@ -39,7 +39,7 @@ public class ChipController {
 
 	@Autowired
 	ChipServiceImpl chipService;
-
+	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody

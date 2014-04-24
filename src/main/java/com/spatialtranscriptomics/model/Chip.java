@@ -8,6 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
 
 
 /**
@@ -38,6 +39,10 @@ public class Chip implements IChip {
 	int y2_border;
 	int y2_total;
 
+    private DateTime created_at;
+	
+    private DateTime last_modified;
+	
 	// id is set automatically by MongoDB
 	public String getId() {
 		return id;
@@ -159,4 +164,16 @@ public class Chip implements IChip {
 		this.y2_total = y2_total;
 	}
 
+	public DateTime getCreated_at() {
+		return created_at;
+	}
+	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
+	}
+	
 }

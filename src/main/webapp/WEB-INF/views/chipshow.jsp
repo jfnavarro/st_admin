@@ -66,6 +66,10 @@
 			<dd>${chip.y2_border}&nbsp;</dd>
 			<dt>Y2 total</dt>
 			<dd>${chip.y2_total}&nbsp;</dd>
+			<dt>Created</dt>
+			<dd>${chip.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${chip.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 
 		<div></div>

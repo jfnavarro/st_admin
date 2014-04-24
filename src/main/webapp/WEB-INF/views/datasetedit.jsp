@@ -106,7 +106,7 @@
 
 						<legend>Features <small>(leave both empty to keep the current features)</small></legend>
 
-						<!-- spring:bind path="experimentId">
+						<!-- <spring:bind path="experimentId">
 							<div class="control-group  ${status.error ? 'error' : ''}">
 								<label class="control-label" for="experiment">Experiment
 									Output </label>
@@ -118,7 +118,7 @@
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
-						</spring:bind -->
+						</spring:bind> -->
 
 						<div class="pull-center text-center">
 							<strong>-- or --</strong>

@@ -194,8 +194,7 @@
 					<div class="control-group ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputY2Total">Y2 Total</label>
 						<div class="controls">
-							<form:input type="text" id="inputY2Total" placeholder="Y2 total"
-								path="y2_total" />
+							<form:input type="text" id="inputY2Total" placeholder="Y2 total" path="y2_total" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>
@@ -206,6 +205,9 @@
 				</div>
 
 				<form:input type="hidden" path="id" />
+				<form:input type="hidden" path="created_at" />
+				<form:input type="hidden" path="last_modified" />
+				
 			</form:form>
 		</div>
 		<div>
@@ -213,9 +215,6 @@
 		</div>
 
 	</div>
-
-
-
 
 </body>
 </html>

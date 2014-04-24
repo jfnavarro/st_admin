@@ -173,6 +173,13 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- JODA -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.2</version>
+		</dependency>
 
 		<!-- Amazon AWS Java SDK -->
 		<dependency><!-- check this -->
