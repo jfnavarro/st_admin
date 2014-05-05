@@ -38,4 +38,8 @@ public interface ITask {
 	public String getParameters();
 
 	public void setParameters(String parameters);
+	
+	public String getResultFile();
+
+	public void setResultFile(String file);
 }
