@@ -7,9 +7,22 @@
 
 package com.spatialtranscriptomics.model;
 
+import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.spatialtranscriptomics.controller.DatasetController;
+import com.spatialtranscriptomics.controller.DatasetInfoController;
+import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 
 
 /**
@@ -31,7 +44,7 @@ public class Account implements IAccount {
 	@NotBlank
 	public String role;
 
-	@NotBlank
+	//@NotBlank   // not possible...
 	public boolean enabled;
 	
 	public String institution;
@@ -47,6 +60,8 @@ public class Account implements IAccount {
 	public String postcode;
 	
 	public String country;
+	
+	public List<String> granted_datasets;
 	
 	// id is set automatically by MongoDB
 	public String getId() {
@@ -145,4 +160,34 @@ public class Account implements IAccount {
 		this.country = country;
 	}
 
+	
+	@Transient
+	public List<String> getGranted_datasets() {
+		return this.granted_datasets;
+//		List<Dataset> alreadyInThere = DatasetController.getStaticDatasetService().listForAccount(this.id);
+//		if (alreadyInThere == null) { return null; }
+//		ArrayList<String> ds = new ArrayList<String>(alreadyInThere.size());
+//		for (Dataset d : alreadyInThere) {
+//			ds.add(d.getId());
+//		}
+//		return ds;
+	}
+	
+	
+	@Transient
+	public void setGranted_datasets(List<String> grantedDatasets) {
+		this.granted_datasets = grantedDatasets;
+		//System.out.println(grantedDatasets == null);
+//		DatasetInfoServiceImpl datasetinfoService = DatasetInfoController.getStaticDatasetInfoService();
+//		if (grantedDatasets == null) { return; }
+//		for (String did : grantedDatasets) {
+//			try {
+//				Date d = new Date();
+//				System.out.println(did);
+//				datasetinfoService.add(new DatasetInfo(this.id, did, "Added " + d.toString()));
+//			} catch (Exception e) {
+//			}
+//		}
+	}
+	
 }

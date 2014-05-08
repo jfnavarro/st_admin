@@ -7,7 +7,10 @@
 
 package com.spatialtranscriptomics.controller;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spatialtranscriptomics.component.StaticContextAccessor;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
@@ -117,15 +121,24 @@ public class AccountController {
 	}
 
 	
-//	// populate dataset choice fields for form
-//	@ModelAttribute("datasetChoices")
-//	public Map<String, String> populateDatasetChoices() {
-//		Map<String, String> choices = new LinkedHashMap<String, String>();
-//		List<Dataset> l = datasetService.list();
-//		for (Dataset t : l) {
-//			choices.put(t.getId(), t.getName());
-//		}
-//		return choices;
-//	}
-
+	// populate dataset choice fields for form
+	@ModelAttribute("datasetChoices")
+	public Map<String, String> populateDatasetChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<Dataset> l = datasetService.list();
+		for (Dataset t : l) {
+			choices.put(t.getId(), t.getName());
+		}
+		return choices;
+	}
+	
+	
+	public static AccountServiceImpl getStaticAccountService() {
+        return StaticContextAccessor.getBean(AccountController.class).getAccountService();
+   }
+	
+	
+	public AccountServiceImpl getAccountService() {
+		return this.accountService;
+	}
 }

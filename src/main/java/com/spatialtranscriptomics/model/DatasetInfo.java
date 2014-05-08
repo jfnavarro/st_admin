@@ -1,7 +1,5 @@
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
@@ -21,7 +19,7 @@ public class DatasetInfo implements IDatasetInfo {
 	
 	String comment;
 	
-	Date last_modified;
+	public DatasetInfo() {}
 	
 	public String getId() {
 		return id;

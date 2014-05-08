@@ -68,6 +68,9 @@
 			<dt>Parameters</dt>
 			<dd>${task.parameters}&nbsp;
 			</dd>
+			<dt>Result file</dt>
+			<dd>${task.result_file}&nbsp;
+			</dd>
 		</dl>
 	</div>
 	

@@ -7,6 +7,9 @@
 
 package com.spatialtranscriptomics.model;
 
+import java.beans.Transient;
+import java.util.List;
+
 /**
  * This interface defines the Account model. Should reflect the corresponding model in ST API.
  */
@@ -60,5 +63,12 @@ public interface IAccount {
 	public String getCountry();
 
 	public void setCountry(String country);
+	
+	@Transient
+	public List<String> getGranted_datasets();
+
+	@Transient
+	public void setGranted_datasets(List<String> datasets);
+
 
 }

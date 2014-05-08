@@ -72,8 +72,10 @@ public class DatasetInfoServiceImpl implements DatasetInfoService {
 	
 	public DatasetInfo add(DatasetInfo datasetinfo) {
 		String url = appConfig.getProperty("url.datasetinfo");
+		System.out.println(url);
 		DatasetInfo dsResponse = secureRestTemplate.postForObject(url, datasetinfo,
 				DatasetInfo.class);
+		System.out.println(dsResponse);
 		return dsResponse;
 	}
 

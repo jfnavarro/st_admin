@@ -74,6 +74,17 @@
 					</div>
 				</div>
 
+				<spring:bind path="password">
+					<div class="control-group  ${status.error ? 'error' : ''}">
+						<label class="control-label" for="inputPassword">Password</label>
+						<div class="controls">
+							<form:input type="password" id="inputPassword"
+								placeholder="Password" path="password" />
+							<span class='help-inline'>${status.errorMessage}</span>
+						</div>
+					</div>
+				</spring:bind>
+
 				<div class="control-group">
 					<label class="control-label">Account enabled</label>
 					<div class="controls">
@@ -156,7 +167,18 @@
 						</div>
 					</div>
 				</spring:bind>
-				
+			    
+			    
+			    <div class="control-group">
+                <label class="control-label" for="inputGrantedDatasets">Granted datasets</label>
+                <div class="controls">
+                <form:select id="inputGrantedDatasets" path="granted_datasets" class="multiselect" multiple="multiple">
+                    <form:options items="${datasetChoices}"></form:options>
+                 </form:select>
+                 </div>
+                 </div>
+			    
+			    			    
 				<button type="submit" class="btn">Save</button>
 				<form:input type="hidden" path="id" />
 				<form:input type="hidden" path="password" />

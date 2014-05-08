@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spatialtranscriptomics.component.StaticContextAccessor;
 import com.spatialtranscriptomics.form.DatasetAddForm;
 import com.spatialtranscriptomics.form.DatasetEditForm;
 import com.spatialtranscriptomics.model.Account;
@@ -230,5 +231,16 @@ public class DatasetController {
 //		}
 //		return choices;
 //	}
+	
+	
+	
+	public static DatasetServiceImpl getStaticDatasetService() {
+		return StaticContextAccessor.getBean(DatasetController.class).getDatasetService();
+	}
+	
+	
+	public DatasetServiceImpl getDatasetService() {
+		return this.datasetService;
+	}
 	
 }

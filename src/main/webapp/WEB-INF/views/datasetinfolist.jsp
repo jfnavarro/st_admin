@@ -63,6 +63,7 @@
 				<tr>
 					<th>Dataset</th>
 					<th>Account</th>
+					<th>Comment</th>
 				</tr>
 
 			</thead>
@@ -71,6 +72,7 @@
 					<tr>
 						<td><a href="<c:url value="/dataset/"/>${dain.dataset_id}">${datasets[dain.dataset_id]}</a></td>
 						<td><a href="<c:url value="/account/"/>${dain.account_id}">${accounts[dain.account_id]}</a></td>
+						<td><a href="<c:url value="/account/"/>${dain.comment}">${accounts[dain.comment]}</a></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${dain.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

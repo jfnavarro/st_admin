@@ -55,6 +55,7 @@ public class DatasetServiceImpl implements DatasetService {
 	public List<Dataset> listForAccount(String accountId) {
 		String url = appConfig.getProperty("url.dataset") + "?account=" + accountId;
 		Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
+		if (dsArray == null) { return null; }
 		List<Dataset> dsList = Arrays.asList(dsArray);
 		return dsList;
 	}

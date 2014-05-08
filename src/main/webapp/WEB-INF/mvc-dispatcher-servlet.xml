@@ -39,10 +39,10 @@
 	<context:component-scan base-package="com.spatialtranscriptomics.serviceImpl" />
 	<context:component-scan base-package="com.spatialtranscriptomics.auth" />
 	
-	<!--  Enable startup bean. -->
+	<!--  Enable startup bean and some "hacks". -->
 	
-	<bean id="startupHousekeeper" class="com.spatialtranscriptomics.StartupHousekeeper"/>
-	
+	<bean id="startupHousekeeper" class="com.spatialtranscriptomics.component.StartupHousekeeper"/>
+	<bean id="staticContextAccessor" class="com.spatialtranscriptomics.component.StaticContextAccessor"/>
 	
 	<!-- File upload max. filesize -->
 

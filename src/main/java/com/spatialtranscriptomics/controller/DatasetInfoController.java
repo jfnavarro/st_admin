@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spatialtranscriptomics.component.StaticContextAccessor;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.DatasetInfo;
@@ -135,6 +136,15 @@ public class DatasetInfoController {
 			choices.put(t.getId(), t.getName());
 		}
 		return choices;
+	}
+	
+	public static DatasetInfoServiceImpl getStaticDatasetInfoService() {
+		return StaticContextAccessor.getBean(DatasetInfoController.class).getDatasetInfoService();
+	}
+	
+	
+	public DatasetInfoServiceImpl getDatasetInfoService() {
+		return this.datasetinfoService;
 	}
 	
 }
