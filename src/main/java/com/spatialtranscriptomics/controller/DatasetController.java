@@ -143,12 +143,14 @@ public class DatasetController {
 
 	}
 
+	
 	// edit
 	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
 	public ModelAndView edit(@PathVariable String id) {
 		return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(datasetService.find(id)));
 	}
 
+	
 	// edit submit
 	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
 	public ModelAndView submitEdit(@ModelAttribute("datasetform") @Valid DatasetEditForm datasetEditForm, BindingResult result) {
@@ -232,6 +234,17 @@ public class DatasetController {
 //		return choices;
 //	}
 	
+	
+	// populate account choice fields for form
+	@ModelAttribute("accountChoices")
+	public Map<String, String> populateAccountChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<Account> l = accountService.list();
+		for (Account t : l) {
+			choices.put(t.getId(), t.getUsername());
+		}
+		return choices;
+	}
 	
 	
 	public static DatasetServiceImpl getStaticDatasetService() {

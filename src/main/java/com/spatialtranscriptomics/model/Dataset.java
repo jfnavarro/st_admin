@@ -7,7 +7,9 @@
 
 package com.spatialtranscriptomics.model;
 
+import java.beans.Transient;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -42,6 +44,8 @@ public class Dataset implements IDataset {
 	String[] obo_foundry_terms;
 	String comment;
 	Date last_modified;	
+	
+	List<String> granted_accounts;
 	
 	public String getId() {
 		return id;
@@ -155,6 +159,16 @@ public class Dataset implements IDataset {
 
 	public void setComment(String comm) {
 		this.comment = comm;
+	}
+	
+	@Transient
+	public List<String> getGranted_accounts() {
+		return this.granted_accounts;
+	}
+	
+	@Transient
+	public void setGranted_accounts(List<String> grantedAccounts) {
+		this.granted_accounts = grantedAccounts;
 	}
 
 }

@@ -252,6 +252,23 @@
 						</spring:bind>
 
 					</div>
+					
+					
+					<div class="span4">
+						<legend>Granted datasets</legend>
+						
+						
+						<div class="control-group">
+		                <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
+		                <div class="controls">
+			                <form:select id="inputGrantedAccounts" path="granted_accounts" class="multiselect" multiple="multiple">
+			                    <form:options items="${accountChoices}"></form:options>
+			                 </form:select>
+			                 </div>
+		                 </div>
+						
+					</div>
+					
 				</fieldset>
 
 				<div class="control-group">

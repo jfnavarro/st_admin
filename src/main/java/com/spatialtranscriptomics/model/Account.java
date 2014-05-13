@@ -164,30 +164,13 @@ public class Account implements IAccount {
 	@Transient
 	public List<String> getGranted_datasets() {
 		return this.granted_datasets;
-//		List<Dataset> alreadyInThere = DatasetController.getStaticDatasetService().listForAccount(this.id);
-//		if (alreadyInThere == null) { return null; }
-//		ArrayList<String> ds = new ArrayList<String>(alreadyInThere.size());
-//		for (Dataset d : alreadyInThere) {
-//			ds.add(d.getId());
-//		}
-//		return ds;
 	}
 	
 	
 	@Transient
 	public void setGranted_datasets(List<String> grantedDatasets) {
+		//System.out.println("Setting datasets: " + grantedDatasets.size());
 		this.granted_datasets = grantedDatasets;
-		//System.out.println(grantedDatasets == null);
-//		DatasetInfoServiceImpl datasetinfoService = DatasetInfoController.getStaticDatasetInfoService();
-//		if (grantedDatasets == null) { return; }
-//		for (String did : grantedDatasets) {
-//			try {
-//				Date d = new Date();
-//				System.out.println(did);
-//				datasetinfoService.add(new DatasetInfo(this.id, did, "Added " + d.toString()));
-//			} catch (Exception e) {
-//			}
-//		}
 	}
 	
 }

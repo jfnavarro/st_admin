@@ -7,6 +7,8 @@
 
 package com.spatialtranscriptomics.model;
 
+import java.util.List;
+
 /**
  * This interface defines the Dataset model. Should reflect the corresponding model in ST API.
  */
@@ -68,6 +70,10 @@ public interface IDataset {
 	public String getComment();
 	
 	public void setComment(String comm);
+	
+	public List<String> getGranted_accounts();
+	
+	public void setGranted_accounts(List<String> grantedAccounts);
 	
 
 }

@@ -73,7 +73,7 @@
 					</div>
 				</spring:bind>
 
-
+				<spring:bind path="role">
 				<div class="control-group">
 					<label class="control-label" for="inputRole">Role</label>
 					<div class="controls">
@@ -85,6 +85,7 @@
 						</form:select>
 					</div>
 				</div>
+				</spring:bind>
 
 				<spring:bind path="password">
 					<div class="control-group  ${status.error ? 'error' : ''}">
@@ -105,81 +106,85 @@
 				</div>
 				
 				<spring:bind path="institution">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputInstitution">Institution</label>
 						<div class="controls">
 							<form:input type="text" id="inputInstitution" placeholder="Institution"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="institution" />
 						</div>
 					</div>
 				</spring:bind>
 				
 				<spring:bind path="first_name">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputFirst_name">First name</label>
 						<div class="controls">
 							<form:input type="text" id="inputFirst_name" placeholder="First_name"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="first_name" />
 						</div>
 					</div>
 				</spring:bind>
 				
 				<spring:bind path="last_name">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputLast_name">Last name</label>
 						<div class="controls">
 							<form:input type="text" id="inputLast_name" placeholder="Last_name"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="last_name" />
 						</div>
 					</div>
 				</spring:bind>
 				
 				<spring:bind path="street_address">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputStreet_address">Street address</label>
 						<div class="controls">
 							<form:input type="text" id="inputStreet_address" placeholder="Street_address"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="street_address" />
 						</div>
 					</div>
 				</spring:bind>
 				
 				<spring:bind path="city">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputCity">City</label>
 						<div class="controls">
 							<form:input type="text" id="inputCity" placeholder="City"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="city" />
 						</div>
 					</div>
 				</spring:bind>
 
 				<spring:bind path="postcode">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputPostcode">Post code</label>
 						<div class="controls">
 							<form:input type="text" id="inputPostcode" placeholder="Postcode"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="postcode" />
 						</div>
 					</div>
 				</spring:bind>
 				
 				<spring:bind path="country">
-					<div class="control-group  ${status.error ? 'error' : ''}">
+					<div class="control-group">
 						<label class="control-label" for="inputCountry">Country</label>
 						<div class="controls">
 							<form:input type="text" id="inputCountry" placeholder="Country"
-								path="" />
-							<span class='help-inline'>${status.errorMessage}</span>
+								path="country" />
 						</div>
 					</div>
-				</spring:bind>
+				
+								
+					<div class="control-group">
+	                <label class="control-label" for="inputGranted_datasets">Granted datasets</label>
+	                <div class="controls">
+	                <form:select id="inputGranted_datasets" path="granted_datasets" class="multiselect" multiple="multiple">
+	                    <form:options items="${datasetChoices}"></form:options>
+	                 </form:select>
+	                 </div>
+                 </div>
+                 </spring:bind>
+                 
 
 				<div>
 					<button type="submit" class="btn">Create</button>

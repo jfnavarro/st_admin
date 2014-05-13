@@ -5,10 +5,11 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
+	
 <head>
-<title>Create dataset access for account</title>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<title>Dataset access for accounts</title>
+
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
 <script
@@ -23,18 +24,20 @@
 	});
 </script>
 
-<!-- Script to style file upload -->
+<!--  Scripts for Multiselect -->	
 <script type="text/javascript"
-	src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
+	src="<c:url value="/js/bootstrap-multiselect.js"/>"></script>
+<script type="text/javascript"
+	src="<c:url value="/js/st-multiselect-button.js"/>"></script>
 
 
 </head>
 <body>
-	<c:import url="header.jsp"></c:import>
 	<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
-	<div class="container">
+	<c:import url="header.jsp"></c:import>
 
+	<div class="container">
 
 		<div class="page-header">
 			<h1>Create dataset access for account</h1>
@@ -42,248 +45,61 @@
 
 		<c:if test="${not empty errors}">
 			<div class="alert alert-error">
-				<strong>Error: </strong>Your input is not valid. Please check the
-				values in the form below.
+				<strong>Error: </strong>Your input is not valid. Please check the values in the form below.
 			</div>
+			<c:forEach var="err" items="${errors}" varStatus="idx">
+				<div class="alert alert-error">${err.defaultMessage}</div>
+			</c:forEach>
 		</c:if>
 
-		<c:if test="${not empty featureerror}">
-			<div class="alert alert-error">
-				<strong>Error: </strong>${featureerror}
-			</div>
-		</c:if>
+		
 
 		<div>
+			<form:form method="POST" commandName="datasetinfo"
+				action="${contextPath}/datasetinfo/submitadd" class="form-horizontal">
 
-			<div class="row">
-				<form:form method="POST" commandName="datasetform"
-					action="${contextPath}/dataset/submitadd" class="form-horizontal"
-					enctype="multipart/form-data">
-
-
-					<fieldset>
-
-						<div class="span6">
-							<legend>General</legend>
-
-							 <div class="control-group">
--                                       <label class="control-label" for="inputDatasets">Datasets</label>
--                                       <div class="controls">
--                                               <form:select id="inputDatasets" path="datasets"
--                                                       class="multiselect" multiple="multiple">
--                                                       <form:options items="${datasetChoices}"></form:options>
--                                               </form:select>
--                                       </div>
--                               </div>
-
-							<spring:bind path="dataset.name">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="inputName">Name</label>
-									<div class="controls">
-										<form:input type="text" id="inputName" placeholder="Name"
-											path="dataset.name" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.imagealignment_id">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="inputImageAlignment">Image alignment</label>
-									<div class="controls">
-										<form:select id="inputImageAlignment" path="dataset.imagealignment_id">
-											<option></option>
-											<form:options items="${imageAlignmentChoices}"></form:options>
-										</form:select>
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<!--  start features -->
-
-							<legend>
-								Features <small>(choose either experiment output or feature file)</small>
-							</legend>
-
-							<spring:bind path="experimentId">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="experiment">Experiment output</label>
-									<div class="controls">
-										<form:select id="experimentId" path="experimentId">
-											<option></option>
-											<form:options items="${experimentChoices}"></form:options>
-										</form:select>
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<div class="pull-center text-center">
-								<strong>-- or --</strong>
-							</div>
-
-							<spring:bind path="featureFile">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="featureFile">Feature file</label>
-									<div class="control-group">
-										<div class="controls">
-											<form:input type="file" id="featureFile"
-												placeholder="Feature file" path="featureFile"
-												class="filestyle" />
-											<span class='help-inline'>${status.errorMessage}</span>
-										</div>
-									</div>
-								</div>
-							</spring:bind>
-
-							<!-- end features -->
-
-						</div>
-
-
-						<div class="span4">
-						
-							<legend>Information and statistics</legend>
-						
-							<spring:bind path="dataset.species">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="species">Species</label>
-									<div class="controls">
-										<form:input type="text" id="species" placeholder="Species"
-											path="dataset.species" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-						
-							<spring:bind path="dataset.tissue">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="tissue">Tissue</label>
-									<div class="controls">
-										<form:input type="text" id="tissue" placeholder="Tissue"
-											path="dataset.tissue" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.overall_gene_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallGeneCount">Overall gene count</label>
-									<div class="controls">
-										<form:input type="text" id="overallGeneCount"
-											placeholder="Overall gene count" path="dataset.overall_gene_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.unique_gene_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="uniqueGeneCount">Unique gene count</label>
-									<div class="controls">
-										<form:input type="text" id="uniqueGeneCount"
-											placeholder="Unique gene count" path="dataset.unique_gene_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.overall_barcode_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallBarcodeCount">Overall barcode count</label>
-									<div class="controls">
-										<form:input type="text" id="overallBarcodeCount"
-											placeholder="Overall barcode count" path="dataset.overall_barcode_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.unique_barcode_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="uniqueBarcodeCount">Unique barcode count</label>
-									<div class="controls">
-										<form:input type="text" id="uniqueBarcodeCount"
-											placeholder="Unique barcode count" path="dataset.unique_barcode_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-							
-							<spring:bind path="dataset.overall_hit_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallHitCount">Overall hit count</label>
-									<div class="controls">
-										<form:input type="text" id="overallHitCount"
-											placeholder="Overall hit count" path="dataset.overall_hit_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-							
-							<spring:bind path="dataset.overall_hit_quartiles">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallHitQuartiles">Overall hit quartiles</label>
-									<div class="controls">
-										<form:input type="text" id="overallHitQuartiles"
-											placeholder="Overall hit quartiles" path="dataset.overall_hit_quartiles" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-							
-							<spring:bind path="dataset.gene_pooled_hit_quartiles">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="genePooledHitQuartiles">Gene-pooled hit quartiles</label>
-									<div class="controls">
-										<form:input type="text" id="genePooledHitQuartiles"
-											placeholder="Gene-pooled hit quartiles" path="dataset.gene_pooled_hit_quartiles" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.comment">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="comments">Comments</label>
-									<div class="controls">
-										<form:textarea rows="5" id="comments"
-											placeholder="Comments" path="dataset.comment"></form:textarea>
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-						</div>
-
-					</fieldset>
-
+				<spring:bind path="account_id">				
 					<div class="control-group">
-						<button type="submit" class="btn">Create</button>
+	                <label class="control-label" for="inputAccounts">Accounts</label>
+	                <div class="controls">
+		                <form:select id="inputAccounts" path="" multiple="false">
+		                    <form:options items="${accountChoices}"></form:options>
+		                 </form:select>
+		                 </div>
+	                 </div>
+                 </spring:bind>
+
+				<spring:bind path="dataset_id">				
+					<div class="control-group">
+	                <label class="control-label" for="inputDatasets">Datasets</label>
+	                <div class="controls">
+		                <form:select id="inputDatasets" path=""  multiple="false">
+		                    <form:options items="${datasetChoices}"></form:options>
+		                 </form:select>
+		                 </div>
+	                 </div>
+                 </spring:bind>
+				
+				<spring:bind path="comment">
+					<div class="control-group  ${status.error ? 'error' : ''}">
+						<label class="control-label" for="inputComment">Comments</label>
+						<div class="controls">
+							<form:input type="text" id="inputComment" placeholder="Comment" path="" />
+							<span class='help-inline'>${status.errorMessage}</span>
+						</div>
 					</div>
-
-				</form:form>
-			</div>
-
+				</spring:bind>
+				
+				<div>
+					<button type="submit" class="btn">Create</button>
+				</div>
+			</form:form>
 		</div>
-
 		<div>
-			<a href="<c:url value="/dataset/"/>">Cancel</a>
+			<a href="<c:url value="/datasetinfo/"/>${datasetinfo.id}">Cancel</a>
 		</div>
 
 	</div>
-
-
-	<!-- Load File upload style -->
-	<script>
-		$(":file").filestyle({
-			buttonText : "Choose .json file",
-			classInput : "input-small"
-		});
-	</script>
-
 
 </body>
 </html>

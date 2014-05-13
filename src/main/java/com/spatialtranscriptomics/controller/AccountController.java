@@ -97,8 +97,7 @@ public class AccountController {
 	
 	// edit submit
 	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-	public ModelAndView submitEdit(
-			@ModelAttribute("account") @Valid Account acc, BindingResult result) {
+	public ModelAndView submitEdit(@ModelAttribute("account") @Valid Account acc, BindingResult result) {
 		if (result.hasErrors()) {
 			ModelAndView model = new ModelAndView("accountedit", "account", acc);
 			model.addObject("errors", result.getAllErrors());
