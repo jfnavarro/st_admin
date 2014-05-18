@@ -33,7 +33,8 @@
 			</h1>
 		</div>
 		<div>
-			<a href="<c:url value="/pipelineexperiment/"/>">Back</a>
+			<a href="<c:url value="/pipelineexperiment/"/>">Back</a> | <a
+				href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/edit">Edit pipeline experiment</a>
 		</div>
 
 		<div class="row">

@@ -90,10 +90,28 @@ public class PipelineExperimentController {
 	public @ResponseBody
 	ModelAndView list() {
 		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
-		success.addObject("accounts", populateAccountChoices());
 		return success;
 	}
 
+	// edit
+	@RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+	public ModelAndView edit(@PathVariable String id) {
+		return new ModelAndView("pipelineexperimentedit", "pipelineexperiment", pipelineexperimentService.find(id));
+	}
+	
+	// edit submit
+	@RequestMapping(value = "/submitedit", method = RequestMethod.POST)
+	public ModelAndView submitEdit(@ModelAttribute("pipelineexperiment") @Valid PipelineExperiment pipelineexperiment, BindingResult result) {
+		if (result.hasErrors()) {
+			ModelAndView model = new ModelAndView("pipelineexperimentedit", "pipelineexperiment", pipelineexperiment);
+			model.addObject("errors", result.getAllErrors());
+			return model;
+		}
+		pipelineexperimentService.update(pipelineexperiment);
+		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+		success.addObject("msg", "PipelineExperiment saved.");
+		return success;
+	}
 	
 	// create
 	@RequestMapping(value = "/create", method = RequestMethod.GET)

@@ -55,7 +55,7 @@
 		</c:if>
 
 		<div>
-			<a href="<c:url value="/imagealignments/add"/>">Create image alignment</a>
+			<a href="<c:url value="/imagealignment/add"/>">Create image alignment</a>
 		</div>
 
 		<table class="table">
@@ -70,7 +70,7 @@
 				<c:forEach var="imal" items="${imagealignmentList}">
 					<tr>
 						<td><a href="<c:url value="/imagealignment/"/>${imal.id}">${imal.name}</a></td>
-						<td>${chips[imal.chip_id]}</td>
+						<td>${chipChoices[imal.chip_id]}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${imal.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

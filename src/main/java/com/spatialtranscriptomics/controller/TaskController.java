@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spatialtranscriptomics.model.Account;
+import com.spatialtranscriptomics.model.Selection;
 import com.spatialtranscriptomics.model.Task;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
@@ -124,6 +125,15 @@ public class TaskController {
 		return choices;
 	}
 	
-	
+	// populate account choice fields for form
+	@ModelAttribute("selectionChoices")
+	public Map<String, String> populateSelectionChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<Selection> l = selectionService.list();
+		for (Selection t : l) {
+			choices.put(t.getId(), t.getName());
+		}
+		return choices;
+	}
 	
 }

@@ -31,6 +31,7 @@ import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.ImageAlignment;
+import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
@@ -224,15 +225,15 @@ public class DatasetController {
 		return choices;
 	}
 	
-//	@ModelAttribute("experimentChoices")
-//	public Map<String, String> populateExperimentChoices() {
-//		Map<String, String> choices = new LinkedHashMap<String, String>();
-//		List<Experiment> l = experimentService.list();
-//		for (Experiment t : l) {
-//			choices.put(t.getId(), t.getName());
-//		}
-//		return choices;
-//	}
+	@ModelAttribute("experimentChoices")
+	public Map<String, String> populateExperimentChoices() {
+		Map<String, String> choices = new LinkedHashMap<String, String>();
+		List<PipelineExperiment> l = experimentService.list();
+		for (PipelineExperiment pe : l) {
+			choices.put(pe.getId(), pe.getName());
+		}
+		return choices;
+	}
 	
 	
 	// populate account choice fields for form

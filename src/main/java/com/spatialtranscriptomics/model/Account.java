@@ -8,21 +8,10 @@
 package com.spatialtranscriptomics.model;
 
 import java.beans.Transient;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.spatialtranscriptomics.controller.DatasetController;
-import com.spatialtranscriptomics.controller.DatasetInfoController;
-import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 
 
 /**

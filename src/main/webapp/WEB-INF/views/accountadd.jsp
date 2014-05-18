@@ -192,7 +192,7 @@
 			</form:form>
 		</div>
 		<div>
-			<a href="<c:url value="/account/"/>${account.id}">Cancel</a>
+			<a href="<c:url value="/account/"/>">Cancel</a>
 		</div>
 
 	</div>

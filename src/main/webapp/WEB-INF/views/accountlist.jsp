@@ -72,10 +72,12 @@
 					<th>Institution</th>
 					<th>First name</th>
 					<th>Last name</th>
+					<!--
 					<th>Street address</th>
 					<th>City</th>
 					<th>Post code</th>
 					<th>Country</th>
+					-->
 					<th></th>
 				</tr>
 
@@ -98,10 +100,12 @@
 						<td>${account.institution}</td>
 						<td>${account.first_name}</td>
 						<td>${account.last_name}</td>
+						<!--
 						<td>${account.street_address}</td>
 						<td>${account.city}</td>
 						<td>${account.postcode}</td>
 						<td>${account.country}</td>
+						 -->
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>

@@ -61,9 +61,7 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th>ID</th>
-					<th>Dataset</th>
-					<th>Account</th>
+					<th>Dataset - account</th>
 					<th>Comment</th>
 				</tr>
 
@@ -71,10 +69,8 @@
 			<tbody>
 				<c:forEach var="dain" items="${datasetinfoList}">
 					<tr>
-						<td>${dain.id}</td>
-						<td><a href="<c:url value="/dataset/"/>${dain.dataset_id}">${datasets[dain.dataset_id]}</a></td>
-						<td><a href="<c:url value="/account/"/>${dain.account_id}">${accounts[dain.account_id]}</a></td>
-						<td><a href="<c:url value="/account/"/>${dain.comment}">${dain.comment}</a></td>
+						<td><a href="<c:url value="/datasetinfo/"/>${dain.id}">${accountChoices[dain.account_id]} - ${datasetChoices[dain.dataset_id]}</a></td>
+						<td>${dain.comment}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${dain.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

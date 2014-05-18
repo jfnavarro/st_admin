@@ -1,8 +1,7 @@
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
-
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * This bean class maps the Selection data retrieved from the ST API to the application data model. 
@@ -14,14 +13,17 @@ public class Selection implements ISelection {
 
 	String id;
 	
-	String[] feature_ids;
+	@NotBlank(message = "Name must not be blank.")
+	String name;
 	
+	@NotBlank(message = "Dataset must not be blank.")
 	String dataset_id;
 	
+	@NotBlank(message = "Account must not be blank.")
 	String account_id;
 	
-	@NotBlank(message = "name must not be blank.")
-	String name;
+	@NotEmpty(message = "Features must not be empty.")
+	String[] feature_ids;
 	
 	String type;
 	
@@ -30,8 +32,6 @@ public class Selection implements ISelection {
 	String comment;
 	
 	String[] obo_foundry_terms;
-	
-	Date last_modified;
 
 	public String getId() {
 		return id;
@@ -104,16 +104,5 @@ public class Selection implements ISelection {
 	public void setObo_foundry_terms(String[] obo_foundry_terms) {
 		this.obo_foundry_terms = obo_foundry_terms;
 	}
-	
-	
-	public Date getLast_modified() {
-		return last_modified;
-	}
-
-	public void setLast_modified(Date last_modified) {
-		this.last_modified = last_modified;
-	}
-	
-	
 	
 }

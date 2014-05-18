@@ -56,7 +56,6 @@ public class ImageAlignmentController {
 	public ModelAndView list() {
 		ModelAndView success;
 		success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
-		success.addObject("chips", populateChipChoices());
 		return success;
 	}
 

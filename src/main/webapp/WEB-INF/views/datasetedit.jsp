@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Edit Dataset</title>
+<title>Edit dataset</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 	
@@ -84,7 +84,7 @@
 							<div class="control-group  ${status.error ? 'error' : ''}">
 								<label class="control-label" for="tissue">Tissue</label>
 								<div class="controls">
-									<form:input type="text" id="tissue" placeholder="tissue"
+									<form:input type="text" id="tissue" placeholder="Tissue"
 										path="dataset.tissue" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -93,23 +93,43 @@
 
 						<spring:bind path="dataset.species">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="species">Stat
-									Specie</label>
+								<label class="control-label" for="species">Species</label>
 								<div class="controls">
-									<form:input type="text" id="species" placeholder="species"
+									<form:input type="text" id="species" placeholder="Species"
 										path="dataset.species" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
+						
+						 <spring:bind path="dataset.image_alignment_id">
+						    <div class="control-group">
+				                <label class="control-label" for="inputImageAlignmentId">Image alignment ID</label>
+				                <div class="controls">
+				                <form:select id="inputImageAlignmentId" path="dataset.image_alignment_id" multiple="false">
+	                  		  <form:options items="${imageAlignmentChoices}"></form:options>
+	                 	</form:select>
+		                 </div>
+		                </div>
+	                	</spring:bind>
+	                	
+					  <spring:bind path="dataset.granted_accounts">
+					    <div class="control-group">
+			                <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
+			                <div class="controls">
+			                <form:select id="inputGrantedAccounts" path="dataset.granted_accounts" class="multiselect" multiple="multiple">
+                  		  <form:options items="${accountChoices}"></form:options>
+                 	</form:select>
+	                 </div>
+	                </div>
+                	</spring:bind>						
 
 
 						<legend>Features <small>(leave both empty to keep the current features)</small></legend>
 
-						<!-- <spring:bind path="experimentId">
+						<spring:bind path="experimentId">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="experiment">Experiment
-									Output </label>
+								<label class="control-label" for="experiment">Experiment output </label>
 								<div class="controls">
 									<form:select id="experimentId" path="experimentId">
 										<option></option>
@@ -118,7 +138,7 @@
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
-						</spring:bind> -->
+						</spring:bind>
 
 						<div class="pull-center text-center">
 							<strong>-- or --</strong>
@@ -140,8 +160,7 @@
 
 						<spring:bind path="featureFile">
 							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="featureFile">Feature
-									File</label>
+								<label class="control-label" for="featureFile">Feature file</label>
 								<div class="control-group">
 
 									<div class="controls">
@@ -163,7 +182,7 @@
 							<div class="control-group  ${status.error ? 'error' : ''}">
 								<label class="control-label" for="overall_gene_count">Overall # of genes</label>
 								<div class="controls">
-									<form:input type="text" id="overall_gene_count" placeholder="overall_gene_count"
+									<form:input type="text" id="overall_gene_count" placeholder=""
 										path="dataset.overall_gene_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -174,7 +193,7 @@
 							<div class="control-group  ${status.error ? 'error' : ''}">
 								<label class="control-label" for="unique_gene_count">Unique # of genes</label>
 								<div class="controls">
-									<form:input type="text" id="unique_gene_count" placeholder="unique_gene_count"
+									<form:input type="text" id="unique_gene_count" placeholder=""
 										path="dataset.unique_gene_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -186,7 +205,7 @@
 								<label class="control-label" for="overall_barcode_count">Overall # of barcodes</label>
 								<div class="controls">
 									<form:input type="text" id="overall_barcode_count"
-										placeholder="overall_barcode_count" path="dataset.overall_barcode_count" />
+										placeholder="" path="dataset.overall_barcode_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
@@ -197,7 +216,7 @@
 								<label class="control-label" for="unique_barcode_count">Unique # of barcodes</label>
 								<div class="controls">
 									<form:input type="text" id="unique_barcode_count"
-										placeholder="unique_barcode_count"
+										placeholder=""
 										path="dataset.unique_barcode_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -209,7 +228,7 @@
 								<label class="control-label" for="overall_hit_count">Overall # of hits</label>
 								<div class="controls">
 									<form:input type="text" id="overall_hit_count"
-										placeholder="overall_hit_count"
+										placeholder=""
 										path="dataset.overall_hit_count" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -221,7 +240,7 @@
 								<label class="control-label" for="overall_hit_quartiles">Overall hit quartiles</label>
 								<div class="controls">
 									<form:input type="text" id="overall_hit_quartiles"
-										placeholder="overall_hit_quartiles"
+										placeholder=""
 										path="dataset.overall_hit_quartiles" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
@@ -233,8 +252,20 @@
 								<label class="control-label" for="gene_pooled_hit_quartiles">Gene-pooled hit quartiles</label>
 								<div class="controls">
 									<form:input type="text" id="gene_pooled_hit_quartiles"
-										placeholder="gene_pooled_hit_quartiles"
+										placeholder=""
 										path="dataset.gene_pooled_hit_quartiles" />
+									<span class='help-inline'>${status.errorMessage}</span>
+								</div>
+							</div>
+						</spring:bind>
+						
+						<spring:bind path="dataset.obo_foundry_terms">
+							<div class="control-group  ${status.error ? 'error' : ''}">
+								<label class="control-label" for="obo_foundry_terms">OBO Foundry terms</label>
+								<div class="controls">
+									<form:input type="text" id="obo_foundry_terms"
+										placeholder=""
+										path="dataset.obo_foundry_terms" />
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
@@ -245,28 +276,12 @@
 								<label class="control-label" for="comment">Comments</label>
 								<div class="controls">
 									<form:textarea rows="5" id="comment"
-										placeholder="comment" path="dataset.comment"></form:textarea>
+										placeholder="Comment" path="dataset.comment"></form:textarea>
 									<span class='help-inline'>${status.errorMessage}</span>
 								</div>
 							</div>
 						</spring:bind>
 
-					</div>
-					
-					
-					<div class="span4">
-						<legend>Granted datasets</legend>
-						
-						
-						<div class="control-group">
-		                <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
-		                <div class="controls">
-			                <form:select id="inputGrantedAccounts" path="granted_accounts" class="multiselect" multiple="multiple">
-			                    <form:options items="${accountChoices}"></form:options>
-			                 </form:select>
-			                 </div>
-		                 </div>
-						
 					</div>
 					
 				</fieldset>

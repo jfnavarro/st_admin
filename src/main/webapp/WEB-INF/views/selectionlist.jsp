@@ -56,11 +56,6 @@
 			</div>
 		</c:if>
 
-
-		<div>
-			<a href="<c:url value="/selection/add"/>">Create selection</a>
-		</div>
-
 		<table class="table">
 			<thead>
 				<tr>
@@ -74,8 +69,8 @@
 				<c:forEach var="selection" items="${selectionList}">
 					<tr>
 						<td><a href="<c:url value="/selection/"/>${selection.id}">${selection.name}</a></td>
-						<td>${accounts[selection.account_id]}</td>
-						<td>${datasets[selection.dataset_id]}</td>					        
+						<td>${accountChoices[selection.account_id]}</td>
+						<td>${datasetChoices[selection.dataset_id]}</td>					        
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${selection.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>

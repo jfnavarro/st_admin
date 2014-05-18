@@ -3,6 +3,7 @@ package com.spatialtranscriptomics.model;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * This bean class maps the Task data retrieved from the ST API to the application data model. 
@@ -22,8 +23,10 @@ public class Task implements ITask {
 	
 	String status;
 	
+	@DateTimeFormat
 	Date start;
 	
+	@DateTimeFormat
 	Date end;
 	
 	String[] selection_ids;

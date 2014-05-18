@@ -8,7 +8,6 @@
 package com.spatialtranscriptomics.model;
 
 import java.beans.Transient;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -43,7 +42,6 @@ public class Dataset implements IDataset {
 	double[] gene_pooled_hit_quartiles;
 	String[] obo_foundry_terms;
 	String comment;
-	Date last_modified;	
 	
 	List<String> granted_accounts;
 	

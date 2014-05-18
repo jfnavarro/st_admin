@@ -61,10 +61,6 @@ public class SelectionController {
 	public ModelAndView list() {
 		List<Selection> selections = selectionService.list();
 		ModelAndView success = new ModelAndView("selectionlist", "selectionList", selections);
-		// Probably more selections than accounts/datasets eventually, so we grab all items
-		// rather than filter out the ones having selections.
-		success.addObject("accounts", populateAccountChoices());
-		success.addObject("datasets", populateDatasetChoices());
 		return success;
 	}
 	

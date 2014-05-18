@@ -62,7 +62,7 @@
 					<div class="control-group">
 	                <label class="control-label" for="inputAccounts">Accounts</label>
 	                <div class="controls">
-		                <form:select id="inputAccounts" path="" multiple="false">
+		                <form:select id="inputAccounts" path="account_id" multiple="false">
 		                    <form:options items="${accountChoices}"></form:options>
 		                 </form:select>
 		                 </div>
@@ -73,7 +73,7 @@
 					<div class="control-group">
 	                <label class="control-label" for="inputDatasets">Datasets</label>
 	                <div class="controls">
-		                <form:select id="inputDatasets" path=""  multiple="false">
+		                <form:select id="inputDatasets" path="dataset_id"  multiple="false">
 		                    <form:options items="${datasetChoices}"></form:options>
 		                 </form:select>
 		                 </div>
@@ -84,7 +84,7 @@
 					<div class="control-group  ${status.error ? 'error' : ''}">
 						<label class="control-label" for="inputComment">Comments</label>
 						<div class="controls">
-							<form:input type="text" id="inputComment" placeholder="Comment" path="" />
+							<form:input type="text" id="inputComment" placeholder="Comment" path="comment" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>
@@ -96,7 +96,7 @@
 			</form:form>
 		</div>
 		<div>
-			<a href="<c:url value="/datasetinfo/"/>${datasetinfo.id}">Cancel</a>
+			<a href="<c:url value="/datasetinfo/"/>">Cancel</a>
 		</div>
 
 	</div>

@@ -77,13 +77,34 @@
 									</div>
 								</div>
 							</spring:bind>
+							
+							<spring:bind path="dataset.species">
+								<div class="control-group  ${status.error ? 'error' : ''}">
+									<label class="control-label" for="species">Species</label>
+									<div class="controls">
+										<form:input type="text" id="species" placeholder="Species"
+											path="dataset.species" />
+										<span class='help-inline'>${status.errorMessage}</span>
+									</div>
+								</div>
+							</spring:bind>
+						
+							<spring:bind path="dataset.tissue">
+								<div class="control-group  ${status.error ? 'error' : ''}">
+									<label class="control-label" for="tissue">Tissue</label>
+									<div class="controls">
+										<form:input type="text" id="tissue" placeholder="Tissue"
+											path="dataset.tissue" />
+										<span class='help-inline'>${status.errorMessage}</span>
+									</div>
+								</div>
+							</spring:bind>
 
-							<spring:bind path="dataset.imagealignment_id">
+							<spring:bind path="dataset.image_alignment_id">
 								<div class="control-group  ${status.error ? 'error' : ''}">
 									<label class="control-label" for="inputImageAlignment">Image alignment</label>
 									<div class="controls">
-										<form:select id="inputImageAlignment" path="dataset.imagealignment_id">
-											<option></option>
+										<form:select id="inputImageAlignment" path="dataset.image_alignment_id">
 											<form:options items="${imageAlignmentChoices}"></form:options>
 										</form:select>
 										<span class='help-inline'>${status.errorMessage}</span>
@@ -136,35 +157,13 @@
 						<div class="span4">
 						
 							<legend>Information and statistics</legend>
-						
-							<spring:bind path="dataset.species">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="species">Species</label>
-									<div class="controls">
-										<form:input type="text" id="species" placeholder="Species"
-											path="dataset.species" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-						
-							<spring:bind path="dataset.tissue">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="tissue">Tissue</label>
-									<div class="controls">
-										<form:input type="text" id="tissue" placeholder="Tissue"
-											path="dataset.tissue" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
 
 							<spring:bind path="dataset.overall_gene_count">
 								<div class="control-group  ${status.error ? 'error' : ''}">
 									<label class="control-label" for="overallGeneCount">Overall gene count</label>
 									<div class="controls">
 										<form:input type="text" id="overallGeneCount"
-											placeholder="Overall gene count" path="dataset.overall_gene_count" />
+											placeholder="" path="dataset.overall_gene_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -175,7 +174,7 @@
 									<label class="control-label" for="uniqueGeneCount">Unique gene count</label>
 									<div class="controls">
 										<form:input type="text" id="uniqueGeneCount"
-											placeholder="Unique gene count" path="dataset.unique_gene_count" />
+											placeholder="" path="dataset.unique_gene_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -186,7 +185,7 @@
 									<label class="control-label" for="overallBarcodeCount">Overall barcode count</label>
 									<div class="controls">
 										<form:input type="text" id="overallBarcodeCount"
-											placeholder="Overall barcode count" path="dataset.overall_barcode_count" />
+											placeholder="" path="dataset.overall_barcode_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -197,7 +196,7 @@
 									<label class="control-label" for="uniqueBarcodeCount">Unique barcode count</label>
 									<div class="controls">
 										<form:input type="text" id="uniqueBarcodeCount"
-											placeholder="Unique barcode count" path="dataset.unique_barcode_count" />
+											placeholder="" path="dataset.unique_barcode_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -208,7 +207,7 @@
 									<label class="control-label" for="overallHitCount">Overall hit count</label>
 									<div class="controls">
 										<form:input type="text" id="overallHitCount"
-											placeholder="Overall hit count" path="dataset.overall_hit_count" />
+											placeholder="" path="dataset.overall_hit_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -219,7 +218,7 @@
 									<label class="control-label" for="overallHitQuartiles">Overall hit quartiles</label>
 									<div class="controls">
 										<form:input type="text" id="overallHitQuartiles"
-											placeholder="Overall hit quartiles" path="dataset.overall_hit_quartiles" />
+											placeholder="" path="dataset.overall_hit_quartiles" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -230,7 +229,18 @@
 									<label class="control-label" for="genePooledHitQuartiles">Gene-pooled hit quartiles</label>
 									<div class="controls">
 										<form:input type="text" id="genePooledHitQuartiles"
-											placeholder="Gene-pooled hit quartiles" path="dataset.gene_pooled_hit_quartiles" />
+											placeholder="" path="dataset.gene_pooled_hit_quartiles" />
+										<span class='help-inline'>${status.errorMessage}</span>
+									</div>
+								</div>
+							</spring:bind>
+							
+							<spring:bind path="dataset.obo_foundry_terms">
+								<div class="control-group  ${status.error ? 'error' : ''}">
+									<label class="control-label" for="oboFoundryTerms">OBO Foundry terms</label>
+									<div class="controls">
+										<form:input type="text" id="obo_foundry_terms"
+											placeholder="" path="dataset.obo_foundry_terms" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>

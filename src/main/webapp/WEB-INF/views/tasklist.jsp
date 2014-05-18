@@ -31,7 +31,7 @@
 						var theId = $(this).data('id');
 						$(".modal-footer #deleteBtn")
 								.html(
-										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/selection/"/>'
+										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/task/"/>'
 												+ theId
 												+ '/delete" class="btn btn-danger">Delete</a>');
 					});

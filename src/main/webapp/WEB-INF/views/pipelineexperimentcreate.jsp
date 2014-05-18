@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Create Experiment</title>
+<title>Create pipeline experiment</title>
 
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
@@ -39,8 +39,7 @@
 
 		<c:if test="${not empty errors}">
 			<div class="alert alert-error">
-				<strong>Error: </strong>Your input is not valid. Please check the
-				values in the form below.
+				<strong>Error: </strong>Your input is not valid. Please check the values in the form below.
 			</div>
 		</c:if>
 
@@ -58,18 +57,16 @@
 						<!-- TODO VALIDATION -->
 
 						<div class="control-group">
-							<label class="control-label" for="pipelineexperimentName">Pipeline experiment
-								name</label>
+							<label class="control-label" for="experimentName">Pipeline experiment name</label>
 							<div class="controls">
-								<form:input type="text" id="pipelineexperimentName"
-									placeholder="Choose a name" path="pipelineexperimentName" />
+								<form:input type="text" id="experimentName"
+									placeholder="Choose a name" path="experimentName" />
 							</div>
 						</div>
 
 
 						<div class="control-group">
-							<label class="control-label" for="numNodes">Number of
-								instances</label>
+							<label class="control-label" for="numNodes">Number of instances</label>
 							<div class="controls">
 								<form:select id="numNodes" path="numNodes">
 									<option></option>
@@ -79,29 +76,6 @@
 						</div>
 
 
-						<div class="control-group">
-							<label class="control-label" for="nodeTypeMaster">Master
-								instance type</label>
-							<div class="controls">
-								<form:select id="nodeTypeMaster" path="nodeTypeMaster">
-									<form:option selected="m1.large" label="M1Large (default)"
-										value="m1.large"></form:option>
-									<form:options items="${nodeTypeChoices}" />
-								</form:select>
-							</div>
-						</div>
-
-						<div class="control-group">
-							<label class="control-label" for="nodeTypeSlave">Slave
-								instance type</label>
-							<div class="controls">
-								<form:select id="nodeTypeSlave" path="nodeTypeSlave">
-									<form:option selected="m1.xlarge" label="M1XLarge (default)"
-										value="m1.xlarge"></form:option>
-									<form:options items="${nodeTypeChoices}" />
-								</form:select>
-							</div>
-						</div>
 					</div>
 
 					<!-- end span -->
@@ -110,8 +84,7 @@
 					<div class="span6">
 						<legend>Pipeline parameters</legend>
 						<div class="control-group">
-							<label class="control-label" for="folder">Input data
-								folder</label>
+							<label class="control-label" for="folder">Input data folder</label>
 							<div class="controls">
 								<form:select id="folder" path="folder">
 									<option></option>
@@ -142,8 +115,7 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="referenceGenome">Reference
-								genome bowtie2 index</label>
+							<label class="control-label" for="referenceGenome">Reference genome bowtie2 index</label>
 							<div class="controls">
 								<form:select id="referenceGenome" path="referenceGenome">
 									<option></option>
@@ -155,24 +127,42 @@
 						<!-- Toggle Optional button -->
 						<div class="control-group pull-right">
 							<button class="btn btn-link" type="button" class="btn btn-danger"
-								data-toggle="collapse" data-target="#optional">Optional
-								parameters</button>
+								data-toggle="collapse" data-target="#optional">Optional parameters</button>
 						</div>
 
 					</div>
 
-
 				</div>
 				<div id="optional" class="collapse out">
-
 
 					<legend>Optional parameters</legend>
 					<div class="row">
 						<div class="span6">
 
 							<div class="control-group">
-								<label class="control-label" for="allowMissed">Number of
-									allowed mismatches for barcode mapping</label>
+							<label class="control-label" for="nodeTypeMaster">Master instance type</label>
+							<div class="controls">
+								<form:select id="nodeTypeMaster" path="nodeTypeMaster">
+										<form:option selected="m1.large" label="M1Large (default)"
+											value="m1.large"></form:option>
+										<form:options items="${nodeTypeChoices}" />
+									</form:select>
+								</div>
+							</div>
+	
+							<div class="control-group">
+								<label class="control-label" for="nodeTypeSlave">Slave instance type</label>
+								<div class="controls">
+									<form:select id="nodeTypeSlave" path="nodeTypeSlave">
+										<form:option selected="m1.xlarge" label="M1XLarge (default)"
+											value="m1.xlarge"></form:option>
+										<form:options items="${nodeTypeChoices}" />
+									</form:select>
+								</div>
+							</div>
+
+							<div class="control-group">
+								<label class="control-label" for="allowMissed">Number of allowed mismatches for barcode mapping</label>
 								<div class="controls">
 									<form:input type="text" id="allowMissed" value="3"
 										path="allowMissed" />
@@ -180,8 +170,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="kMerLength">Kmer for
-									barcode mapping</label>
+								<label class="control-label" for="kMerLength">Kmer for barcode mapping</label>
 								<div class="controls">
 									<form:input type="text" id="kMerLength" value="6"
 										path="kMerLength" />
@@ -189,8 +178,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="numBasesTrimFw">Number
-									of bases to Trim (forward)</label>
+								<label class="control-label" for="numBasesTrimFw">Number of bases to trim (forward)</label>
 								<div class="controls">
 									<form:input type="text" id="numBasesTrimFw" value="42"
 										path="numBasesTrimFw" />
@@ -198,8 +186,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="numBasesTrimRev">Number
-									of bases to Trim (reverse)</label>
+								<label class="control-label" for="numBasesTrimRev">Number of bases to trim (reverse)</label>
 								<div class="controls">
 									<form:input type="text" id="numBasesTrimRev" value="5"
 										path="numBasesTrimRev" />
@@ -207,8 +194,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="minSeqLength">Minimal
-									sequence length after trimming</label>
+								<label class="control-label" for="minSeqLength">Minimal sequence length after trimming</label>
 								<div class="controls">
 									<form:input type="text" id="minSeqLength" value="28"
 										path="minSeqLength" />
@@ -216,8 +202,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="BarcodeLength">Barcode
-									length</label>
+								<label class="control-label" for="BarcodeLength">Barcode length</label>
 								<div class="controls">
 									<form:input type="text" id="BarcodeLength" value="18"
 										path="BarcodeLength" />
@@ -225,8 +210,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="phred64Quality">Use
-									phred-64 quality system (reads)</label>
+								<label class="control-label" for="phred64Quality">Use phred-64 quality system (reads)</label>
 								<div class="controls">
 									<form:checkbox id="phred64Quality" path="phred64Quality" />
 								</div>
@@ -238,9 +222,14 @@
 				</div>-->
 
 
+							
+						</div>
+
+						<div class="span6">
+							<!-- Second column of optional parameters -->
+
 							<div class="control-group">
-								<label class="control-label" for="bowtieFile">Contaminant
-									genome bowtie2 index</label>
+								<label class="control-label" for="bowtieFile">Contaminant genome bowtie2 index</label>
 								<div class="controls">
 									<form:select id="bowtieFile" path="bowtieFile">
 										<form:option selected="none" label="none" value=""></form:option>
@@ -250,8 +239,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="htseqAnnotationMode">HTSeq
-									type of annotation mode</label>
+								<label class="control-label" for="htseqAnnotationMode">HTSeq type of annotation mode</label>
 								<div class="controls">
 									<form:select id="htseqAnnotationMode"
 										path="htseqAnnotationMode">
@@ -261,16 +249,9 @@
 									</form:select>
 								</div>
 							</div>
-						</div>
-
-						<div class="span6">
-							<!-- Second column of optional parameters -->
-
-
 
 							<div class="control-group">
-								<label class="control-label" for="BarcodeStartPos">Barcode
-									start position in the sequence</label>
+								<label class="control-label" for="BarcodeStartPos">Barcode start position in the sequence</label>
 								<div class="controls">
 									<form:input type="text" id="BarcodeStartPos" value="0"
 										path="BarcodeStartPos" />
@@ -278,8 +259,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="idPosError">Barcode
-									positional error</label>
+								<label class="control-label" for="idPosError">Barcode positional error</label>
 								<div class="controls">
 									<form:input type="text" id="idPosError" value="0"
 										path="idPosError" />
@@ -287,8 +267,7 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="minQualityTrim">Minimum
-									trimming quality</label>
+								<label class="control-label" for="minQualityTrim">Minimum trimming quality</label>
 								<div class="controls">
 									<form:input type="text" id="minQualityTrim" value="20"
 										path="minQualityTrim" />
@@ -296,32 +275,28 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="htSeqDisregard">HTSeq
-									discard reads that annotates to ambigous genes</label>
+								<label class="control-label" for="htSeqDisregard">HTSeq discard reads that annotates to ambigous genes</label>
 								<div class="controls">
 									<form:checkbox id="htSeqDisregard" path="htSeqDisregard" />
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="discardFw">Discard
-									forward reads that map uniquely</label>
+								<label class="control-label" for="discardFw">Discard forward reads that map uniquely</label>
 								<div class="controls">
 									<form:checkbox id="discardFw" path="discardFw" />
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="discardRev">Discard
-									reverse reads that map uniquely</label>
+								<label class="control-label" for="discardRev">Discard reverse reads that map uniquely</label>
 								<div class="controls">
 									<form:checkbox id="discardRev" path="discardRev" />
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="inclNonDiscordant">Discard
-									non-discordant alignments when mapping</label>
+								<label class="control-label" for="inclNonDiscordant">Discard non-discordant alignments when mapping</label>
 								<div class="controls">
 									<form:checkbox id="inclNonDiscordant" path="inclNonDiscordant" />
 								</div>
@@ -343,11 +318,8 @@
 
 				<div class="control-group">
 
-					<button type="submit" class="btn btn-primary">Start
-						Pipeline</button>
+					<button type="submit" class="btn btn-primary">Start pipeline</button>
 				</div>
-
-
 
 			</form:form>
 		</div>

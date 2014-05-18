@@ -77,7 +77,7 @@
 				<c:forEach var="exp" items="${pipelineexperimentList}">
 					<tr>
 						<td><a href="<c:url value="/pipelineexperiment/"/>${exp.id}">${exp.name}</a></td>
-						<td>${accounts[exp.account_id]}</td>
+						<td>${accountChoices[exp.account_id]}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${exp.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
