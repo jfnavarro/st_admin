@@ -88,5 +88,12 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		String url = appConfig.getProperty("url.pipelinestats");
 		secureRestTemplate.delete(url + id);
 	}
+	
+	public void deleteForExperiment(String experimentId) {
+		PipelineStats stats = findForPipelineExperiment(experimentId);
+		if (stats != null) {
+			delete(stats.getId());
+		}
+	}
 
 }

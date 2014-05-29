@@ -19,6 +19,7 @@ import com.spatialtranscriptomics.model.ImageAlignment;
 import com.spatialtranscriptomics.model.Chip;
 import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
 
@@ -32,6 +33,9 @@ public class ImageAlignmentController {
 
 	@Autowired
 	ImageAlignmentServiceImpl imagealignmentService;
+	
+	@Autowired
+	DatasetServiceImpl datasetService;
 	
 	@Autowired
 	ChipServiceImpl chipService;
@@ -110,6 +114,7 @@ public class ImageAlignmentController {
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
 		imagealignmentService.delete(id);
+		datasetService.setUnabledForImageAlignment(id);
 		ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
 		success.addObject("msg", "ImageAlignment deleted.");
 		return success;

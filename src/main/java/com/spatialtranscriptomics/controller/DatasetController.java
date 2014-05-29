@@ -34,11 +34,13 @@ import com.spatialtranscriptomics.model.ImageAlignment;
 import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
 
 /**
  * This class is Spring MVC controller class for the URL "/dataset". It implements the methods available at this URL and returns views (.jsp pages) with models .
@@ -60,7 +62,13 @@ public class DatasetController {
 
 	@Autowired
 	FeatureServiceImpl featureService;
+	
+	@Autowired
+	SelectionServiceImpl selectionService;
 
+	@Autowired
+	DatasetInfoServiceImpl datasetinfoService;
+	
 	@Autowired
 	ChipServiceImpl chipService;
 	
@@ -200,6 +208,8 @@ public class DatasetController {
 	public ModelAndView delete(@PathVariable String id) {
 		featureService.deleteAll(id);
 		datasetService.delete(id);
+		selectionService.deleteForDataset(id);
+		datasetinfoService.deleteForDataset(id);
 		ModelAndView success = new ModelAndView("datasetlist", "datasetList", datasetService.list());
 		success.addObject("msg", "Dataset deleted.");
 		return success;

@@ -101,7 +101,10 @@
 			<h3 id="deleteModalLabel">Delete dataset</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the dataset?</div>
+			<div>Are you sure you want to delete the dataset?<br/>
+			This will delete all features and selections of the dataset.<br/>
+			Note that you may set it unabled instead.
+			</div>
 
 		</div>
 		<div class="modal-footer">

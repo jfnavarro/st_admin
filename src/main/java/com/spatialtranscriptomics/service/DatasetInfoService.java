@@ -26,5 +26,7 @@ public interface DatasetInfoService {
 	public void update(DatasetInfo datasetinfo);
 
 	public void delete(String id);
+	
+	public void deleteForDataset(String datasetId);
 
 }

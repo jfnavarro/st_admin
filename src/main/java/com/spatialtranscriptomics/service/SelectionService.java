@@ -29,5 +29,5 @@ public interface SelectionService {
 
 	public void delete(String id);
 	
-
+	public void deleteForDataset(String datasetId);
 }

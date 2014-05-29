@@ -93,8 +93,9 @@
 			<h3 id="deleteModalLabel">Delete pipeline experiment</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the pipeline experiment? This will
-				stop the EMR job and delete all data.</div>
+			<div>Are you sure you want to delete the pipeline experiment?<br/>
+				This will stop the EMR job, delete the associated pipeline experiment statistics,<br/>
+				and remove the associated files on Amazon.</div>
 		</div>
 		<div class="modal-footer">
 			<div id="deleteBtn"></div>

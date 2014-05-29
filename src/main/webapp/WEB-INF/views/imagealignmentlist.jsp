@@ -87,7 +87,8 @@
 			<h3 id="deleteModalLabel">Delete image alignment</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the image alignment?</div>
+			<div>Are you sure you want to delete the image alignment?<br/>
+			This will unable (but not delete) all datasets that use the image alignment, and remove associated files from Amazon.</div>
 
 		</div>
 		<div class="modal-footer">

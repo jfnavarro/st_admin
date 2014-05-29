@@ -73,6 +73,15 @@ public class SelectionServiceImpl implements SelectionService {
 		String url = appConfig.getProperty("url.selection");
 		secureRestTemplate.delete(url + id);
 	}
+	
+	public void deleteForDataset(String datasetId) {
+		List<Selection> sels = findForDataset(datasetId);
+		if (sels == null) { return; }
+		String url = appConfig.getProperty("url.selection");
+		for (Selection sel : sels) {
+			secureRestTemplate.delete(url + sel.getId());
+		}
+	}
 
 
 	public List<Selection> findForAccount(String accountId) {

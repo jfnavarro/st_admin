@@ -77,5 +77,16 @@ public class DatasetServiceImpl implements DatasetService {
 		String url = appConfig.getProperty("url.dataset");
 		secureRestTemplate.delete(url + id);
 	}
+	
+	public void setUnabledForImageAlignment(String imalId) {
+		List<Dataset> ds = list();
+		if (ds == null) { return; }
+		for (Dataset d : ds) {
+			if (d.getImage_alignment_id().equals(imalId)) {
+				d.setEnabled(false);
+				update(d);
+			}
+		}
+	}
 
 }
