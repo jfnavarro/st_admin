@@ -7,6 +7,8 @@
 
 package com.spatialtranscriptomics.model;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 
 
 /**
@@ -15,20 +17,27 @@ package com.spatialtranscriptomics.model;
  * Does validation using Hibernate validator constraints.
  */
 
+//@JsonPropertyOrder({ "x", "y", "hits", "barcode", "gene", "annotation" })
 public class Feature implements IFeature {
 
 	String id;
 	
+	@JsonProperty(value="barcode")
 	String barcode;
 
-	String gene_nomenclature;
+	//@JsonProperty(value="gene")
+	String gene;
 	
+	@JsonProperty(value="hits")
 	int hits;
 	
+	@JsonProperty(value="x")
 	int x;
 	
+	@JsonProperty(value="y")
 	int y;
 	
+	@JsonProperty(value="annotation")
 	String annotation;
 	
 	public String getId() {
@@ -40,50 +49,62 @@ public class Feature implements IFeature {
 		this.id = id;
 	}
 
+	@JsonProperty(value="barcode")
 	public String getBarcode() {
 		return barcode;
 	}
 
+	@JsonProperty(value="barcode")
 	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
 
+	@JsonProperty(value="hits")
 	public int getHits() {
 		return hits;
 	}
 
+	@JsonProperty(value="hits")
 	public void setHits(int hits) {
 		this.hits = hits;
 	}
 
+	@JsonProperty(value="x")
 	public int getX() {
 		return x;
 	}
 
+	@JsonProperty(value="x")
 	public void setX(int x) {
 		this.x = x;
 	}
-
+	
+	@JsonProperty(value="y")
 	public int getY() {
 		return y;
 	}
 
+	@JsonProperty(value="y")
 	public void setY(int y) {
 		this.y = y;
 	}
 
-	public String getGene_nomenclature() {
-		return this.gene_nomenclature;
+	//@JsonProperty(value="gene")
+	public String getGene() {
+		return this.gene;
 	}
 
-	public void setGene_nomenclature(String gene) {
-		this.gene_nomenclature = gene;
+	//@JsonProperty(value="gene")
+	public void setGene(String gene) {
+		this.gene = gene;
 	}
 
+	@JsonProperty(value="annotation")
 	public String getAnnotation() {
 		return this.annotation;
 	}
 
+	@JsonProperty(value="annotation")
 	public void setAnnotation(String ann) {
 		this.annotation = ann;
 	}

@@ -1,5 +1,7 @@
 package com.spatialtranscriptomics.model;
 
+import java.util.LinkedHashMap;
+
 /**
  * This interface defines the Selection model. Should reflect the corresponding model in ST API.
  */
@@ -9,9 +11,9 @@ public interface ISelection {
 
 	public void setId(String id);
 
-	public String[] getFeature_ids();
+	public LinkedHashMap<String, Integer> getGene_hits();
 
-	public void setFeature_ids(String[] feature_ids);
+	public void setGene_hits(LinkedHashMap<String,Integer> gene_hits);
 
 	public String getDataset_id();
 

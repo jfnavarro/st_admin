@@ -117,7 +117,7 @@
 
 				<form:input type="hidden" path="id" />
 				<form:input type="hidden" path="dataset_id" />
-				<form:input type="hidden" path="feature_ids" />
+				<form:input type="hidden" path="gene_hits" />
 				
 				
 			</form:form>

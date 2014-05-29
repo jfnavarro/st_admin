@@ -182,21 +182,6 @@
 		</dependency>
 
 		<!-- Amazon AWS Java SDK -->
-		<dependency><!-- check this -->
-			<groupId>com.amazonaws</groupId>
-			<artifactId>aws-java-sdk</artifactId>
-			<version>1.5.8</version> 
-			<exclusions>
-				<exclusion>
-					<groupId>org.codehaus</groupId>
-					<artifactId>jackson-core-asl</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.codehaus</groupId>
-					<artifactId>jackson-mapper-asl</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
 		<!-- Log4j -->
 		<dependency>
@@ -277,6 +262,11 @@
 			<groupId>javax.annotation</groupId>
 			<artifactId>javax.annotation-api</artifactId>
 			<version>1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk</artifactId>
+			<version>1.7.11</version>
 		</dependency>
 	</dependencies>
 

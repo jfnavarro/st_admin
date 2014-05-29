@@ -76,6 +76,7 @@ public class PipelineExperimentController {
 	public ModelAndView get(@PathVariable String id) {
 		PipelineExperiment exp = pipelineexperimentService.find(id);
 		ModelAndView success = new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
+		//System.out.println("Trtying to get " + exp.getEmr_jobflow_id());
 		PipelineStats stats = pipelinestatsService.findForPipelineExperiment(id);
 		success.addObject("stats", stats);
 		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());

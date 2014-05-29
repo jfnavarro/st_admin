@@ -70,9 +70,11 @@
 			<dd>${selection.comment}&nbsp;
 			</dd>
 			
-			<dt>Features</dt>
+			<dt>Gene hits</dt>
 			<dd>
-				<a href="<c:url value="/selection/"/>${selection.id}/features">Show</a>
+				<c:forEach var="genehits" items="${selection.gene_hits}">
+						${genehits.key} &nbsp;&nbsp; ${genehits.value}
+				</c:forEach>
 			</dd>
 		</dl>
 	

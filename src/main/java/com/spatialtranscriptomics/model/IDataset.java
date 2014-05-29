@@ -35,17 +35,13 @@ public interface IDataset {
 
 	public void setSpecies(String species);
 	
-	public int getOverall_gene_count();
+	public int getOverall_feature_count();
 
-	public void setOverall_gene_count(int count);
+	public void setOverall_feature_count(int count);
 	
 	public int getUnique_gene_count();
 
 	public void setUnique_gene_count(int count);
-
-	public int getOverall_barcode_count();
-
-	public void setOverall_barcode_count(int count);
 
 	public int getUnique_barcode_count();
 
@@ -70,6 +66,10 @@ public interface IDataset {
 	public String getComment();
 	
 	public void setComment(String comm);
+	
+	public boolean getEnabled();
+	
+	public void setEnabled(boolean b);
 	
 	public List<String> getGranted_accounts();
 	

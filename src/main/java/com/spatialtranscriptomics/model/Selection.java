@@ -1,5 +1,7 @@
 package com.spatialtranscriptomics.model;
 
+import java.util.LinkedHashMap;
+
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -22,9 +24,9 @@ public class Selection implements ISelection {
 	@NotBlank(message = "Account must not be blank.")
 	String account_id;
 	
-	@NotEmpty(message = "Features must not be empty.")
-	String[] feature_ids;
-	
+	@NotEmpty(message = "Gene nomenclatures with hit counts must not be empty.")
+	LinkedHashMap<String, Integer> gene_hits;
+
 	String type;
 	
 	String status;
@@ -32,7 +34,7 @@ public class Selection implements ISelection {
 	String comment;
 	
 	String[] obo_foundry_terms;
-
+	
 	public String getId() {
 		return id;
 	}
@@ -41,14 +43,14 @@ public class Selection implements ISelection {
 		this.id = id;
 	}
 
-	public String[] getFeature_ids() {
-		return feature_ids;
+	public LinkedHashMap<String, Integer> getGene_hits() {
+		return gene_hits;
 	}
 
-	public void setFeature_ids(String[] feature_ids) {
-		this.feature_ids = feature_ids;
+	public void setGene_hits(LinkedHashMap<String,Integer> gene_hits) {
+		this.gene_hits = gene_hits;
 	}
-
+	
 	public String getDataset_id() {
 		return dataset_id;
 	}

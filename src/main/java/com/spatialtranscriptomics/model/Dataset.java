@@ -25,19 +25,21 @@ public class Dataset implements IDataset {
 	@NotBlank(message = "Name must not be blank.")
 	String name;
 	
+	boolean enabled;
+	
 	@NotBlank(message = "Tissue must not be blank.")
 	String tissue;
 	
 	@NotBlank(message = "Species must not be blank.")
 	String species;
 	
+	@NotBlank(message = "Image alignment must not be blank.")
 	String image_alignment_id;
 	
-	int overall_gene_count;
-	int unique_gene_count;
-	int overall_barcode_count;
-	int unique_barcode_count;
+	int overall_feature_count;
 	int overall_hit_count;
+	int unique_gene_count;
+	int unique_barcode_count;
 	double[] overall_hit_quartiles;
 	double[] gene_pooled_hit_quartiles;
 	String[] obo_foundry_terms;
@@ -86,12 +88,12 @@ public class Dataset implements IDataset {
 		this.species = species;
 	}
 
-	public int getOverall_gene_count() {
-		return overall_gene_count;
+	public int getOverall_feature_count() {
+		return overall_feature_count;
 	}
 
-	public void setOverall_gene_count(int count) {
-		this.overall_gene_count = count;
+	public void setOverall_feature_count(int count) {
+		this.overall_feature_count = count;
 	}
 
 	public int getUnique_gene_count() {
@@ -100,14 +102,6 @@ public class Dataset implements IDataset {
 
 	public void setUnique_gene_count(int count) {
 		this.unique_gene_count = count;
-	}
-
-	public int getOverall_barcode_count() {
-		return overall_barcode_count;
-	}
-
-	public void setOverall_barcode_count(int count) {
-		this.overall_barcode_count = count;
 	}
 
 	public int getUnique_barcode_count() {
@@ -141,7 +135,6 @@ public class Dataset implements IDataset {
 	public void setGene_pooled_hit_quartiles(double[] quartiles) {
 		this.gene_pooled_hit_quartiles = quartiles;
 	}
-
 		
 	public String[] getObo_foundry_terms() {
 		return obo_foundry_terms;
@@ -158,6 +151,15 @@ public class Dataset implements IDataset {
 	public void setComment(String comm) {
 		this.comment = comm;
 	}
+	
+	public boolean getEnabled() {
+		return this.enabled;
+	}
+	
+	public void setEnabled(boolean b) {
+		this.enabled = b;
+	}
+
 	
 	@Transient
 	public List<String> getGranted_accounts() {

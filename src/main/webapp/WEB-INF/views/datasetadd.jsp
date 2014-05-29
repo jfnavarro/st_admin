@@ -78,6 +78,15 @@
 								</div>
 							</spring:bind>
 							
+							<spring:bind path="dataset.enabled">
+								<div class="control-group">
+									<label class="control-label">Dataset enabled</label>
+									<div class="controls">
+										<form:checkbox path="dataset.enabled" checked="true"/>
+									</div>
+								</div>
+							</spring:bind>
+							
 							<spring:bind path="dataset.species">
 								<div class="control-group  ${status.error ? 'error' : ''}">
 									<label class="control-label" for="species">Species</label>
@@ -111,6 +120,17 @@
 									</div>
 								</div>
 							</spring:bind>
+							
+							 <spring:bind path="dataset.granted_accounts">
+							    <div class="control-group">
+					                <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
+					                <div class="controls">
+					                <form:select id="inputGrantedAccounts" path="dataset.granted_accounts" class="multiselect" multiple="multiple">
+		                  		  <form:options items="${accountChoices}"></form:options>
+		                 		</form:select>
+			                	 </div>
+			                	</div>
+		                	</spring:bind>
 
 							<!--  start features -->
 
@@ -158,12 +178,13 @@
 						
 							<legend>Information and statistics</legend>
 
-							<spring:bind path="dataset.overall_gene_count">
+							<!--
+							<spring:bind path="dataset.overall_feature_count">
 								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallGeneCount">Overall gene count</label>
+									<label class="control-label" for="overallFeatureCount">Overall feature count</label>
 									<div class="controls">
-										<form:input type="text" id="overallGeneCount"
-											placeholder="" path="dataset.overall_gene_count" />
+										<form:input type="text" id="overallFeatureCount"
+											placeholder="" path="dataset.overall_feature_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -175,17 +196,6 @@
 									<div class="controls">
 										<form:input type="text" id="uniqueGeneCount"
 											placeholder="" path="dataset.unique_gene_count" />
-										<span class='help-inline'>${status.errorMessage}</span>
-									</div>
-								</div>
-							</spring:bind>
-
-							<spring:bind path="dataset.overall_barcode_count">
-								<div class="control-group  ${status.error ? 'error' : ''}">
-									<label class="control-label" for="overallBarcodeCount">Overall barcode count</label>
-									<div class="controls">
-										<form:input type="text" id="overallBarcodeCount"
-											placeholder="" path="dataset.overall_barcode_count" />
 										<span class='help-inline'>${status.errorMessage}</span>
 									</div>
 								</div>
@@ -234,6 +244,7 @@
 									</div>
 								</div>
 							</spring:bind>
+							-->
 							
 							<spring:bind path="dataset.obo_foundry_terms">
 								<div class="control-group  ${status.error ? 'error' : ''}">

@@ -34,7 +34,7 @@ import com.amazonaws.services.elasticmapreduce.util.StreamingStep;
 
 /**
  * This class implements the logic to start/stop/monitor Amazon Elastic MapReduce (EMR) JobFlows.
- * The connection to the EMR is handled in a AmazonElasticMapReduceClient object, which is configured in mvc-dispather-servlet.xml
+ * The connection to the EMR is handled in a AmazonElasticMapReduceClient object, which is configured in mvc-dispatcher-servlet.xml
  */
 
 @Service
@@ -301,12 +301,15 @@ public class EMRServiceImpl implements EMRService {
 
 		List<String> idAsList = new ArrayList<String>();
 		idAsList.add(jobFlowId);
+		System.out.println("Getting...");
 		DescribeJobFlowsRequest req = new DescribeJobFlowsRequest(idAsList);
-
+		System.out.println("Got: " + req.toString());
+		
 		emrClient.setRegion(Region.getRegion(Regions.EU_WEST_1));
-		List<JobFlowDetail> jobflows = emrClient.describeJobFlows(req)
-				.getJobFlows();
-
+		System.out.println("Set region...");
+		List<JobFlowDetail> jobflows = emrClient.describeJobFlows(req).getJobFlows();
+		System.out.println("Got jobflows of size: " + jobflows.size());
+		
 		if (jobflows.size() < 1) {
 			return null;
 		}

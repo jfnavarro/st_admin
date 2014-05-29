@@ -80,6 +80,15 @@
 							</div>
 						</spring:bind>
 						
+						<spring:bind path="dataset.enabled">
+							<div class="control-group">
+								<label class="control-label">Dataset enabled</label>
+								<div class="controls">
+									<form:checkbox path="dataset.enabled" />
+								</div>
+							</div>
+						</spring:bind>
+						
 						<spring:bind path="dataset.tissue">
 							<div class="control-group  ${status.error ? 'error' : ''}">
 								<label class="control-label" for="tissue">Tissue</label>
@@ -119,10 +128,10 @@
 			                <div class="controls">
 			                <form:select id="inputGrantedAccounts" path="dataset.granted_accounts" class="multiselect" multiple="multiple">
                   		  <form:options items="${accountChoices}"></form:options>
-                 	</form:select>
-	                 </div>
-	                </div>
-                	</spring:bind>						
+                 		</form:select>
+	                	 </div>
+	                	</div>
+                		</spring:bind>						
 
 
 						<legend>Features <small>(leave both empty to keep the current features)</small></legend>
@@ -177,87 +186,6 @@
 
 					<div class="span4">
 						<legend>Statistics and comments</legend>
-
-						<spring:bind path="dataset.overall_gene_count">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="overall_gene_count">Overall # of genes</label>
-								<div class="controls">
-									<form:input type="text" id="overall_gene_count" placeholder=""
-										path="dataset.overall_gene_count" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-						
-						<spring:bind path="dataset.unique_gene_count">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="unique_gene_count">Unique # of genes</label>
-								<div class="controls">
-									<form:input type="text" id="unique_gene_count" placeholder=""
-										path="dataset.unique_gene_count" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-				
-						<spring:bind path="dataset.overall_barcode_count">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="overall_barcode_count">Overall # of barcodes</label>
-								<div class="controls">
-									<form:input type="text" id="overall_barcode_count"
-										placeholder="" path="dataset.overall_barcode_count" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-
-						<spring:bind path="dataset.unique_barcode_count">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="unique_barcode_count">Unique # of barcodes</label>
-								<div class="controls">
-									<form:input type="text" id="unique_barcode_count"
-										placeholder=""
-										path="dataset.unique_barcode_count" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-						
-						<spring:bind path="dataset.overall_hit_count">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="overall_hit_count">Overall # of hits</label>
-								<div class="controls">
-									<form:input type="text" id="overall_hit_count"
-										placeholder=""
-										path="dataset.overall_hit_count" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-						
-						<spring:bind path="dataset.overall_hit_quartiles">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="overall_hit_quartiles">Overall hit quartiles</label>
-								<div class="controls">
-									<form:input type="text" id="overall_hit_quartiles"
-										placeholder=""
-										path="dataset.overall_hit_quartiles" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
-						
-						<spring:bind path="dataset.gene_pooled_hit_quartiles">
-							<div class="control-group  ${status.error ? 'error' : ''}">
-								<label class="control-label" for="gene_pooled_hit_quartiles">Gene-pooled hit quartiles</label>
-								<div class="controls">
-									<form:input type="text" id="gene_pooled_hit_quartiles"
-										placeholder=""
-										path="dataset.gene_pooled_hit_quartiles" />
-									<span class='help-inline'>${status.errorMessage}</span>
-								</div>
-							</div>
-						</spring:bind>
 						
 						<spring:bind path="dataset.obo_foundry_terms">
 							<div class="control-group  ${status.error ? 'error' : ''}">
@@ -291,6 +219,12 @@
 				</div>
 
 				<form:input type="hidden" path="dataset.id" />
+				<form:input type="hidden" path="dataset.overall_feature_count" />
+				<form:input type="hidden" path="dataset.unique_gene_count" />
+				<form:input type="hidden" path="dataset.unique_barcode_count" />
+				<form:input type="hidden" path="dataset.overall_hit_count" />
+				<form:input type="hidden" path="dataset.overall_hit_quartiles" />
+				<form:input type="hidden" path="dataset.gene_pooled_hit_quartiles" />
 
 			</form:form>
 		</div>

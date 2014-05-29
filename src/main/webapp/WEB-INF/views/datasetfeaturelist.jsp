@@ -58,7 +58,7 @@
 			<tbody>
 				<c:forEach var="feature" items="${featureList}">
 					<tr>
-						<td>${feature.gene_nomenclature}</td>
+						<td>${feature.gene}</td>
 						<td>${feature.annotation}</td>
 						<td>${feature.barcode}</td>
 						<td>${feature.hits}</td>

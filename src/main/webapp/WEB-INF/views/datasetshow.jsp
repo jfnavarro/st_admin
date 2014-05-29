@@ -40,6 +40,18 @@
 
 		<dl class="dl-horizontal">
 
+			<dt>Enabled</dt>
+			<dd>
+			<c:choose>
+    			<c:when test="${dataset.enabled == true}">
+        			<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">&nbsp;
+    			</c:when>
+    			<c:otherwise>
+        			<input type="checkbox" name="chkEnabled" value="" onclick="return false">&nbsp;
+    			</c:otherwise>
+			</c:choose>
+			</dd>
+
 			<dt>Tissue</dt>
 			<dd>${dataset.tissue}&nbsp;</dd>
 
@@ -49,14 +61,11 @@
 			<dt>Image alignment</dt>
 			<dd>${imagealignment.name}&nbsp;</dd>
 			
-			<dt>Overall # of genes</dt>
-			<dd>${dataset.overall_gene_count}&nbsp;</dd>
+			<dt>Overall # of features</dt>
+			<dd>${dataset.overall_feature_count}&nbsp;</dd>
 			
 			<dt>Unique # of genes</dt>
 			<dd>${dataset.unique_gene_count}&nbsp;</dd>
-			
-			<dt>Overall # of barcodes</dt>
-			<dd>${dataset.overall_barcode_count}&nbsp;</dd>
 			
 			<dt>Unique # of barcodes</dt>
 			<dd>${dataset.unique_barcode_count}&nbsp;</dd>

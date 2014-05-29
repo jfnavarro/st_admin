@@ -62,6 +62,7 @@
 			<thead>
 				<tr>
 					<th>Name</th>
+					<th>Enabled</th>
 					<th>Tissue</th>
 					<th>Species</th>
 				</tr>
@@ -71,6 +72,16 @@
 				<c:forEach var="dataset" items="${datasetList}">
 					<tr>
 						<td><a href="<c:url value="/dataset/"/>${dataset.id}">${dataset.name}</a></td>
+						<td>
+							<c:choose>
+    						<c:when test="${dataset.enabled == true}">
+        						<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">
+    						</c:when>
+    						<c:otherwise>
+        						<input type="checkbox" name="chkEnabled" value="" onclick="return false">
+    						</c:otherwise>
+							</c:choose>
+						</td>
 						<td>${dataset.tissue}</td>
 						<td>${dataset.species}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
