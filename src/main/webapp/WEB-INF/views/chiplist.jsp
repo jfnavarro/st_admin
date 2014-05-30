@@ -96,7 +96,10 @@
 			<h3 id="deleteModalLabel">Delete chip</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the chip?</div>
+			<div>Are you sure you want to delete the chip?<br/>
+			All image alignments related to the chip will be removed, and<br/>
+			the associated datasets will become unabled.
+			</div>
 
 		</div>
 		<div class="modal-footer">

@@ -101,6 +101,13 @@ public class DatasetInfoServiceImpl implements DatasetInfoService {
 		}
 	}
 
-
+	public void deleteForAccount(String accountId) {
+		List<DatasetInfo> dsis = listForAccount(accountId);
+		if (dsis ==  null) { return; }
+		String url = appConfig.getProperty("url.datasetinfo");
+		for (DatasetInfo dsi : dsis) {
+			secureRestTemplate.delete(url + dsi.getId());
+		}
+	}
 
 }

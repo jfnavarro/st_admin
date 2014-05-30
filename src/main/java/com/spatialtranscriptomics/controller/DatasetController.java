@@ -96,8 +96,10 @@ public class DatasetController {
 		ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
 		List<Account> accounts = accountService.findForDataset(id);
 		success.addObject("accounts", accounts);
-		ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
-		success.addObject("imagealignment", imal);
+		if (dataset.getImage_alignment_id() != null && !dataset.getImage_alignment_id().equals("")) {
+			ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
+			success.addObject("imagealignment", imal);
+		}
 		return success;
 
 	}

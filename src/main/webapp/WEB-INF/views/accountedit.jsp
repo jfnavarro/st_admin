@@ -180,7 +180,6 @@
 			    			    
 				<button type="submit" class="btn">Save</button>
 				<form:input type="hidden" path="id" />
-				<form:input type="hidden" path="password" />
 
 			</form:form>
 		</div>

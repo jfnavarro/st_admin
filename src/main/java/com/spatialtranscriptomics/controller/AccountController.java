@@ -25,6 +25,7 @@ import com.spatialtranscriptomics.component.StaticContextAccessor;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 
 import javax.validation.Valid;
@@ -45,6 +46,9 @@ public class AccountController {
 
 	@Autowired
 	DatasetServiceImpl datasetService;
+	
+	@Autowired
+	DatasetInfoServiceImpl datasetinfoService;
 
 	
 	// get
@@ -114,6 +118,7 @@ public class AccountController {
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
 		accountService.delete(id);
+		datasetinfoService.deleteForAccount(id);
 		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account deleted.");
 		return success;

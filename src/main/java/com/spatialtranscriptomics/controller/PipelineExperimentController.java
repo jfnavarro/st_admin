@@ -167,6 +167,7 @@ public class PipelineExperimentController {
 		}
 		s3Service.deleteExperimentData(id);
 		pipelineexperimentService.delete(id);
+		pipelinestatsService.deleteForExperiment(id);
 		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		success.addObject("msg", "Experiment deleted.");
 		return success;

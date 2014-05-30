@@ -8,6 +8,8 @@
 package com.spatialtranscriptomics.controller;
 
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
@@ -23,7 +25,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.spatialtranscriptomics.form.ChipForm;
 import com.spatialtranscriptomics.model.Chip;
+import com.spatialtranscriptomics.model.ImageAlignment;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 
 
 /**
@@ -39,6 +44,12 @@ public class ChipController {
 
 	@Autowired
 	ChipServiceImpl chipService;
+	
+	@Autowired
+	ImageAlignmentServiceImpl imagealignmentService;
+	
+	@Autowired
+	DatasetServiceImpl datasetService;
 	
 	// list
 	@RequestMapping(method = RequestMethod.GET)
@@ -100,6 +111,12 @@ public class ChipController {
 	// delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
+		List<ImageAlignment> imals = imagealignmentService.deleteForChip(id);
+		if (imals != null) {
+			for (ImageAlignment imal : imals) {
+				datasetService.setUnabledForImageAlignment(imal.getId());
+			}
+		}
 		chipService.delete(id);
 		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
 		success.addObject("msg", "Chip deleted.");

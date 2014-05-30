@@ -121,7 +121,10 @@
 			<h3 id="deleteModalLabel">Delete account</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the account?</div>
+			<div>Are you sure you want to delete the account?<br/>
+			This may invalidate some related objects associated with the account.<br/>
+			Note that you may set the account unabled instead.
+			</div>
 
 		</div>
 		<div class="modal-footer">

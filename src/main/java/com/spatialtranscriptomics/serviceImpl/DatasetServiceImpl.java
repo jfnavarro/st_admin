@@ -82,8 +82,9 @@ public class DatasetServiceImpl implements DatasetService {
 		List<Dataset> ds = list();
 		if (ds == null) { return; }
 		for (Dataset d : ds) {
-			if (d.getImage_alignment_id().equals(imalId)) {
+			if (d.getImage_alignment_id() != null && d.getImage_alignment_id().equals(imalId)) {
 				d.setEnabled(false);
+				d.setImage_alignment_id(null);
 				update(d);
 			}
 		}

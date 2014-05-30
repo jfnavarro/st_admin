@@ -74,10 +74,24 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 
 
 	public List<ImageAlignment> findForChip(String chipId) {
-		String url = appConfig.getProperty("url.imagealignment") + "?chip=" + chipId;
+		String url = appConfig.getProperty("url.imagealignment");
+		if (url.endsWith("/")) { url = url.substring(0, url.length() - 1); }
+		url += "?chip=" + chipId;
 		ImageAlignment[] imalArray = secureRestTemplate.getForObject(url, ImageAlignment[].class);
+		if (imalArray == null) { return null; }
 		List<ImageAlignment> imalList = Arrays.asList(imalArray);
 		return imalList;
 	}
+	
+	public List<ImageAlignment> deleteForChip(String chipId) {
+		//System.out.println("about to delete chip");
+		List<ImageAlignment> imals = findForChip(chipId);
+		//System.out.println("imal size" + (imals == null ? 0 : imals.size()));
+		if (imals == null) { return null; }
+		for (ImageAlignment imal : imals) {
+			delete(imal.getId());
+		}
+		return imals;
+	} 
 
 }
