@@ -25,6 +25,9 @@ public class PipelineExperimentForm {
 	private String numNodes;
 	
 	@NotBlank
+	private String accountId;
+	
+	@NotBlank
 	private String nodeTypeMaster;
 	
 	@NotBlank
@@ -96,6 +99,14 @@ public class PipelineExperimentForm {
 
 	public void setNumNodes(String numNodes) {
 		this.numNodes = numNodes;
+	}
+	
+	public String getAccountId() {
+		return accountId;
+	}
+
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
 	}
 
 	public String getNodeTypeMaster() {

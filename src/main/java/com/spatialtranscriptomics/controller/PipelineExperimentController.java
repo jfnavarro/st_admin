@@ -80,6 +80,7 @@ public class PipelineExperimentController {
 		PipelineStats stats = pipelinestatsService.findForPipelineExperiment(id);
 		success.addObject("stats", stats);
 		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
+		
 		success.addObject("jobflow", jobFlow);
 		success.addObject("account", accountService.find(exp.getAccount_id()));
 		return success;
@@ -133,6 +134,8 @@ public class PipelineExperimentController {
 		// create pipelineexperiment
 		PipelineExperiment pipelineexperiment = new PipelineExperiment();
 		pipelineexperiment.setName(form.getExperimentName());
+		pipelineexperiment.setAccount_id(form.getAccountId());
+		pipelineexperiment.setEmr_jobflow_id("Not yet received");
 		//pipelineexperiment.setCreated(new Date());
 		pipelineexperiment = pipelineexperimentService.add(pipelineexperiment);
 

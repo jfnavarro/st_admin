@@ -22,6 +22,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient;
 import com.amazonaws.services.elasticmapreduce.model.BootstrapActionConfig;
 import com.amazonaws.services.elasticmapreduce.model.DescribeJobFlowsRequest;
+import com.amazonaws.services.elasticmapreduce.model.DescribeJobFlowsResult;
 import com.amazonaws.services.elasticmapreduce.model.HadoopJarStepConfig;
 import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.amazonaws.services.elasticmapreduce.model.JobFlowInstancesConfig;
@@ -278,37 +279,41 @@ public class EMRServiceImpl implements EMRService {
 
 	}
 
+	
 	public void stopJobFlow(String jobFlowId) {
-
 		if (jobFlowId == null) {
 			return;
 		}
-
 		List<String> idAsList = new ArrayList<String>();
 		idAsList.add(jobFlowId);
 		TerminateJobFlowsRequest req = new TerminateJobFlowsRequest(idAsList);
 
 		emrClient.setRegion(Region.getRegion(Regions.EU_WEST_1));
 		emrClient.terminateJobFlows(req);
-
 	}
 
+	
 	public JobFlowDetail findJobFlow(String jobFlowId) {
-
+		//System.out.println("EMR name: " + emrClient.getServiceName());
+		//System.out.println("EMR tostring: " + emrClient.toString());
+		
+		//System.out.println("EMR describe cluster: " + emrClient.describeCluster().toString());
 		if (jobFlowId == null) {
 			return null;
 		}
-
 		List<String> idAsList = new ArrayList<String>();
 		idAsList.add(jobFlowId);
-		System.out.println("Getting...");
+		//System.out.println("Getting...");
 		DescribeJobFlowsRequest req = new DescribeJobFlowsRequest(idAsList);
-		System.out.println("Got: " + req.toString());
+		//System.out.println("Got: " + req.toString());
 		
 		emrClient.setRegion(Region.getRegion(Regions.EU_WEST_1));
-		System.out.println("Set region...");
-		List<JobFlowDetail> jobflows = emrClient.describeJobFlows(req).getJobFlows();
-		System.out.println("Got jobflows of size: " + jobflows.size());
+		//System.out.println("Set region...");
+		
+		DescribeJobFlowsResult res = emrClient.describeJobFlows(req);
+		List<JobFlowDetail> jobflows = res.getJobFlows();
+		//System.out.println("Got results" + res.toString());
+		//System.out.println("Got jobflows of size: " + jobflows.size());
 		
 		if (jobflows.size() < 1) {
 			return null;
