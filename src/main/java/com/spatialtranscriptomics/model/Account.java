@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.beans.Transient;
 import java.util.List;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -149,14 +148,10 @@ public class Account implements IAccount {
 		this.country = country;
 	}
 
-	
-	@Transient
 	public List<String> getGranted_datasets() {
 		return this.granted_datasets;
 	}
 	
-	
-	@Transient
 	public void setGranted_datasets(List<String> grantedDatasets) {
 		//System.out.println("Setting datasets: " + grantedDatasets.size());
 		this.granted_datasets = grantedDatasets;

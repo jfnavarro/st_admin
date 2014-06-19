@@ -1,5 +1,7 @@
 package com.spatialtranscriptomics.controller;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 
 /**
  * This class is Spring MVC controller class for the URL "/imagealignment". It implements the methods available at this URL and returns views (.jsp pages) with models .
@@ -42,6 +45,9 @@ public class ImageAlignmentController {
 	
 	@Autowired
 	ImageServiceImpl imageService;
+	
+	@Autowired
+	S3ServiceImpl s3service;
 
 	
 	// get
@@ -113,8 +119,22 @@ public class ImageAlignmentController {
 	// delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
-		imagealignmentService.delete(id);
-		datasetService.setUnabledForImageAlignment(id);
+		ImageAlignment imal = imagealignmentService.find(id);
+		if (imal != null) {
+			//imagealignmentService.delete(id);
+			//datasetService.setUnabledForImageAlignment(id);
+			HashSet<String> todel = new HashSet<String>(1024);
+			todel.add(imal.getFigure_blue());
+			todel.add(imal.getFigure_red());
+			List<ImageAlignment> imals = imagealignmentService.list();
+			for (ImageAlignment ia : imals) {
+				if (!ia.getId().equals(id)) {
+					todel.remove(ia.getFigure_blue());
+					todel.remove(ia.getFigure_red());
+				}
+			}
+			s3service.deleteImageData(new ArrayList<String>(todel));
+		}
 		ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
 		success.addObject("msg", "ImageAlignment deleted.");
 		return success;

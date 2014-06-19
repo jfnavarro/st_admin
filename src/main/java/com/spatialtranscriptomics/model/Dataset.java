@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.beans.Transient;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -160,13 +159,10 @@ public class Dataset implements IDataset {
 		this.enabled = b;
 	}
 
-	
-	@Transient
 	public List<String> getGranted_accounts() {
 		return this.granted_accounts;
 	}
 	
-	@Transient
 	public void setGranted_accounts(List<String> grantedAccounts) {
 		this.granted_accounts = grantedAccounts;
 	}

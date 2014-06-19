@@ -36,8 +36,7 @@
 		<custom-filter ref="oauthFilter" after="EXCEPTION_TRANSLATION_FILTER" />
 	</http>
 	
-	<!-- Authentication manager for web application login (authenticates against 
-		the ST API) -->
+	<!-- Authentication manager for web application login (authenticates against the ST API) -->
 
 	<authentication-manager
 		xmlns="http://www.springframework.org/schema/security">

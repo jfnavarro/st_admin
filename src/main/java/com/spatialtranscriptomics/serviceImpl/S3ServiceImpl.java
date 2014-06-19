@@ -64,35 +64,58 @@ public class S3ServiceImpl implements S3Service {
 	private @Value("${s3.bowtiepath}")
 	String bowtiePath;
 
+	private @Value("${s3.imagesbucket}")
+	String imagesBucket;
+	
+	private @Value("${s3.imagespath}")
+	String imagesPath;
+	
 	public void deleteExperimentData(String experimentId) {
-
 		String path = experimentsPath + experimentId;
 		ObjectListing objects = s3Client.listObjects(pipelineBucket, path);
 		List<S3ObjectSummary> objs = objects.getObjectSummaries();
-
 		if (objs.isEmpty()) {
 			return;
 		}
-
 		List<DeleteObjectsRequest.KeyVersion> keysToDelete = new ArrayList<DeleteObjectsRequest.KeyVersion>();
-
 		for (S3ObjectSummary o : objs) {
 			KeyVersion kv = new DeleteObjectsRequest.KeyVersion(o.getKey());
 			keysToDelete.add(kv);
 		}
-
 		if (keysToDelete.isEmpty()) {
 			return;
 		}
-
 		DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
 		req.setKeys(keysToDelete);
 		s3Client.deleteObjects(req);
-
 	}
 
+	
+	public void deleteImageData(List<String> imageNames) {
+		ObjectListing objects = s3Client.listObjects(imagesBucket, imagesPath);
+		List<S3ObjectSummary> objs = objects.getObjectSummaries();
+		if (objs.isEmpty()) {
+			return;
+		}
+		List<DeleteObjectsRequest.KeyVersion> keysToDelete = new ArrayList<DeleteObjectsRequest.KeyVersion>();
+		for (S3ObjectSummary o : objs) {
+			for (String imageName : imageNames) {
+				if (o.getKey().equals(imageName)) {
+					System.out.println("Adding image: " + imageName);
+					KeyVersion kv = new DeleteObjectsRequest.KeyVersion(o.getKey());
+					keysToDelete.add(kv);
+				}
+			}
+		}
+		if (keysToDelete.isEmpty()) {
+			return;
+		}
+		//DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
+		//req.setKeys(keysToDelete);
+		//s3Client.deleteObjects(req);
+	}
+	
 	public List<String> getInputFolders() {
-
 		List<String> result = new ArrayList<String>();
 
 		ObjectListing objects = s3Client.listObjects(pipelineBucket, inputPath);
@@ -105,12 +128,11 @@ public class S3ServiceImpl implements S3Service {
 			String[] tokens = s.split("[/]");
 			result.add(tokens[1]);
 		}
-
 		return result;
 	}
 
+	
 	public List<String> getIDFiles() {
-
 		List<String> result = new ArrayList<String>();
 
 		ObjectListing objects = s3Client.listObjects(pipelineBucket,
@@ -128,6 +150,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
+	
 	public List<String> getReferenceAnnotation() {
 
 		List<String> result = new ArrayList<String>();
@@ -145,6 +168,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
+	
 	public List<String> getReferenceGenome() {
 
 		List<String> result = new ArrayList<String>();
@@ -167,6 +191,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
+	
 	public List<String> getBowtieFiles() {
 
 		List<String> result = new ArrayList<String>();
@@ -189,23 +214,23 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
+	
 	public InputStream getFeaturesAsJson(String experimentId) {
-
 		return new EMROutputParser().getJSON(getOutputFromS3(experimentId));
 	}
 
+	
 	public InputStream getFeaturesAsCSV(String experimentId) {
-
 		return new EMROutputParser().getCSV(getOutputFromS3(experimentId));
 	}
 
+	
 	public List<Feature> getFeaturesAsList(String experimentId) {
-
 		return new EMROutputParser().getFeatures(getOutputFromS3(experimentId));
 	}
 
+	
 	private InputStream getOutputFromS3(String experimentId) {
-
 		String path = experimentsPath + experimentId + "/output";
 		// String path = "experiments/" + "test" + "/output";
 
@@ -228,10 +253,10 @@ public class S3ServiceImpl implements S3Service {
 
 	}
 
+	
 	private String getCleanName(String path) {
 		String[] tokens = path.split("[/]");
 		return tokens[tokens.length - 1];
-
 	}
 
 }

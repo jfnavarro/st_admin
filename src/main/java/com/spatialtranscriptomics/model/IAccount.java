@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.model;
 
-import java.beans.Transient;
 import java.util.List;
 
 /**
@@ -64,10 +63,8 @@ public interface IAccount {
 
 	public void setCountry(String country);
 	
-	@Transient
 	public List<String> getGranted_datasets();
 
-	@Transient
 	public void setGranted_datasets(List<String> datasets);
 
 
