@@ -25,19 +25,35 @@ public class ImageForm {
 	@NotEmpty
 	String fileName;
 
+        /**
+         * Returns the image file.
+         * @return the image file.
+         */
 	public CommonsMultipartFile getImageFile() {
 		return imageFile;
 	}
 
+        /**
+         * Sets the image file.
+         * @param imageFile image file.
+         */
 	public void setImageFile(CommonsMultipartFile imageFile) {
 		this.imageFile = imageFile;
 		this.fileName = imageFile.getOriginalFilename();
 	}
 
+        /**
+         * Returns the file name.
+         * @return file name.
+         */
 	public String getFileName() {
 		return fileName;
 	}
 	
+        /**
+         * Sets the filename.
+         * @param fileName filename.
+         */
 	public void setFileName(String fileName){
 		this.fileName = fileName;
 	}

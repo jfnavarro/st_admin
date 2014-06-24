@@ -30,33 +30,64 @@ public class DatasetEditForm {
 	
 	String experimentId; // not required when editing a dataset
 
+        /**
+         * Constructor.
+         */
 	public DatasetEditForm() {
 	}
 
+        /**
+         * Constructor.
+         * @param dataset dataset.
+         */
 	public DatasetEditForm(Dataset dataset) {
 		this.dataset = dataset;
 	}
 
+        /**
+         * Returns the feature file.
+         * @return the feature file.
+         */
 	public CommonsMultipartFile getFeatureFile() {
 		return featureFile;
 	}
 
+        /**
+         * Sets the feature file.
+         * @param featureFile feature file.
+         */
 	public void setFeatureFile(CommonsMultipartFile featureFile) {
 		this.featureFile = featureFile;
 	}
 	
+        /**
+         * Returns the experiment ID.
+         * @return experiment ID.
+         */
 	public String getExperimentId(){
 		return experimentId;
 	}
 	
+        /**
+         * Sets the experiment ID.
+         * @param experimentId experiment ID.
+         */
 	public void setExperimentId(String experimentId){
 		this.experimentId = experimentId;
 	}
 
+        /**
+         * Returns the dataset.
+         * @return the dataset.
+         */
 	public Dataset getDataset() {
 		return dataset;
 	}
 
+        /**
+         * Sets the dataset
+         * @param dataset the dataset.
+         */
 	public void setDataset(Dataset dataset) {
 		this.dataset = dataset;
 	}

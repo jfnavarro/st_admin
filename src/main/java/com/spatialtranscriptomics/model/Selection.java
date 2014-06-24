@@ -1,6 +1,14 @@
+/*
+*Copyright © 2012 Spatial Transcriptomics AB
+*Read LICENSE for more information about licensing terms
+*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+* 
+*/
+
 package com.spatialtranscriptomics.model;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -24,9 +32,9 @@ public class Selection implements ISelection {
 	@NotBlank(message = "Account must not be blank.")
 	String account_id;
 	
-	@NotEmpty(message = "Gene nomenclatures with hit counts must not be empty.")
-	LinkedHashMap<String, Integer> gene_hits;
-
+	@NotEmpty(message = "Gene nomenclatures with stats must not be empty.")
+	List<String[]> gene_hits = new ArrayList<String[]>();
+	
 	String type;
 	
 	String status;
@@ -34,7 +42,7 @@ public class Selection implements ISelection {
 	String comment;
 	
 	String[] obo_foundry_terms;
-	
+
 	public String getId() {
 		return id;
 	}
@@ -43,14 +51,14 @@ public class Selection implements ISelection {
 		this.id = id;
 	}
 
-	public LinkedHashMap<String, Integer> getGene_hits() {
+	public List<String[]> getGene_hits() {
 		return gene_hits;
 	}
 
-	public void setGene_hits(LinkedHashMap<String,Integer> gene_hits) {
+	public void setGene_hits(List<String[]> gene_hits) {
 		this.gene_hits = gene_hits;
 	}
-	
+
 	public String getDataset_id() {
 		return dataset_id;
 	}
@@ -98,7 +106,7 @@ public class Selection implements ISelection {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-
+	
 	public String[] getObo_foundry_terms() {
 		return obo_foundry_terms;
 	}
@@ -106,5 +114,20 @@ public class Selection implements ISelection {
 	public void setObo_foundry_terms(String[] obo_foundry_terms) {
 		this.obo_foundry_terms = obo_foundry_terms;
 	}
-	
+        
+        public String getGene(int i) {
+            return (gene_hits.get(i)[0]);
+	}
+        
+	public int getHit_count(int i) {
+            return Integer.parseInt(gene_hits.get(i)[1]);
+	}
+
+	public double getNormalized_hit_count(int i) {
+            return Double.parseDouble(gene_hits.get(i)[2]);
+	}
+
+	public double getNormalized_pixel_intensity(int i) {
+            return Double.parseDouble(gene_hits.get(i)[3]);
+	}
 }

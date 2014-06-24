@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.ImageAlignment;
 
+/**
+ * Interface for the image alignment service.
+ */
 public interface ImageAlignmentService {
 
 	public ImageAlignment find(String id);

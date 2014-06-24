@@ -1,6 +1,13 @@
+/*
+*Copyright © 2012 Spatial Transcriptomics AB
+*Read LICENSE for more information about licensing terms
+*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+* 
+*/
+
 package com.spatialtranscriptomics.model;
 
-import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * This interface defines the Selection model. Should reflect the corresponding model in ST API.
@@ -11,9 +18,9 @@ public interface ISelection {
 
 	public void setId(String id);
 
-	public LinkedHashMap<String, Integer> getGene_hits();
+	public List<String[]> getGene_hits();
 
-	public void setGene_hits(LinkedHashMap<String,Integer> gene_hits);
+	public void setGene_hits(List<String[]> selection_hits);
 
 	public String getDataset_id();
 
@@ -42,4 +49,12 @@ public interface ISelection {
 	public String[] getObo_foundry_terms();
 	
 	public void setObo_foundry_terms(String[] obo_foundry_terms);
+
+        public String getGene(int i);
+        
+	public int getHit_count(int i);
+
+	public double getNormalized_hit_count(int i);
+
+	public double getNormalized_pixel_intensity(int i);
 }

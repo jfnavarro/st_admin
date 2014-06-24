@@ -14,6 +14,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.spatialtranscriptomics.model.ImageMetadata;
 
+/**
+ * Interface for the image service.
+ */
 public interface ImageService {
 
 	public List<ImageMetadata> list();

@@ -1,3 +1,11 @@
+/*
+*Copyright © 2014 Spatial Transcriptomics AB
+*Read LICENSE for more information about licensing terms
+*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+* 
+*/
+
+
 package com.spatialtranscriptomics.controller;
 
 import java.util.LinkedHashMap;
@@ -53,8 +61,11 @@ public class TaskController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
+                //System.out.println("Listing tasks");
 		ModelAndView success = new ModelAndView("tasklist", "taskList", taskService.list());
+                //System.out.println("Listed tasks");
 		success.addObject("accounts", populateAccountChoices());
+                //System.out.println("Populated account choices");
 		return success;
 	}
 

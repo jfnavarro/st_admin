@@ -36,7 +36,7 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 	@Autowired
 	Properties appConfig;
 
-	
+	@Override
 	public ImageAlignment find(String id) {
 		String url = appConfig.getProperty("url.imagealignment");
 		url += id;
@@ -44,7 +44,7 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 		return imal;
 	}
 
-	
+	@Override
 	public List<ImageAlignment> list() {
 		String url = appConfig.getProperty("url.imagealignment");
 		ImageAlignment[] imalArray = secureRestTemplate.getForObject(url, ImageAlignment[].class);
@@ -52,27 +52,27 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 		return imalList;
 	}
 
-	
+	@Override
 	public ImageAlignment create(ImageAlignment imal) {
 		String url = appConfig.getProperty("url.imagealignment");
 		ImageAlignment imalResponse = secureRestTemplate.postForObject(url, imal, ImageAlignment.class);
 		return imalResponse;
 	}
 
-	
+	@Override
 	public void update(ImageAlignment imal) {
 		String url = appConfig.getProperty("url.imagealignment");
 		String id = imal.getId();
 		secureRestTemplate.put(url + id, imal);
 	}
 
-	
+	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.imagealignment");
 		secureRestTemplate.delete(url + id);
 	}
 
-
+        @Override
 	public List<ImageAlignment> findForChip(String chipId) {
 		String url = appConfig.getProperty("url.imagealignment");
 		if (url.endsWith("/")) { url = url.substring(0, url.length() - 1); }
@@ -83,6 +83,7 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 		return imalList;
 	}
 	
+        @Override
 	public List<ImageAlignment> deleteForChip(String chipId) {
 		//System.out.println("about to delete chip");
 		List<ImageAlignment> imals = findForChip(chipId);

@@ -37,7 +37,7 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 	@Autowired
 	Properties appConfig;
 
-	
+	@Override
 	public PipelineStats find(String id) {
 		String url = appConfig.getProperty("url.pipelinestats");
 		url += id;
@@ -45,7 +45,7 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		return stats;
 	}
 
-	
+	@Override
 	public List<PipelineStats> list() {
 		String url = appConfig.getProperty("url.pipelinestats");
 		PipelineStats[] eArray = secureRestTemplate.getForObject(url,
@@ -54,7 +54,7 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		return eList;
 	}
 
-	
+	@Override
 	public PipelineStats findForPipelineExperiment(String expId) {
 		String url = appConfig.getProperty("url.pipelinestats");
 		if (url.endsWith("/")) {
@@ -68,7 +68,7 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		return arr[0];
 	}
 
-	
+	@Override
 	public PipelineStats add(PipelineStats stats) {
 		String url = appConfig.getProperty("url.pipelinestats");
 		PipelineStats eResponse = secureRestTemplate.postForObject(url, stats,
@@ -76,19 +76,20 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		return eResponse;
 	}
 
-	
+	@Override
 	public void update(PipelineStats stats) {
 		String url = appConfig.getProperty("url.pipelinestats");
 		String id = stats.getId();
 		secureRestTemplate.put(url + id, stats);
 	}
 
-	
+	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.pipelinestats");
 		secureRestTemplate.delete(url + id);
 	}
 	
+        @Override
 	public void deleteForExperiment(String experimentId) {
 		PipelineStats stats = findForPipelineExperiment(experimentId);
 		if (stats != null) {

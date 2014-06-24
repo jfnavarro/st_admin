@@ -27,12 +27,16 @@ public class NDFParser {
 
 	private InputStream fis;
 
+        /**
+         * Constructor.
+         * @param fis chip input content.
+         */
 	public NDFParser(InputStream fis) {
 		this.fis = fis;
 	}
 
-	/*
-	 * Parses the class input stream and returns a Chip object
+	/**
+	 * Parses the class input stream and returns a Chip object.
 	 */
 	public Chip readChip() {
 

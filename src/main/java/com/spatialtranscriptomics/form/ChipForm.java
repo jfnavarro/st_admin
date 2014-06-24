@@ -26,23 +26,43 @@ public class ChipForm {
 	
 	CommonsMultipartFile chipFile;
 
+        /**
+         * Returns the chip file.
+         * @return the chip file.
+         */
 	public CommonsMultipartFile getChipFile() {
 		return chipFile;
 	}
 
+        /**
+         * Sets the chip file.
+         * @param chipFile the file.
+         */
 	public void setChipFile(CommonsMultipartFile chipFile) {
 		this.chipFile = chipFile;
 		this.fileName = chipFile.getOriginalFilename();
 	}
 
+        /**
+         * Returns the name.
+         * @return the name.
+         */
 	public String getName() {
 		return name;
 	}
 
+        /**
+         * Sets the name.
+         * @param name the name.
+         */
 	public void setName(String name) {
 		this.name = name;
 	}
 	
+        /**
+         * Returns the filename.
+         * @return the filename.
+         */
 	public String getFileName() {
 		return this.fileName;
 	}

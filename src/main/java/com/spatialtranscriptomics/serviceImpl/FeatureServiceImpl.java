@@ -41,7 +41,7 @@ public class FeatureServiceImpl implements FeatureService {
 	@Autowired
 	Properties appConfig;
 
-	
+	@Override
 	public List<Feature> findForDataset(String datasetId){
 		String url = appConfig.getProperty("url.feature");
 		 url += "?dataset=" + datasetId;
@@ -50,6 +50,7 @@ public class FeatureServiceImpl implements FeatureService {
 		return Arrays.asList(features);
 	}
 	
+        @Override
 	public List<Feature> findForSelection(String selectionId){
 		String url = appConfig.getProperty("url.feature");
 		 url += "?selection=" + selectionId;
@@ -58,7 +59,7 @@ public class FeatureServiceImpl implements FeatureService {
 		return (features == null ? new ArrayList<Feature>(0) : Arrays.asList(features));
 	}
 
-	
+	@Override
 	public List<Feature> parse(CommonsMultipartFile featureFile) {
 		Feature[] features;
 		try {
@@ -77,7 +78,7 @@ public class FeatureServiceImpl implements FeatureService {
 
 	}
 
-	
+	@Override
 	public List<Feature> add(List<Feature> features, String datasetId) {
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;
@@ -85,7 +86,7 @@ public class FeatureServiceImpl implements FeatureService {
 		return Arrays.asList(featuresResponse);
 	}
 
-	
+	@Override
 	public List<Feature> update(List<Feature> features, String datasetId) {
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;
@@ -97,7 +98,7 @@ public class FeatureServiceImpl implements FeatureService {
 		return fs;
 	}
 	
-	
+	@Override
 	public void deleteAll(String datasetId) {
 		String url = appConfig.getProperty("url.feature");
 		url += "?dataset=" + datasetId;

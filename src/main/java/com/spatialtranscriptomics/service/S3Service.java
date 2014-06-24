@@ -12,6 +12,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.Feature;
 
+/**
+ * Interface for the Amazon S3 service.
+ */
 public interface S3Service {
 	
 	public void deleteExperimentData(String experimentId);
@@ -31,4 +34,6 @@ public interface S3Service {
 	public InputStream getFeaturesAsCSV(String experimentId);
 	
 	public List<Feature> getFeaturesAsList(String experimentId);
+        
+        public void deleteImageData(List<String> imageNames);
 }

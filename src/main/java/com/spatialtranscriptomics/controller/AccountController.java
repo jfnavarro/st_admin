@@ -136,12 +136,12 @@ public class AccountController {
 		return choices;
 	}
 	
-	
+	// static access to the account service.
 	public static AccountServiceImpl getStaticAccountService() {
-        return StaticContextAccessor.getBean(AccountController.class).getAccountService();
-   }
+            return StaticContextAccessor.getBean(AccountController.class).getAccountService();
+        }
 	
-	
+	// access to the account service.
 	public AccountServiceImpl getAccountService() {
 		return this.accountService;
 	}

@@ -70,6 +70,7 @@ public class S3ServiceImpl implements S3Service {
 	private @Value("${s3.imagespath}")
 	String imagesPath;
 	
+        @Override
 	public void deleteExperimentData(String experimentId) {
 		String path = experimentsPath + experimentId;
 		ObjectListing objects = s3Client.listObjects(pipelineBucket, path);
@@ -90,7 +91,7 @@ public class S3ServiceImpl implements S3Service {
 		s3Client.deleteObjects(req);
 	}
 
-	
+	@Override
 	public void deleteImageData(List<String> imageNames) {
 		ObjectListing objects = s3Client.listObjects(imagesBucket, imagesPath);
 		List<S3ObjectSummary> objs = objects.getObjectSummaries();
@@ -101,7 +102,7 @@ public class S3ServiceImpl implements S3Service {
 		for (S3ObjectSummary o : objs) {
 			for (String imageName : imageNames) {
 				if (o.getKey().equals(imageName)) {
-					System.out.println("Adding image: " + imageName);
+					//System.out.println("Adding image: " + imageName);
 					KeyVersion kv = new DeleteObjectsRequest.KeyVersion(o.getKey());
 					keysToDelete.add(kv);
 				}
@@ -110,11 +111,13 @@ public class S3ServiceImpl implements S3Service {
 		if (keysToDelete.isEmpty()) {
 			return;
 		}
+                // TODO: test!
 		//DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
 		//req.setKeys(keysToDelete);
 		//s3Client.deleteObjects(req);
 	}
 	
+        @Override
 	public List<String> getInputFolders() {
 		List<String> result = new ArrayList<String>();
 
@@ -131,7 +134,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
-	
+	@Override
 	public List<String> getIDFiles() {
 		List<String> result = new ArrayList<String>();
 
@@ -150,7 +153,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
-	
+	@Override
 	public List<String> getReferenceAnnotation() {
 
 		List<String> result = new ArrayList<String>();
@@ -168,7 +171,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
-	
+	@Override
 	public List<String> getReferenceGenome() {
 
 		List<String> result = new ArrayList<String>();
@@ -191,7 +194,7 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
-	
+	@Override
 	public List<String> getBowtieFiles() {
 
 		List<String> result = new ArrayList<String>();
@@ -214,22 +217,22 @@ public class S3ServiceImpl implements S3Service {
 		return result;
 	}
 
-	
+	@Override
 	public InputStream getFeaturesAsJson(String experimentId) {
 		return new EMROutputParser().getJSON(getOutputFromS3(experimentId));
 	}
 
-	
+	@Override
 	public InputStream getFeaturesAsCSV(String experimentId) {
 		return new EMROutputParser().getCSV(getOutputFromS3(experimentId));
 	}
 
-	
+	@Override
 	public List<Feature> getFeaturesAsList(String experimentId) {
 		return new EMROutputParser().getFeatures(getOutputFromS3(experimentId));
 	}
 
-	
+	// Returns output from an S3 experiment as a stream.
 	private InputStream getOutputFromS3(String experimentId) {
 		String path = experimentsPath + experimentId + "/output";
 		// String path = "experiments/" + "test" + "/output";
@@ -253,7 +256,7 @@ public class S3ServiceImpl implements S3Service {
 
 	}
 
-	
+        // Cleans the name by returning the last string before '/'.
 	private String getCleanName(String path) {
 		String[] tokens = path.split("[/]");
 		return tokens[tokens.length - 1];

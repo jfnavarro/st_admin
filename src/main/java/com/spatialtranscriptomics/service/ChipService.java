@@ -13,6 +13,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.spatialtranscriptomics.model.Chip;
 
+/**
+ * Interface for the chip service.
+ */
 public interface ChipService {
 
 	public Chip find(String id);

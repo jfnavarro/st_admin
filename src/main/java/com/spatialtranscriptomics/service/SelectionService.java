@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.Selection;
 
+/**
+ * Interface for the selection service.
+ */
 public interface SelectionService {
 
 	public Selection find(String id);

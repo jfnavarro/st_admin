@@ -13,6 +13,9 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.spatialtranscriptomics.model.Feature;
 
+/**
+ * Interface for the feature service.
+ */
 public interface FeatureService {
 	
 	public List<Feature> findForDataset(String datasetId);

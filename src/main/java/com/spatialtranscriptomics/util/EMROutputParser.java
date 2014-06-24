@@ -53,6 +53,11 @@ public class EMROutputParser {
 	private static final Logger logger = Logger
 			.getLogger(EMROutputParser.class);
 
+        /**
+         * Converts CSV stream to JSON.
+         * @param is CSV stream
+         * @return JSON stream.
+         */
 	public InputStream getJSON(InputStream is) {
 
 		try {
@@ -74,6 +79,11 @@ public class EMROutputParser {
 		}
 	}
 
+        /**
+         * Converts JSON stream to CSV.
+         * @param is JSON stream.
+         * @return CSV stream.
+         */
 	public InputStream getCSV(InputStream is) {
 
 		try {
@@ -99,6 +109,11 @@ public class EMROutputParser {
 		}
 	}
 
+        /**
+         * Converts a CSV stream to a set of features.
+         * @param is CSV stream.
+         * @return features.
+         */
 	public List<Feature> getFeatures(InputStream is) {
 
 		Feature[] features;
@@ -117,6 +132,11 @@ public class EMROutputParser {
 
 	}
 
+        /**
+         * Helper that returns a map of features in a specialized map format.
+         * @param is CSV stream.
+         * @return map.
+         */
 	private Map<String, Integer> getMapFromInputStream(InputStream is) {
 
 		try {
@@ -144,6 +164,11 @@ public class EMROutputParser {
 		}
 	}
 
+        /**
+         * Helper that converts a specialized map format of features into actual features.
+         * @param map the map.
+         * @return the features.
+         */
 	private List<EMROutputParser.JsonFeature> getFeaturesFromMap(
 			Map<String, Integer> map) {
 
@@ -167,8 +192,9 @@ public class EMROutputParser {
 		return features;
 	}
 
-	// Inner class used to serialize Features to Json Objects
-
+        /**
+         * Inner class used to serialize Features to Json Objects
+         */
 	private class JsonFeature {
 
 		String barcode;

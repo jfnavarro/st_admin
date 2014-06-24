@@ -226,7 +226,7 @@ public class DatasetController {
 		return success;
 	}
 
-	
+	// populate image alignment choices
 	@ModelAttribute("imageAlignmentChoices")
 	public Map<String, String> populateImageAlignmentChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -237,6 +237,7 @@ public class DatasetController {
 		return choices;
 	}
 	
+        // populate experiment choices.
 	@ModelAttribute("experimentChoices")
 	public Map<String, String> populateExperimentChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -259,12 +260,12 @@ public class DatasetController {
 		return choices;
 	}
 	
-	
+	// static access for dataset service
 	public static DatasetServiceImpl getStaticDatasetService() {
 		return StaticContextAccessor.getBean(DatasetController.class).getDatasetService();
 	}
 	
-	
+	// access for dataset service.
 	public DatasetServiceImpl getDatasetService() {
 		return this.datasetService;
 	}

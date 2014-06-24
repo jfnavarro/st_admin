@@ -87,6 +87,7 @@ public class EMRServiceImpl implements EMRService {
 
 	// see
 	// http://stackoverflow.com/questions/9283929/how-to-specify-mapred-configurations-java-options-with-custom-jar-in-cli-using
+        @Override
 	public String startJobFlow(PipelineExperimentForm j, String experimentId) {
 
 		// set args for Pipeline mapper script
@@ -279,7 +280,7 @@ public class EMRServiceImpl implements EMRService {
 
 	}
 
-	
+	@Override
 	public void stopJobFlow(String jobFlowId) {
 		if (jobFlowId == null) {
 			return;
@@ -292,7 +293,7 @@ public class EMRServiceImpl implements EMRService {
 		emrClient.terminateJobFlows(req);
 	}
 
-	
+	@Override
 	public JobFlowDetail findJobFlow(String jobFlowId) {
 		//System.out.println("EMR name: " + emrClient.getServiceName());
 		//System.out.println("EMR tostring: " + emrClient.toString());

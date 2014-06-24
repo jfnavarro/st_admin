@@ -6,8 +6,7 @@ package com.spatialtranscriptomics.util;
 public class StringOperations {
 
 	/**
-	 * Returns a string with the last found character replaced (searching from
-	 * tail to head).
+	 * Returns a string with the last found character replaced (searching from tail to head).
 	 * @param str the string
 	 * @param toReplace the character to look for and replace.
 	 * @param replacement the replacement.

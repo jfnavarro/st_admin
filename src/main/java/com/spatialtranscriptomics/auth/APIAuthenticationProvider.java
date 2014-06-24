@@ -1,5 +1,5 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
+*Copyright © 2014 Spatial Transcriptomics AB
 *Read LICENSE for more information about licensing terms
 *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
 * 
@@ -46,7 +46,12 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 	@Autowired
 	Properties appConfig;
 
-	
+	/**
+         * Returns a token for the autorization.
+         * @param authentication the credentials.
+         * @return the token.
+         * @throws AuthenticationException a bad credentials object, should authentication fail.
+         */
 	public Authentication authenticate(Authentication authentication)
 			throws AuthenticationException {
 		String username = authentication.getName();
@@ -64,12 +69,21 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 		}
 	}
 
-	
+	/**
+         * Verfies the authenticatio object is of the right type.
+         * @param authentication authentication.
+         * @return true if correct type.
+         */
 	public boolean supports(Class<?> authentication) {
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
 
-	
+	/**
+         * Authenticates a user against the API, returning the user role as stored in DB.
+         * @param username username.
+         * @param password password.
+         * @return the user role ID, or null if authentication fails.
+         */
 	private String authenticateAgainstAPI(String username, String password) {
 		try {
 

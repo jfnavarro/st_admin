@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.Dataset;
 
+/**
+ * Interface for the dataset service.
+ */
 public interface DatasetService {
 
 	public Dataset find(String id);

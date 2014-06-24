@@ -11,7 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.Account;
 
-
+/**
+ * Interface for the account service.
+ */
 public interface AccountService {
 
 	public Account find(String id);

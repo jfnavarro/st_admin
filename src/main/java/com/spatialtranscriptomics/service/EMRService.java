@@ -10,6 +10,9 @@ package com.spatialtranscriptomics.service;
 import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.spatialtranscriptomics.form.PipelineExperimentForm;
 
+/**
+ * Interface for the Amazon EMR service.
+ */
 public interface EMRService {
 
 	public JobFlowDetail findJobFlow(String jobFlowId);

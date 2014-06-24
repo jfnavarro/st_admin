@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.PipelineStats;
 
+/**
+ * Interface for the pipelinestats service.
+ */
 public interface PipelineStatsService {
 
 	public PipelineStats find(String id);
@@ -25,5 +28,5 @@ public interface PipelineStatsService {
 
 	public void delete(String id);
 	
-
+        public void deleteForExperiment(String experimentId);
 }

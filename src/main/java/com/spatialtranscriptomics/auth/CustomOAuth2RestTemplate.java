@@ -67,6 +67,9 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 
 	private boolean retryBadAccessTokens = true;
 
+        /**
+         * Constructor.
+         */
 	public CustomOAuth2RestTemplate() {
 		super();
 		context = new DefaultOAuth2ClientContext();
@@ -224,6 +227,12 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 		return context;
 	}
 
+        /**
+         * Acquires an oauth access token.
+         * @param oauth2Context context.
+         * @return an access token.
+         * @throws UserRedirectRequiredException if a context has not been established or if a null access token is acquired.
+         */
 	protected OAuth2AccessToken acquireAccessToken(
 			OAuth2ClientContext oauth2Context)
 			throws UserRedirectRequiredException {
@@ -260,6 +269,12 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 		return accessToken;
 	}
 
+        /**
+         * Appends a URI with the Oauth access token needed for access.
+         * @param uri URI.
+         * @param accessToken oauth access token for the session.
+         * @return the appended uri.
+         */
 	protected URI appendQueryParameter(URI uri, OAuth2AccessToken accessToken) {
 
 		try {
@@ -300,6 +315,10 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 
 	}
 
+        /**
+         * Sets the access token provider.
+         * @param accessTokenProvider 
+         */
 	public void setAccessTokenProvider(AccessTokenProvider accessTokenProvider) {
 		this.accessTokenProvider = accessTokenProvider;
 	}

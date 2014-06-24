@@ -84,83 +84,162 @@ public class PipelineExperimentForm {
 	@Range(min = 1000, max = 1000000)
 	private int chunks;
 
-	
+	/**
+         * Returns the experiment name.
+         * @return experiment name.
+         */
 	public String getExperimentName() {
 		return experimentName;
 	}
 
+        /**
+         * Sets the experiment name.
+         * @param experimentName experiment name.
+         */
 	public void setExperimentName(String experimentName) {
 		this.experimentName = experimentName;
 	}
 	
+        /**
+         * Returns the number of nodes.
+         * @return the number of nodes.
+         */
 	public String getNumNodes() {
 		return numNodes;
 	}
 
+        /**
+         * Sets the number of nodes.
+         * @param numNodes number of nodes.
+         */
 	public void setNumNodes(String numNodes) {
 		this.numNodes = numNodes;
 	}
 	
+        /**
+         * Returns the account ID.
+         * @return account ID.
+         */
 	public String getAccountId() {
 		return accountId;
 	}
 
+        /**
+         * Sets the account ID.
+         * @param accountId account ID.
+         */
 	public void setAccountId(String accountId) {
 		this.accountId = accountId;
 	}
 
+        /**
+         * Returns the node type master.
+         * @return node type master.
+         */
 	public String getNodeTypeMaster() {
 		return nodeTypeMaster;
 	}
 
+        /**
+         * Sets the node type master.
+         * @param nodeTypeMaster node type master.
+         */
 	public void setNodeTypeMaster(String nodeTypeMaster) {
 		this.nodeTypeMaster = nodeTypeMaster;
 	}
 
+        /**
+         * Returns the node type slave.
+         * @return node type slave.
+         */
 	public String getNodeTypeSlave() {
 		return nodeTypeSlave;
 	}
 
+        /**
+         * Sets the node type slave.
+         * @param nodeTypeSlave node type slave.
+         */
 	public void setNodeTypeSlave(String nodeTypeSlave) {
 		this.nodeTypeSlave = nodeTypeSlave;
 	}
 
+        /**
+         * Returns the folder.
+         * @return folder.
+         */
 	public String getFolder() {
 		return folder;
 	}
 
+        /**
+         * Sets the folder.
+         * @param folder the folder.
+         */
 	public void setFolder(String folder) {
 		this.folder = folder;
 	}
 
+        /**
+         * Returns the ID file.
+         * @return the ID file.
+         */
 	public String getIdFile() {
 		return idFile;
 	}
 
+        /**
+         * Sets the ID file.
+         * @param idFile ID file.
+         */
 	public void setIdFile(String idFile) {
 		this.idFile = idFile;
 	}
 
+        /**
+         * Returns the ref annotation.
+         * @return ref annotation.
+         */
 	public String getReferenceAnnotation() {
 		return referenceAnnotation;
 	}
 
+        /**
+         * Sets the ref annotation
+         * @param referenceAnnotation ref annotation. 
+         */
 	public void setReferenceAnnotation(String referenceAnnotation) {
 		this.referenceAnnotation = referenceAnnotation;
 	}
 
+        /**
+         * Returns the ref genome.
+         * @return ref genome.
+         */
 	public String getReferenceGenome() {
 		return referenceGenome;
 	}
 
+        /**
+         * Sets the ref genome.
+         * @param referenceGenome ref genome.
+         */
 	public void setReferenceGenome(String referenceGenome) {
 		this.referenceGenome = referenceGenome;
 	}
 	
+        /**
+         * Returns the Bowtie file.
+         * @return Bowtie file.
+         */
 	public String getBowtieFile() {
 		return bowtieFile;
 	}
 
+        /**
+         * Sets the Bowtie file.
+         * @param bowtieFile Bowtie file.
+         */
 	public void setBowtieFile(String bowtieFile) {
 		this.bowtieFile = bowtieFile;
 	}

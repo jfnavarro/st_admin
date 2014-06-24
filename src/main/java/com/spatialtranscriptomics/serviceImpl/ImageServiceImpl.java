@@ -37,6 +37,7 @@ public class ImageServiceImpl implements ImageService {
 	@Autowired
 	Properties appConfig;
 
+        @Override
 	public List<ImageMetadata> list() {
 
 		String url = appConfig.getProperty("url.image");
@@ -45,6 +46,7 @@ public class ImageServiceImpl implements ImageService {
 		return Arrays.asList(imgMetadataArray);
 	}
 
+        @Override
 	public BufferedImage find(String id) {
 
 		String url = appConfig.getProperty("url.image");
@@ -54,12 +56,14 @@ public class ImageServiceImpl implements ImageService {
 		return img;
 	}
 
+        @Override
 	public void delete(String id) {
 
 		String url = appConfig.getProperty("url.image");
 		secureRestTemplate.delete(url + id);
 	}
 
+        @Override
 	public void addFromFile(CommonsMultipartFile imageFile) {
 
 		String url = appConfig.getProperty("url.image");

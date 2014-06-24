@@ -37,7 +37,7 @@ public class TaskServiceImpl implements TaskService {
 	@Autowired
 	Properties appConfig;
 
-	
+	@Override
 	public Task find(String id) {
 		String url = appConfig.getProperty("url.task");
 		url += id;
@@ -45,35 +45,39 @@ public class TaskServiceImpl implements TaskService {
 		return task;
 	}
 
-	
+	@Override
 	public List<Task> list() {
 		String url = appConfig.getProperty("url.task");
+                //System.out.println("Getting task");
 		Task[] eArray = secureRestTemplate.getForObject(url,
 				Task[].class);
+                //System.out.println("Got tasks: " + eArray.length);
 		List<Task> eList = Arrays.asList(eArray);
+                //System.out.println("Parsed tasks");
 		return eList;
 	}
 
-	
+	@Override
 	public Task add(Task task) {
 		String url = appConfig.getProperty("url.task");
 		Task eResponse = secureRestTemplate.postForObject(url, task, Task.class);
 		return eResponse;
 	}
 
-	
+	@Override
 	public void update(Task task) {
 		String url = appConfig.getProperty("url.task");
 		String id = task.getId();
 		secureRestTemplate.put(url + id, task);
 	}
 
-	
+	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.task");
 		secureRestTemplate.delete(url + id);
 	}
 
+        @Override
 	public List<Task> findForAccount(String accountId) {
 		String url = appConfig.getProperty("url.task") + "?account=" + accountId;
 		Task[] arr = secureRestTemplate.getForObject(url, Task[].class);

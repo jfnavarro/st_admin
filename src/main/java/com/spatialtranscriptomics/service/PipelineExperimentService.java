@@ -11,6 +11,9 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.PipelineExperiment;
 
+/**
+ * Interface for the pipeline experiment service.
+ */
 public interface PipelineExperimentService {
 
 	public PipelineExperiment find(String id);

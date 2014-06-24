@@ -1,3 +1,10 @@
+/*
+*Copyright © 2012 Spatial Transcriptomics AB
+*Read LICENSE for more information about licensing terms
+*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+* 
+*/
+
 package com.spatialtranscriptomics.controller;
 
 import java.util.LinkedHashMap;
@@ -59,9 +66,11 @@ public class SelectionController {
 	// list
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView list() {
-		List<Selection> selections = selectionService.list();
-		ModelAndView success = new ModelAndView("selectionlist", "selectionList", selections);
-		return success;
+            //System.out.println("Listing selections");
+            List<Selection> selections = selectionService.list();
+            //System.out.println("Got selections: " + (selections == null ? "null" : selections.size()));
+            ModelAndView success = new ModelAndView("selectionlist", "selectionList", selections);
+            return success;
 	}
 	
 	

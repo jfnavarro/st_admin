@@ -21,7 +21,7 @@
 	});
 </script>
 
-
+       
 </head>
 <body>
 
@@ -70,11 +70,16 @@
 			<dd>${selection.comment}&nbsp;
 			</dd>
 			
-			<dt>Gene hits</dt>
+			<dt>Gene hits </dt>
 			<dd>
+                            <table>
+                                <tr><td>Gene</td><td>&nbsp;&nbsp;&nbsp;Hit count</td><td>&nbsp;&nbsp;&nbsp;Normalized hit count</td><td>&nbsp;&nbsp;&nbsp;Normalized pixel intensity</td></tr>
 				<c:forEach var="genehits" items="${selection.gene_hits}">
-						${genehits.key} &nbsp;&nbsp; ${genehits.value}
-				</c:forEach>
+                                    <tr>
+                                        <td>${genehits[0]}</td><td>&nbsp;&nbsp;&nbsp;${genehits[1]}</td><td>&nbsp;&nbsp;&nbsp;${genehits[2]}</td><td>&nbsp;&nbsp;&nbsp;${genehits[3]}</td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
 			</dd>
 		</dl>
 	

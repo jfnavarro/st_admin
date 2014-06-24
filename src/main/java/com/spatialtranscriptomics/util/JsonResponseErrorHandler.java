@@ -31,10 +31,19 @@ public class JsonResponseErrorHandler implements ResponseErrorHandler {
 
 	private ObjectMapper mapper;
 
+        /**
+         * Constructor.
+         */
 	public JsonResponseErrorHandler() {
 		mapper = new ObjectMapper();
 	}
 
+        /**
+         * Validates a client http response.
+         * @param response the response.
+         * @return true if invalid, false of OK.
+         * @throws IOException 
+         */
 	public boolean hasError(ClientHttpResponse response) throws IOException {
 
 		if (response.getStatusCode() != HttpStatus.OK) {
@@ -47,6 +56,11 @@ public class JsonResponseErrorHandler implements ResponseErrorHandler {
 		return false;
 	}
 
+        /**
+         * Helper that generates a client HTTP response.
+         * @param response
+         * @throws IOException 
+         */
 	public void handleError(ClientHttpResponse response) throws IOException {
 
 		GenericExceptionResponse errorResponse = mapper.readValue(response.getBody(),

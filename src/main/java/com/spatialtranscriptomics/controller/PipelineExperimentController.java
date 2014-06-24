@@ -91,6 +91,7 @@ public class PipelineExperimentController {
 	@RequestMapping(method = RequestMethod.GET)
 	public @ResponseBody
 	ModelAndView list() {
+            //System.out.println("Listing exps");
 		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		return success;
 	}
@@ -217,7 +218,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// Populate node choices.
 	@ModelAttribute("nodeTypeChoices")
 	public Map<String, String> populateNodeTypeChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -228,7 +229,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate folder choices
 	@ModelAttribute("folderChoices")
 	public Map<String, String> populateFolderChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -239,7 +240,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate ID file choices.
 	@ModelAttribute("idFileChoices")
 	public Map<String, String> populateIdFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -250,7 +251,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate referance annotation choices
 	@ModelAttribute("refAnnotationChoices")
 	public Map<String, String> populateRefAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -261,7 +262,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate genome file choices
 	@ModelAttribute("refGenomeChoices")
 	public Map<String, String> populateRefGenomeChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -272,7 +273,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate bowtie file choices
 	@ModelAttribute("bowtieFileChoices")
 	public Map<String, String> populateBowtieFileChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
@@ -283,7 +284,7 @@ public class PipelineExperimentController {
 		return choices;
 	}
 
-	
+	// populate HTSeq annotation file choices.
 	@ModelAttribute("htseqAnnotationChoices")
 	public Map<String, String> populateHtseqAnnotationChoices() {
 		Map<String, String> choices = new LinkedHashMap<String, String>();

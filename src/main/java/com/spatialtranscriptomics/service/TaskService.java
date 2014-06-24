@@ -11,19 +11,22 @@ import java.util.List;
 
 import com.spatialtranscriptomics.model.Task;
 
+/**
+ * Interface for the task service.
+ */
 public interface TaskService {
 
-	public Task find(String id);
+    public Task find(String id);
 
-	public List<Task> list();
-	
-	public List<Task> findForAccount(String accountId);
+    public List<Task> list();
 
-	public Task add(Task task);
+    public List<Task> findForAccount(String accountId);
 
-	public void update(Task task);
+    public Task add(Task task);
 
-	public void delete(String id);
+    public void update(Task task);
+
+    public void delete(String id);
 	
 
 }
