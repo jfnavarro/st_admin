@@ -11,6 +11,7 @@ import java.util.List;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
+import org.joda.time.DateTime;
 
 
 /**
@@ -50,7 +51,11 @@ public class Account implements IAccount {
 	public String country;
 	
 	public List<String> granted_datasets;
+        
+        private DateTime created_at;
 	
+        private DateTime last_modified;
+        
 	// id is set automatically by MongoDB
 	public String getId() {
 		return id;
@@ -156,5 +161,16 @@ public class Account implements IAccount {
 		//System.out.println("Setting datasets: " + grantedDatasets.size());
 		this.granted_datasets = grantedDatasets;
 	}
+        
+        public DateTime getCreated_at() {
+		return created_at;
+	}
 	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
+	}
 }

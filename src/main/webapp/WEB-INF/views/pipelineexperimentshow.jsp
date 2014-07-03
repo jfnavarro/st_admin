@@ -54,12 +54,18 @@
 			<dd>${account.username}&nbsp;</dd>
 			<dt>EMR job ID</dt>
 			<dd>${pipelineexperiment.emr_jobflow_id}&nbsp;</dd>
+                        <dt>EMR job state</dt>
+			<dd>${pipelineexperiment.emr_state}&nbsp;</dd>
 			<dt>EMR job created</dt>
-			<dd>${jobflow.executionStatusDetail.creationDateTime}&nbsp;</dd>
+			<dd>${pipelineexperiment.emr_creation_date_time}&nbsp;</dd>
 			<dt>EMR job ended</dt>
-			<dd>${jobflow.executionStatusDetail.endDateTime}&nbsp;</dd>
+			<dd>${pipelineexperiment.emr_end_date_time}&nbsp;</dd>
 			<dt>EMR job last message</dt>
-			<dd>${jobflow.executionStatusDetail.lastStateChangeReason}&nbsp;</dd>
+			<dd>${pipelineexperiment.emr_last_state_change_reason}&nbsp;</dd>
+                        <dt>Created</dt>
+			<dd>${pipelineexperiment.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${pipelineexperiment.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 		
 		<c:if test="${not empty stats}">
@@ -71,7 +77,7 @@
 		</dl>
 		</c:if>
 		
-		<c:if test="${jobflow.executionStatusDetail.state == 'COMPLETED'}">
+		<c:if test="${pipelineexperiment.emr_state == 'COMPLETED'}">
 			<dl class="dl-horizontal">
 				<dt>EMR job output</dt>
 				<dd>

@@ -75,15 +75,6 @@
 							</div>
 						</div>
 						
-						<div class="control-group">
-		                	<label class="control-label" for="inputAccountId">Account</label>
-		                	<div class="controls">
-			                	<form:select id="inputAccountId" path="accountId" multiple="false">
-	                 		  	<form:options items="${accountChoices}"></form:options>
-	                			</form:select>
-                	 		</div>
-                	 	</div>
-                	
 					</div>
 
 					<!-- end span -->

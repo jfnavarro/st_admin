@@ -111,10 +111,9 @@ public class S3ServiceImpl implements S3Service {
 		if (keysToDelete.isEmpty()) {
 			return;
 		}
-                // TODO: test!
-		//DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
-		//req.setKeys(keysToDelete);
-		//s3Client.deleteObjects(req);
+                DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
+		req.setKeys(keysToDelete);
+		s3Client.deleteObjects(req);
 	}
 	
         @Override

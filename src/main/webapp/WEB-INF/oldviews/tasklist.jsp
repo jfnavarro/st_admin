@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Dataset access for accounts</title>
+<title>Tasks</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -13,15 +13,15 @@
 	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script
 	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-
-<!-- Script to set the highlight the active menu in the header -->
+	
+	<!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuDatasetInfo").addClass("active");
+		$("#menuTask").addClass("active");
 	});
 </script>
 
-<!-- Script for Delete dialog -->
+	<!--  Script for Delete dialog -->
 <script>
 	$(document)
 			.on(
@@ -31,21 +31,23 @@
 						var theId = $(this).data('id');
 						$(".modal-footer #deleteBtn")
 								.html(
-										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/datasetinfo/"/>'
+										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/task/"/>'
 												+ theId
 												+ '/delete" class="btn btn-danger">Delete</a>');
 					});
 </script>
 
+
 </head>
 <body>
+
 
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
 
 		<div class="page-header">
-			<h1>Dataset access for accounts</h1>
+			<h1>Tasks</h1>
 		</div>
 
 		<c:if test="${not empty msg}">
@@ -54,41 +56,45 @@
 			</div>
 		</c:if>
 
+                <!--
 		<div>
-			<a href="<c:url value="/datasetinfo/add"/>">Create dataset access for account</a>
+			<a href="<c:url value="/task/add"/>">Create task</a>
 		</div>
+                -->
 
 		<table class="table">
 			<thead>
 				<tr>
-					<th>Dataset - account</th>
-					<th>Comment</th>
+					<th>Name</th>
+					<th>Account</th>
+					<th>Start time</th>
+					<th>End time</th>
 				</tr>
 
 			</thead>
 			<tbody>
-				<c:forEach var="dain" items="${datasetinfoList}">
+				<c:forEach var="task" items="${taskList}">
 					<tr>
-						<td><a href="<c:url value="/datasetinfo/"/>${dain.id}">${accountChoices[dain.account_id]} - ${datasetChoices[dain.dataset_id]}</a></td>
-						<td>${dain.comment}</td>
+						<td><a href="<c:url value="/task/"/>${task.id}">${task.name}</a></td>
+						<td>${accounts[task.account_id]}</td>
+						<td>${task.start}</td>
+						<td>${task.end}</td>
 						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${dain.id}"
-							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
+							data-id="${task.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
+						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
 	</div>
-	<!-- /container -->
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete dataset access for account</h3>
+			<h3 id="deleteModalLabel">Delete task</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the dataset access for the account?</div>
-
+			<div>Are you sure you want to delete the task?</div>
 		</div>
 		<div class="modal-footer">
 			<div id="deleteBtn"></div>

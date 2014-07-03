@@ -128,8 +128,8 @@ public class ImageAlignmentController {
 	public ModelAndView delete(@PathVariable String id) {
 		ImageAlignment imal = imagealignmentService.find(id);
 		if (imal != null) {
-			//imagealignmentService.delete(id);
-			//datasetService.setUnabledForImageAlignment(id);
+			imagealignmentService.delete(id);
+			datasetService.setUnabledForImageAlignment(id);
 			HashSet<String> todel = new HashSet<String>(1024);
 			todel.add(imal.getFigure_blue());
 			todel.add(imal.getFigure_red());

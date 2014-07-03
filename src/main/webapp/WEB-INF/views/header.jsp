@@ -37,8 +37,8 @@ body {
 					<ul class="nav">
 						<li id="menuHome"><a href="<c:url value="/home"/>">Home</a></li>
 						<li id="menuDataset"><a href="<c:url value="/dataset"/>">Datasets</a></li>
-						<li id="menuSelection"><a href="<c:url value="/selection"/>">Selections</a></li>
-						<li id="menuTask"><a href="<c:url value="/task"/>">Tasks</a></li>
+						<!--<li id="menuSelection"><a href="<c:url value="/selection"/>">Selections</a></li>-->
+						<!--<li id="menuTask"><a href="<c:url value="/task"/>">Tasks</a></li>-->
 						<li id="menuPipelineExperiment"><a href="<c:url value="/pipelineexperiment"/>">Experiments</a></li>					
 						<li id="menuChip"><a href="<c:url value="/chip"/>">Chips</a></li>
 						<li id="menuImage"><a href="<c:url value="/image"/>">Images</a></li>
@@ -47,9 +47,11 @@ body {
 						<sec:authorize ifAnyGranted="ROLE_ADMIN">
 							<li id="menuAccount"><a href="<c:url value="/account"/>">Accounts</a></li>
 						</sec:authorize>
+                                                
 						<sec:authorize ifAnyGranted="ROLE_ADMIN">
-							<li id="menuDatasetInfo"><a href="<c:url value="/datasetinfo"/>">Access</a></li>
+							<!--<li id="menuDatasetInfo"><a href="<c:url value="/datasetinfo"/>">Access</a></li>-->
 						</sec:authorize>
+                                                
 
 						<li id="menuHelp"><a href="<c:url value="/help"/>">Help</a></li>
 					</ul>

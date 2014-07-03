@@ -10,6 +10,7 @@ package com.spatialtranscriptomics.model;
 import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -41,6 +42,10 @@ public class Task implements ITask {
 	String parameters;
 
 	String result_file;
+        
+        DateTime created_at;
+	
+        DateTime last_modified;
 
 	public String getId() {
 		return id;
@@ -112,5 +117,17 @@ public class Task implements ITask {
 
 	public void setResult_file(String file) {
 		this.result_file = file;
-	}	
+	}
+        
+        public DateTime getCreated_at() {
+		return created_at;
+	}
+	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
+	}
 }

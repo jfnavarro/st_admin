@@ -10,6 +10,7 @@ package com.spatialtranscriptomics.model;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
 
 /**
  * This bean class maps the Dataset data retrieved from the ST API to the application data model. 
@@ -44,8 +45,14 @@ public class Dataset implements IDataset {
 	String[] obo_foundry_terms;
 	String comment;
 	
-	List<String> granted_accounts;
+    	List<String> granted_accounts;
+
+        String created_by_account_id;
+        
+        DateTime created_at;
 	
+        DateTime last_modified;
+        
 	public String getId() {
 		return id;
 	}
@@ -167,4 +174,25 @@ public class Dataset implements IDataset {
 		this.granted_accounts = grantedAccounts;
 	}
 
+        public String getCreated_by_account_id() {
+            return this.created_by_account_id;
+        }
+        
+        public void setCreated_by_account_id(String id) {
+            this.created_by_account_id = id;
+        }
+        
+        public DateTime getCreated_at() {
+		return created_at;
+	}
+	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
+	}
+        
+        
 }

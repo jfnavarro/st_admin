@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
 
 /**
  * This bean class maps the Selection data retrieved from the ST API to the application data model. 
@@ -35,6 +36,8 @@ public class Selection implements ISelection {
 	@NotEmpty(message = "Gene nomenclatures with stats must not be empty.")
 	List<String[]> gene_hits = new ArrayList<String[]>();
 	
+        boolean enabled;
+        
 	String type;
 	
 	String status;
@@ -42,6 +45,10 @@ public class Selection implements ISelection {
 	String comment;
 	
 	String[] obo_foundry_terms;
+        
+        DateTime created_at;
+	
+        DateTime last_modified;
 
 	public String getId() {
 		return id;
@@ -50,6 +57,14 @@ public class Selection implements ISelection {
 	public void setId(String id) {
 		this.id = id;
 	}
+        
+        public boolean getEnabled() {
+            return this.enabled;
+        }
+        
+        public void setEnabled(boolean enabled) {
+            this.enabled = enabled;
+        }
 
 	public List<String[]> getGene_hits() {
 		return gene_hits;
@@ -129,5 +144,17 @@ public class Selection implements ISelection {
 
 	public double getNormalized_pixel_intensity(int i) {
             return Double.parseDouble(gene_hits.get(i)[3]);
+	}
+        
+        public DateTime getCreated_at() {
+		return created_at;
+	}
+	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
 	}
 }

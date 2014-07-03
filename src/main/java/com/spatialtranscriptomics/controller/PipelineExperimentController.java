@@ -7,28 +7,6 @@
 
 package com.spatialtranscriptomics.controller;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.Valid;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.amazonaws.services.ec2.model.InstanceType;
 import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.spatialtranscriptomics.exceptions.GenericException;
@@ -42,6 +20,26 @@ import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineStatsServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.validation.Valid;
+import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * This class is Spring MVC controller class for the URL "/pipelineexperiment". It implements the methods available at this URL and returns views (.jsp pages) with models.
@@ -80,7 +78,24 @@ public class PipelineExperimentController {
 		PipelineStats stats = pipelinestatsService.findForPipelineExperiment(id);
 		success.addObject("stats", stats);
 		JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
-		
+                
+                // HACK: Update DB w. jobflow status. Should be turned into an Amazon callback, if available.
+                String oldState = exp.getEmr_state() == null ? "" : exp.getEmr_state();
+                if (!oldState.equals("COMPLETED") && !oldState.equals("FAILED") && !oldState.equals("TERMINATED") && jobFlow != null) {
+                    if (jobFlow.getExecutionStatusDetail().getState() != null) {
+                        exp.setEmr_state(jobFlow.getExecutionStatusDetail().getState());
+                    }
+                    if (jobFlow.getExecutionStatusDetail().getCreationDateTime() != null) {
+                        exp.setEmr_creation_date_time(new DateTime(jobFlow.getExecutionStatusDetail().getCreationDateTime()));
+                    }
+                    if (jobFlow.getExecutionStatusDetail().getEndDateTime() != null) {
+                        exp.setEmr_end_date_time(new DateTime(jobFlow.getExecutionStatusDetail().getEndDateTime()));
+                    }
+                    if (jobFlow.getExecutionStatusDetail().getLastStateChangeReason() != null) {
+                        exp.setEmr_last_state_change_reason(jobFlow.getExecutionStatusDetail().getLastStateChangeReason());
+                    }
+                    pipelineexperimentService.update(exp);
+                }
 		success.addObject("jobflow", jobFlow);
 		success.addObject("account", accountService.find(exp.getAccount_id()));
 		return success;
@@ -139,6 +154,12 @@ public class PipelineExperimentController {
 		pipelineexperiment.setEmr_jobflow_id("Not yet received");
 		//pipelineexperiment.setCreated(new Date());
 		pipelineexperiment = pipelineexperimentService.add(pipelineexperiment);
+                
+                if (pipelineexperiment == null || pipelineexperiment.getId() == null) {
+                    ModelAndView addFail = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
+                    addFail.addObject("errors", "Could not create pipeline experiment. Try again.");
+                    return addFail;
+                }
 
 		// create EMR jobflow
 		String emrJobFlowId = emrService.startJobFlow(form, pipelineexperiment.getId());
@@ -146,7 +167,7 @@ public class PipelineExperimentController {
 		// Delete pipelineexperiment and return error if EMR jobflow could not be
 		// started
 		if (emrJobFlowId == null) {
-			ModelAndView awsFail = new ModelAndView("pipelineexperimentcreate",	"pipelineexperimentform", form);
+			ModelAndView awsFail = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
 			pipelineexperimentService.delete(pipelineexperiment.getId());
 			awsFail.addObject("errors", "Could not start EMR Job. Try again.");
 			return awsFail;
@@ -155,7 +176,31 @@ public class PipelineExperimentController {
 		// update pipelineexperiment with Jobflow ID
 		pipelineexperiment.setEmr_jobflow_id(emrJobFlowId);
 		pipelineexperimentService.update(pipelineexperiment);
-
+                
+                // TODO: Change to proper stats.
+                PipelineStats stats = new PipelineStats();
+                stats.setExperiment_id(pipelineexperiment.getId());
+                stats.setInput_files(new String[] { null});
+                stats.setOutput_files(new String[] { null});
+                stats.setParameters("Unknown");
+                stats.setStatus("COMPLETED");
+                stats.setNo_of_reads_mapped(-1);
+                stats.setNo_of_reads_annotated(-1);
+                stats.setNo_of_reads_mapped_with_find_indexes(-1);
+                stats.setNo_of_reads_contaminated(-1);
+                stats.setNo_of_barcodes_found(-1);
+                stats.setNo_of_genes_found(-1);
+                stats.setNo_of_transcripts_found(-1);
+                stats.setNo_of_reads_found(-1);
+                stats.setMapper_tool("Unknown");
+                stats.setMapper_genome("Unknown");
+                stats.setAnnotation_tool("Unknown");
+                stats.setAnnotation_genome("Unknown");
+                stats.setQuality_plots_file("Unknown");
+                stats.setLog_file("Unknown");
+                stats.setDoc_id("Unknown");
+                pipelinestatsService.add(stats);
+                
 		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		success.addObject("msg", "Experiment started.");
 		return success;

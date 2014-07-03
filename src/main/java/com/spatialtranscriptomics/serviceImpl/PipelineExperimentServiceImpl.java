@@ -57,8 +57,7 @@ public class PipelineExperimentServiceImpl implements PipelineExperimentService 
 	@Override
 	public PipelineExperiment add(PipelineExperiment experiment) {
 		String url = appConfig.getProperty("url.pipelineexperiment");
-		PipelineExperiment eResponse = secureRestTemplate.postForObject(url, experiment,
-				PipelineExperiment.class);
+		PipelineExperiment eResponse = secureRestTemplate.postForObject(url, experiment, PipelineExperiment.class);
 		return eResponse;
 	}
 

@@ -83,6 +83,16 @@ public class SelectionServiceImpl implements SelectionService {
 			secureRestTemplate.delete(url + sel.getId());
 		}
 	}
+        
+        @Override
+	public void deleteForAccount(String accountId) {
+		List<Selection> sels = findForAccount(accountId);
+		if (sels == null) { return; }
+		String url = appConfig.getProperty("url.selection");
+		for (Selection sel : sels) {
+			secureRestTemplate.delete(url + sel.getId());
+		}
+	}
 
         @Override
 	public List<Selection> findForAccount(String accountId) {

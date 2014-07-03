@@ -84,6 +84,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 	 * @param password the password to set
 	 */
 	public void setResourceCredentials(String username, String password) {
+            //System.out.println("Setting resource credentials");
 		oauthResource.setUsername(username);
 		oauthResource.setPassword(password);
 		context = new DefaultOAuth2ClientContext();
@@ -115,6 +116,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 	protected ClientHttpRequest createRequest(URI uri, HttpMethod method)
 			throws IOException {
 
+            //System.out.println("Creating request");
 		OAuth2AccessToken accessToken = getAccessToken();
 
 		String tokenType = accessToken.getTokenType();
@@ -142,6 +144,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 			}
 			return req;
 		} else {
+                    //System.out.println("Throwing OAuth2AccessDeniedException");
 			throw new OAuth2AccessDeniedException(
 					"Unsupported access token type: " + tokenType);
 		}
@@ -197,6 +200,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 	 */
 	public OAuth2AccessToken getAccessToken()
 			throws UserRedirectRequiredException {
+            //System.out.println("Getting access token");
 
 		OAuth2AccessToken accessToken = context.getAccessToken();
 
@@ -237,6 +241,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
 			OAuth2ClientContext oauth2Context)
 			throws UserRedirectRequiredException {
 
+            //System.out.println("Acquiring access token");
 		AccessTokenRequest accessTokenRequest = oauth2Context
 				.getAccessTokenRequest();
 		if (accessTokenRequest == null) {

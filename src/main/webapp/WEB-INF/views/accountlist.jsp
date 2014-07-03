@@ -72,6 +72,8 @@
 					<th>Institution</th>
 					<th>First name</th>
 					<th>Last name</th>
+                                        <th>Created</th>
+                                        <th>Last modified</th>
 					<!--
 					<th>Street address</th>
 					<th>City</th>
@@ -100,6 +102,8 @@
 						<td>${account.institution}</td>
 						<td>${account.first_name}</td>
 						<td>${account.last_name}</td>
+                                                <td><small>${account.created_at.toDate()}</small></td>
+                                                <td><small>${account.last_modified.toDate()}</small></td>
 						<!--
 						<td>${account.street_address}</td>
 						<td>${account.city}</td>

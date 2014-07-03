@@ -7,6 +7,7 @@
 
 package com.spatialtranscriptomics.controller;
 
+import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +37,13 @@ import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
+import org.joda.time.DateTime;
 
 /**
  * This class is Spring MVC controller class for the URL "/dataset". It implements the methods available at this URL and returns views (.jsp pages) with models .
@@ -60,6 +63,9 @@ public class DatasetController {
 	@Autowired
 	AccountServiceImpl accountService;
 
+        @Autowired
+	EMRServiceImpl emrService;
+        
 	@Autowired
 	FeatureServiceImpl featureService;
 	
@@ -100,6 +106,8 @@ public class DatasetController {
 			ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
 			success.addObject("imagealignment", imal);
 		}
+                Account creator = accountService.find(dataset.getCreated_by_account_id());
+                success.addObject("accountcreator", creator == null ? "Unknown" : creator.getUsername());
 		return success;
 
 	}
@@ -138,12 +146,14 @@ public class DatasetController {
 		// parse, add features and add dataset
 		if (!datasetAddForm.getFeatureFile().isEmpty()) {
 			features = featureService.parse(datasetAddForm.getFeatureFile());
+                        datasetAddForm.getDataset().setCreated_by_account_id(StaticContextAccessor.getCurrentUser().getId());
 			dsResult = datasetService.add(datasetAddForm.getDataset());
 			featureService.add(features, dsResult.getId());
 		}
 		// or: parse features from experiment output bucket
 		else if (datasetAddForm.getExperimentId() != null) {
 			features = s3Service.getFeaturesAsList(datasetAddForm.getExperimentId());
+                        datasetAddForm.getDataset().setCreated_by_account_id(StaticContextAccessor.getCurrentUser().getId());
 			dsResult = datasetService.add(datasetAddForm.getDataset());
 			featureService.add(features, dsResult.getId());
 		}
@@ -243,7 +253,9 @@ public class DatasetController {
 		Map<String, String> choices = new LinkedHashMap<String, String>();
 		List<PipelineExperiment> l = experimentService.list();
 		for (PipelineExperiment pe : l) {
-			choices.put(pe.getId(), pe.getName());
+                    if (pe.getEmr_state() != null && pe.getEmr_state().equals("COMPLETED")) {    
+                        choices.put(pe.getId(), pe.getName());
+                    }
 		}
 		return choices;
 	}

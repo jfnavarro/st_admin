@@ -10,6 +10,7 @@ package com.spatialtranscriptomics.model;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
 
 /**
  * This bean class maps the ImageAlignment data retrieved from the ST API to the application data model. 
@@ -35,7 +36,10 @@ public class ImageAlignment implements IImageAlignment {
 	@NotEmpty(message = "Alignment matrix must not be empty.")
 	double[] alignment_matrix;
 	
+	DateTime created_at;
 	
+        DateTime last_modified;
+        
     @JsonIgnore
     Double alignment_field1;
     
@@ -247,6 +251,18 @@ public class ImageAlignment implements IImageAlignment {
 			this.alignment_matrix = new double[9];
 		}
 		this.alignment_matrix[8] = d;
+	}
+        
+        public DateTime getCreated_at() {
+		return created_at;
+	}
+	
+	public void setCreated_at(DateTime created) {
+		this.created_at = created;
+	}
+
+	public DateTime getLast_modified() {
+		return last_modified;
 	}
 
 }

@@ -28,5 +28,5 @@ public interface TaskService {
 
     public void delete(String id);
 	
-
+    public void deleteForAccount(String accountId);
 }

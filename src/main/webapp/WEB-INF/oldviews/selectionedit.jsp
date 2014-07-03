@@ -57,6 +57,15 @@
 						</div>
 					</div>
 				</spring:bind>
+                            
+                                <spring:bind path="enabled">
+					<div class="control-group">
+                                                <label class="control-label">Selection enabled</label>
+                                                <div class="controls">
+                                                        <form:checkbox path="enabled" />
+                                                </div>
+                                        </div>
+				</spring:bind>
 
 
 				<spring:bind path="account_id">
@@ -118,6 +127,8 @@
 				<form:input type="hidden" path="id" />
 				<form:input type="hidden" path="dataset_id" />
 				<form:input type="hidden" path="gene_hits" />
+                                <form:input type="hidden" path="created_at" />
+				<form:input type="hidden" path="last_modified" />
 				
 				
 			</form:form>

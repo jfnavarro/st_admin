@@ -7,6 +7,7 @@
 
 package com.spatialtranscriptomics.auth;
 
+import com.spatialtranscriptomics.component.StaticContextAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -86,19 +87,26 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
          */
 	private String authenticateAgainstAPI(String username, String password) {
 		try {
-
+                        //System.out.println("Authenticating with " + username + ", " + password);
+                    
 			// set the given credentials to the secureRestTemplate
 			secureRestTemplate.setResourceCredentials(username, password);
 
+                        //System.out.println("Set resource credentials");
+                        
 			// authenticate and authorize against API through secureRestTemplate
 			String url = appConfig.getProperty("url.account");
 			url += "current/user";
 			Account account = secureRestTemplate.getForObject(url, Account.class);
 
+                        //System.out.println("Set resource credentials");
+                        
 			// authorize if user has role ROLE_CM or ROLE_ADMIN (at API)
 			String role = account.getRole();
-			if(role.equals("ROLE_CM") || role.equals("ROLE_ADMIN")){
-				return role;
+			if(role.equals("ROLE_CM") || role.equals("ROLE_ADMIN")) {
+                            //System.out.println("Got role: " + role);                            
+                            StaticContextAccessor.setCurrentUser(account);
+                            return role;
 			}
 			else{
 				return null;

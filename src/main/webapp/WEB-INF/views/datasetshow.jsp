@@ -61,6 +61,9 @@
 			<dt>Image alignment</dt>
 			<dd>${imagealignment.name}&nbsp;</dd>
 			
+                        <dt>Created by</dt>
+			<dd>${accountcreator}&nbsp;</dd>
+                        
 			<dt>Overall # of features</dt>
 			<dd>${dataset.overall_feature_count}&nbsp;</dd>
 			
@@ -90,6 +93,11 @@
 			<dt>Comments</dt>
 			<dd>${dataset.comment}&nbsp;</dd>
 			
+                        <dt>Created</dt>
+			<dd>${dataset.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${dataset.last_modified.toDate()}&nbsp;</dd>
+                        
 			<dt>Features</dt>
 			<dd>
 				<a href="<c:url value="/dataset/"/>${dataset.id}/features">Show</a>

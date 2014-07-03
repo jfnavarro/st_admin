@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -65,6 +66,9 @@
 					<th>Enabled</th>
 					<th>Tissue</th>
 					<th>Species</th>
+                                        <th>Account creator</th>
+                                        <th>Created</th>
+                                        <th>Last modified</th>
 				</tr>
 
 			</thead>
@@ -84,6 +88,9 @@
 						</td>
 						<td>${dataset.tissue}</td>
 						<td>${dataset.species}</td>
+                                                <td>${accountChoices[dataset.created_by_account_id]}</td>
+                                                <td><small><fmt:formatDate value="${dataset.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td><small><fmt:formatDate value="${dataset.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${dataset.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

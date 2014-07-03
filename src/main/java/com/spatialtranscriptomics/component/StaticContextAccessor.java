@@ -8,8 +8,8 @@
 
 package com.spatialtranscriptomics.component;
 
+import com.spatialtranscriptomics.model.Account;
 import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
@@ -22,6 +22,8 @@ public class StaticContextAccessor {
 
     private static StaticContextAccessor instance;
 
+    private static Account currentUser;
+    
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -38,6 +40,14 @@ public class StaticContextAccessor {
      */
     public static <T> T getBean(Class<T> clazz) {
         return instance.applicationContext.getBean(clazz);
+    }
+    
+    public static void setCurrentUser(Account user) {
+        currentUser = user;
+    }
+    
+    public static Account getCurrentUser() {
+        return currentUser;
     }
 
 }

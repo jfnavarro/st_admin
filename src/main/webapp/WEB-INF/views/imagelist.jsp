@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -73,6 +74,7 @@
 				<tr>
 
 					<th>Name</th>
+                                        <th>Created</th>
 					<th>Last modified</th>
 					<th></th>
 				</tr>
@@ -84,7 +86,8 @@
 
 						<td><a href="<c:url value="/image/"/>${image.filename}"
 							target="_blank">${image.filename}</a></td>
-						<td>${image.lastModified}</td>
+                                                <td><small><fmt:formatDate value="${image.created}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td><small><fmt:formatDate value="${image.lastModified}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${image.filename}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
@@ -103,7 +106,8 @@
 			<h3 id="deleteModalLabel">Delete image</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the image?</div>
+			<div>Are you sure you want to delete the image?
+                            The image may be used by image alignments (and these for datasets), which are then invalidated.</div>
 
 		</div>
 		<div class="modal-footer">

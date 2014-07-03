@@ -180,7 +180,9 @@
 			    			    
 				<button type="submit" class="btn">Save</button>
 				<form:input type="hidden" path="id" />
-
+                                <form:input type="hidden" path="created_at" />
+				<form:input type="hidden" path="last_modified" />
+                                
 			</form:form>
 		</div>
 		<div>

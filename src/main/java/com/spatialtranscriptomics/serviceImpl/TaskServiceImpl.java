@@ -28,8 +28,7 @@ import com.spatialtranscriptomics.service.TaskService;
 public class TaskServiceImpl implements TaskService {
 
 	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(TaskServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(TaskServiceImpl.class);
 
 	@Autowired
 	RestTemplate secureRestTemplate;
@@ -83,6 +82,16 @@ public class TaskServiceImpl implements TaskService {
 		Task[] arr = secureRestTemplate.getForObject(url, Task[].class);
 		List<Task> list = Arrays.asList(arr);
 		return list;
+	}
+        
+        @Override
+	public void deleteForAccount(String accountId) {
+		List<Task> ts = findForAccount(accountId);
+		if (ts == null) { return; }
+		String url = appConfig.getProperty("url.task");
+		for (Task t : ts) {
+			secureRestTemplate.delete(url + t.getId());
+		}
 	}
 
 

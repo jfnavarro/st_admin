@@ -8,6 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 import java.util.List;
+import org.joda.time.DateTime;
 
 /**
  * This interface defines the Account model. Should reflect the corresponding model in ST API.
@@ -67,5 +68,9 @@ public interface IAccount {
 
 	public void setGranted_datasets(List<String> datasets);
 
+        public DateTime getCreated_at();
 
+	public void setCreated_at(DateTime created);
+	
+	public DateTime getLast_modified();
 }

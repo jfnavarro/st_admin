@@ -44,7 +44,7 @@
 				<li>Go to the page "Experiments" --&gt; "Create Experiment".</li>
 				<li>Fill out the form, click on "optional parameters" to enter
 					advanced Pipeline parameters</li>
-				<li>Click "Run" to create the experiment and start the
+				<li>Click "Start pipeline" to create the experiment and start the
 					Pipeline.</li>
 
 			</ul>
@@ -54,11 +54,13 @@
 			<ul>
 				<li>Go to the page "Experiments".</li>
 				<li>Click on the experiment you want to view</li>
-				<li>You see the status of the Pipeline job here (e.g. Running,
-					Completed, Failed)</li>
-				<li>As soon as the Pipeline is "Completed" the page will show
-					download links to the Pipeline output</li>
+				<li>You see the status of the Pipeline job here (e.g. running,
+					completed, failed) as reported by Amazon EMR (where jobs are executed).</li>
+				<li>As soon as the Pipeline is completed the page will show
+					download links to the Pipeline output.</li>
 				<li>The output is available in Json and CSV format</li>
+                                <li>You may also go to the Dataset page and create a dataset based on the
+                                    output of the job without having to save the file locally.</li>
 			</ul>
 
 			Stop the Pipeline and delete experiments
@@ -66,8 +68,7 @@
 			<ul>
 				<li>Go to the page "Experiments".</li>
 				<li>Click on the "delete" link next to the experiment</li>
-				<li>This will delete the experiment with all output, log, and
-					temp data</li>
+				<li>This will delete the experiment with all output, log, and temp data</li>
 				<li>If the Pipeline is still running, it will stop the Pipeline
 					immediately</li>
 			</ul>
@@ -84,7 +85,7 @@
 				<li>Before you can create a new Dataset the Chip and images
 					need to be imported to the system.</li>
 				<li>Go to the page "Dataset" --&gt; "Create Dataset".</li>
-				<li>Select Chip, Images and enter the Dataset information.</li>
+				<li>Select image alignment, granted accounts and enter the dataset information.</li>
 				<li>Select a .json Feature file from your local computer or an
 					experiment that you ran earlier.</li>
 				<li>Click "Create" to import the Features and create the
@@ -138,7 +139,7 @@
 		<h2>Images</h2>
 
 		<div>
-			Import images from .jpg files on your local computer:
+                        Import images from .jpg files on your local computer:
 
 			<p />
 
@@ -146,6 +147,22 @@
 				<li>Go to the page "Images" --&gt; "Import image".</li>
 				<li>Choose a .jpg file from your local computer.</li>
 				<li>Click "Import" to upload the file and import the image.</li>
+			</ul>
+
+		</div>
+                
+                <h2>Alignments</h2>
+
+		<div>
+                        Image alignments are used to co-align images with the chip that was used.
+                        The matrix that governs the alignment is currently computed by an external
+                        script whose output need be set manually.
+			<p />
+
+			<ul>
+				<li>Go to the page "Alignments" --&gt; "Create image alignment".</li>
+				<li>Specify the images and the chip used, along with the alignment matrix.</li>
+				<li>Click "Create".</li>
 			</ul>
 
 		</div>
@@ -158,13 +175,13 @@
 
 		<ul>
 			<li>Go to the page "Accounts" --&gt; "Create Account".</li>
-			<li>Choose a user name.</li>
-			<li>Select a user role. To create a normal account, select
-				"User". To create a User Manager or Content Manager account, select
-				another role accordingly.</li>
-			<li>Select the Datasets you want to grant to the user. Select
-				multiple Datasets using the 'Cmd' key. User Manager and Content
-				Manager accounts always have access to all Datasets.</li>
+			<li>Choose a user name. Note that this must be an email address.</li>
+			<li>Select a user role. To create a normal account (with client rights only), select
+				"User". The Content manager role is allowed not only to the client,
+                                but also to access parts of the admin console, such as for executing
+                                jobs. The Administrator role has full access to the admin console, such as
+                                for administering accounts.</li>
+			<li>Select the Datasets you want to grant to the user.</li>
 			<li>Choose a password for the account.</li>
 			<li>Check "Enable Account" box to enable the account. You can
 				also enable the account later.</li>
@@ -178,13 +195,9 @@
 			<li>Go to the page "Accounts".</li>
 			<li>Click on the Account you want to edit.</li>
 			<li>On the "Account" details page click on "Edit Account".</li>
-			<li>Adjust the values you want to edit. Note that passwords
-				cannot be edited.</li>
+			<li>Adjust the values you want to edit.</li>
 			<li>Click "Save".</li>
 		</ul>
-
-
-
 
 
 	</div>

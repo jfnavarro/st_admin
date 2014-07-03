@@ -7,6 +7,7 @@
 
 package com.spatialtranscriptomics.form;
 
+import com.spatialtranscriptomics.component.StaticContextAccessor;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Range;
 
@@ -84,6 +85,10 @@ public class PipelineExperimentForm {
 	@Range(min = 1000, max = 1000000)
 	private int chunks;
 
+        public PipelineExperimentForm() {
+            this.accountId = StaticContextAccessor.getCurrentUser().getId();
+        }
+        
 	/**
          * Returns the experiment name.
          * @return experiment name.
@@ -129,7 +134,7 @@ public class PipelineExperimentForm {
          * @param accountId account ID.
          */
 	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+            this.accountId = accountId;
 	}
 
         /**

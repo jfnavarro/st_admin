@@ -7,6 +7,8 @@
 
 package com.spatialtranscriptomics.model;
 
+import org.joda.time.DateTime;
+
 /**
  * This interface defines the Experiment model. Should reflect the corresponding model in ST API.
  */
@@ -28,5 +30,27 @@ public interface IPipelineExperiment {
 	public String getAccount_id();
 
 	public void setAccount_id(String id);
+        
+        public String getEmr_state();
+        
+        public void setEmr_state(String state);
+
+        public DateTime getEmr_creation_date_time();
+        
+        public void setEmr_creation_date_time(DateTime creationDateTime);
+        
+        public DateTime getEmr_end_date_time();
+
+        public void setEmr_end_date_time(DateTime endDateTime);
+        
+        public String getEmr_last_state_change_reason();
+
+        public void setEmr_last_state_change_reason(String lastStateChangeReason);
+        
+        public DateTime getCreated_at();
+
+	public void setCreated_at(DateTime created);
+	
+	public DateTime getLast_modified();
 
 }

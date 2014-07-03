@@ -77,6 +77,10 @@
 			<dt>Country</dt>
 			<dd>${account.country}&nbsp;
 			</dd>
+                        <dt>Created</dt>
+			<dd>${account.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${account.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 
 		<dl class="dl-horizontal">

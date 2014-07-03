@@ -56,6 +56,10 @@
 			    <tr><td>${imagealignment.alignment_matrix[6]}</td><td>${imagealignment.alignment_matrix[7]}</td><td>${imagealignment.alignment_matrix[8]}</td></tr>
 			  </table>
 			</dd>
+                        <dt>Created</dt>
+			<dd>${imagealignment.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${imagealignment.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 
 	</div>

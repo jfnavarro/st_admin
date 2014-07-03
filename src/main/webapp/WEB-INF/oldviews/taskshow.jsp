@@ -71,6 +71,10 @@
 			<dt>Result file</dt>
 			<dd>${task.result_file}&nbsp;
 			</dd>
+                        <dt>Created</dt>
+			<dd>${task.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${task.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 	</div>
 	

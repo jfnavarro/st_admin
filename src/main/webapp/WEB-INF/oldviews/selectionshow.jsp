@@ -42,6 +42,17 @@
 		</div>
 
 		<dl class="dl-horizontal">
+                        <dt>Enabled</dt>
+			<dd>
+			<c:choose>
+    			<c:when test="${selection.enabled == true}">
+        			<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">&nbsp;
+    			</c:when>
+    			<c:otherwise>
+        			<input type="checkbox" name="chkEnabled" value="" onclick="return false">&nbsp;
+    			</c:otherwise>
+			</c:choose>
+			</dd>
 			<dt>Account</dt>
 			<dd>${account.username}&nbsp;
 			</dd>
@@ -69,7 +80,10 @@
 			<dt>Comments</dt>
 			<dd>${selection.comment}&nbsp;
 			</dd>
-			
+			<dt>Created</dt>
+			<dd>${selection.created_at.toDate()}&nbsp;</dd>
+			<dt>Last modified</dt>
+			<dd>${selection.last_modified.toDate()}&nbsp;</dd>
 			<dt>Gene hits </dt>
 			<dd>
                             <table>

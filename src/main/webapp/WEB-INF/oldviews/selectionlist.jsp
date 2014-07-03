@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Tasks</title>
+<title>Selections</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -17,7 +17,7 @@
 	<!-- Script to set the highlight the active menu in the header -->
 <script>
 	$(document).ready(function(event) {
-		$("#menuTask").addClass("active");
+		$("#menuSelection").addClass("active");
 	});
 </script>
 
@@ -31,7 +31,7 @@
 						var theId = $(this).data('id');
 						$(".modal-footer #deleteBtn")
 								.html(
-										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/task/"/>'
+										'<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> <a href="<c:url value="/selection/"/>'
 												+ theId
 												+ '/delete" class="btn btn-danger">Delete</a>');
 					});
@@ -47,7 +47,7 @@
 	<div class="container">
 
 		<div class="page-header">
-			<h1>Tasks</h1>
+			<h1>Selections</h1>
 		</div>
 
 		<c:if test="${not empty msg}">
@@ -56,30 +56,32 @@
 			</div>
 		</c:if>
 
-
-		<div>
-			<a href="<c:url value="/task/add"/>">Create task</a>
-		</div>
-
 		<table class="table">
 			<thead>
 				<tr>
 					<th>Name</th>
 					<th>Account</th>
-					<th>Start time</th>
-					<th>End time</th>
+					<th>Dataset</th>
+                                        <th>Enabled</th>
 				</tr>
 
 			</thead>
 			<tbody>
-				<c:forEach var="task" items="${taskList}">
+				<c:forEach var="selection" items="${selectionList}">
 					<tr>
-						<td><a href="<c:url value="/task/"/>${task.id}">${task.name}</a></td>
-						<td>${accounts[task.account_id]}</td>
-						<td>${task.start}</td>
-						<td>${task.end}</td>
+						<td><a href="<c:url value="/selection/"/>${selection.id}">${selection.name}</a></td>
+						<td>${accountChoices[selection.account_id]}</td>
+						<td>${datasetChoices[selection.dataset_id]}</td>
+                                                <td><c:choose>
+    						<c:when test="${selection.enabled == true}">
+        						<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">
+    						</c:when>
+    						<c:otherwise>
+        						<input type="checkbox" name="chkEnabled" value="" onclick="return false">
+    						</c:otherwise>
+							</c:choose></td>
 						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${task.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
+							data-id="${selection.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
 						</td>
 					</tr>
 				</c:forEach>
@@ -90,10 +92,10 @@
 
 	<div id="deleteModal" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete task</h3>
+			<h3 id="deleteModalLabel">Delete selection</h3>
 		</div>
 		<div class="modal-body">
-			<div>Are you sure you want to delete the task?</div>
+			<div>Are you sure you want to delete the selection?</div>
 		</div>
 		<div class="modal-footer">
 			<div id="deleteBtn"></div>

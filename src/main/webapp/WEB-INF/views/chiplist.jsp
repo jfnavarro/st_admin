@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -68,6 +69,9 @@
 				<tr>
 
 					<th>Name</th>
+                                        <th>Barcodes</th>
+                                        <th>Created</th>
+                                        <th>Last modified</th>
 					<th></th>
 				</tr>
 
@@ -77,6 +81,9 @@
 					<tr>
 
 						<td><a href="<c:url value="/chip/"/>${chip.id}">${chip.name}</a></td>
+                                                <td>${chip.barcodes}</td>
+                                                <td><small><fmt:formatDate value="${chip.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td><small><fmt:formatDate value="${chip.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${chip.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -63,6 +64,10 @@
 				<tr>
 					<th>Name</th>
 					<th>Chip</th>
+                                        <th>Figure red</th>
+                                        <th>Figure blue</th>
+                                        <th>Created</th>
+                                        <th>Last modified</th>
 				</tr>
 
 			</thead>
@@ -71,6 +76,10 @@
 					<tr>
 						<td><a href="<c:url value="/imagealignment/"/>${imal.id}">${imal.name}</a></td>
 						<td>${chipChoices[imal.chip_id]}</td>
+                                                <td>${imal.figure_red}</td>
+                                                <td>${imal.figure_blue}</td>
+                                                <td><small><fmt:formatDate value="${imal.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td><small><fmt:formatDate value="${imal.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${imal.id}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
