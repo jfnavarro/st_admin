@@ -27,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spatialtranscriptomics.form.ImageForm;
 import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
+import java.io.IOException;
 
 /**
  * This class is Spring MVC controller class for the URL "/image". It implements the methods available at this URL and returns views (.jsp pages) with models or image payload (BufferedImage).
@@ -88,10 +89,16 @@ public class ImageController {
 			return model;
 		}
 		else {
+                    try {
 			imageService.addFromFile(imageForm.getImageFile());
 			ModelAndView model = new ModelAndView("imagelist", "imagemetadata",	imageService.list());
 			model.addObject("msg", "Image imported.");
 			return model;
+                    } catch (IOException ex) {
+                        ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
+			model.addObject("err", "Error importing image. Format seems invalid.");
+			return model;
+                    }
 		}
 	}
 

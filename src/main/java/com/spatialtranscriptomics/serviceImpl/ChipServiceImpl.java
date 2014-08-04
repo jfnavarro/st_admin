@@ -66,23 +66,25 @@ public class ChipServiceImpl implements ChipService {
 	}
 
 	@Override
-	public Chip addFromFile(CommonsMultipartFile chipFile, String name) {
-		try {
-			// parse ndf file to get Values
-			NDFParser parser = new NDFParser(chipFile.getInputStream());
-			Chip chip = parser.readChip();
-			chip.setName(name);
+	public Chip addFromFile(CommonsMultipartFile chipFile, String name) throws IOException {
+            //try {
+                    // parse ndf file to get Values
+                    NDFParser parser = new NDFParser(chipFile.getInputStream());
+                    Chip chip = parser.readChip();
+                    chip.setName(name);
 
-			String url = appConfig.getProperty("url.chip");
-			Chip chipResponse = secureRestTemplate.postForObject(url, chip,
-					Chip.class);
-			return chipResponse;
+                    String url = appConfig.getProperty("url.chip");
+                    Chip chipResponse = secureRestTemplate.postForObject(url, chip,
+                                    Chip.class);
+                    return chipResponse;
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
+            //} catch (IOException e) {
+            //	e.printStackTrace();
+           // 	return null;
+            //}
+        
 	}
+	
 
 	@Override
 	public void update(Chip chip) {

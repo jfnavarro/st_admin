@@ -96,5 +96,16 @@ public class DatasetServiceImpl implements DatasetService {
 			}
 		}
 	}
+        
+        @Override
+        public void clearAccountCreator(String accountId) {
+            List<Dataset> l = list();
+            for (Dataset d : l) {
+                if (d.getCreated_by_account_id() != null && d.getCreated_by_account_id().equals(accountId)) {
+                    d.setCreated_by_account_id(null);
+                    update(d);
+                }
+            }
+        }
 
 }

@@ -51,7 +51,7 @@
 
 		<dl class="dl-horizontal">
 			<dt>Account</dt>
-			<dd>${account.username}&nbsp;</dd>
+			<dd>${accountName}&nbsp;</dd>
 			<dt>EMR job ID</dt>
 			<dd>${pipelineexperiment.emr_jobflow_id}&nbsp;</dd>
                         <dt>EMR job state</dt>

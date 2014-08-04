@@ -64,17 +64,18 @@ public class ImageServiceImpl implements ImageService {
 	}
 
         @Override
-	public void addFromFile(CommonsMultipartFile imageFile) {
+	public void addFromFile(CommonsMultipartFile imageFile) throws IOException {
 
 		String url = appConfig.getProperty("url.image");
 		url += imageFile.getOriginalFilename();
 
-		try {
+		//try {
 			BufferedImage bi = ImageIO.read(imageFile.getInputStream());
+                        if (bi == null) { throw new IOException(); }
 			secureRestTemplate.put(url, bi);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
 
 	}
 

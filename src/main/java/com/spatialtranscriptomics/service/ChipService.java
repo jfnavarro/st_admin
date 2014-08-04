@@ -7,11 +7,10 @@
 
 package com.spatialtranscriptomics.service;
 
-import java.util.List;
-
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.spatialtranscriptomics.model.Chip;
+import java.io.IOException;
+import java.util.List;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * Interface for the chip service.
@@ -24,7 +23,7 @@ public interface ChipService {
 
 	public Chip create(Chip chip);
 
-	public Chip addFromFile(CommonsMultipartFile chipFile, String name);
+	public Chip addFromFile(CommonsMultipartFile chipFile, String name) throws IOException;
 
 	public void update(Chip chip);
 

@@ -81,5 +81,16 @@ public class PipelineExperimentServiceImpl implements PipelineExperimentService 
 		List<PipelineExperiment> list = Arrays.asList(arr);
 		return list;
 	}
+        
+        @Override
+        public void clearAccount(String accountId) {
+            List<PipelineExperiment> l = list();
+            for (PipelineExperiment pe : l) {
+                if (pe.getAccount_id() != null && pe.getAccount_id().equals(accountId)) {
+                    pe.setAccount_id(null);
+                    update(pe);
+                }
+            }
+        }
 
 }

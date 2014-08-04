@@ -8,10 +8,15 @@
 package com.spatialtranscriptomics.controller;
 
 
+import com.spatialtranscriptomics.form.ChipForm;
+import com.spatialtranscriptomics.model.Chip;
+import com.spatialtranscriptomics.model.ImageAlignment;
+import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
+import java.io.IOException;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,13 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.spatialtranscriptomics.form.ChipForm;
-import com.spatialtranscriptomics.model.Chip;
-import com.spatialtranscriptomics.model.ImageAlignment;
-import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 
 
 /**
@@ -76,15 +74,21 @@ public class ChipController {
 	@RequestMapping(value = "/submitimport", method = RequestMethod.POST)
 	public ModelAndView submitImport(@ModelAttribute("chipform") @Valid ChipForm chipForm, BindingResult result) {
 		if (result.hasErrors()) {
-			ModelAndView model = new ModelAndView("chipimport", "chipform",
-					chipForm);
+			ModelAndView model = new ModelAndView("chipimport", "chipform", chipForm);
 			model.addObject("errors", result.getAllErrors());
 			return model;
 		}
-		chipService.addFromFile(chipForm.getChipFile(), chipForm.getName());
-		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
-		success.addObject("msg", "Chip created.");
-		return success;
+                try {
+                    chipService.addFromFile(chipForm.getChipFile(), chipForm.getName());
+                    ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
+                    success.addObject("msg", "Chip created.");
+                    return success;
+                }
+                catch (IOException e) {
+                    ModelAndView model = new ModelAndView("chipimport", "chipform", chipForm);
+			model.addObject("errors", "Invalid chip file");
+			return model;
+                }
 	}
 
 	// edit 

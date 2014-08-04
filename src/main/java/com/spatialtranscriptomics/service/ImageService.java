@@ -7,12 +7,11 @@
 
 package com.spatialtranscriptomics.service;
 
-import java.awt.image.BufferedImage;
-import java.util.List;
-
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
 import com.spatialtranscriptomics.model.ImageMetadata;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.List;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * Interface for the image service.
@@ -23,7 +22,7 @@ public interface ImageService {
 
 	public BufferedImage find(String id);
 
-	public void addFromFile(CommonsMultipartFile imageFile);
+	public void addFromFile(CommonsMultipartFile imageFile) throws IOException;
 
 	public void delete(String id);
 

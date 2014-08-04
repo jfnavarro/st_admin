@@ -14,7 +14,6 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 /**
  * This class implements the model for the "import chip form" (used to import chip files). 
  * Does data validation using Hibernate validator constraints.
- * 
  * */
 public class ChipForm {
 

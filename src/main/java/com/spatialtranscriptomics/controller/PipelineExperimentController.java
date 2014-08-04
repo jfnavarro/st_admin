@@ -97,7 +97,7 @@ public class PipelineExperimentController {
                     pipelineexperimentService.update(exp);
                 }
 		success.addObject("jobflow", jobFlow);
-		success.addObject("account", accountService.find(exp.getAccount_id()));
+		success.addObject("accountName", exp.getAccount_id() == null ? "" : accountService.find(exp.getAccount_id()).getUsername());
 		return success;
 	}
 
@@ -107,8 +107,8 @@ public class PipelineExperimentController {
 	public @ResponseBody
 	ModelAndView list() {
             //System.out.println("Listing exps");
-		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
-		return success;
+            ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+            return success;
 	}
 
 	// edit

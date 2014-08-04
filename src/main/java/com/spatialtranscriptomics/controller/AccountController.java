@@ -15,6 +15,7 @@ import com.spatialtranscriptomics.service.TaskService;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.TaskServiceImpl;
 import java.util.LinkedHashMap;
@@ -56,6 +57,9 @@ public class AccountController {
         
         @Autowired
         TaskServiceImpl taskService;
+        
+        @Autowired
+        PipelineExperimentServiceImpl pipelineExperimentService;
 
 	
 	// get
@@ -128,6 +132,8 @@ public class AccountController {
 		datasetinfoService.deleteForAccount(id);
                 taskService.deleteForAccount(id);
                 selectionService.deleteForAccount(id);
+                datasetService.clearAccountCreator(id);
+                pipelineExperimentService.clearAccount(id);
 		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account deleted.");
 		return success;

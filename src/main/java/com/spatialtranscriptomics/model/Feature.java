@@ -37,8 +37,8 @@ public class Feature implements IFeature {
 	@JsonProperty(value="y")
 	int y;
 	
-	@JsonProperty(value="annotation")
-	String annotation;
+	//@JsonProperty(value="annotation")
+	//String annotation;
 	
 	public String getId() {
 		return id;
@@ -99,14 +99,14 @@ public class Feature implements IFeature {
 		this.gene = gene;
 	}
 
-	@JsonProperty(value="annotation")
-	public String getAnnotation() {
-		return this.annotation;
-	}
+	//@JsonProperty(value="annotation")
+	//public String getAnnotation() {
+	//	return this.annotation;
+	//}
 
-	@JsonProperty(value="annotation")
-	public void setAnnotation(String ann) {
-		this.annotation = ann;
-	}
+	//@JsonProperty(value="annotation")
+	//public void setAnnotation(String ann) {
+	//	this.annotation = ann;
+	//}
 
 }
