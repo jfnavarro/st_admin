@@ -48,7 +48,7 @@
 
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="100000000" /> <!-- max. filesize of 95 MB -->
+		<property name="maxUploadSize" value="1000000000" /> <!-- max. filesize of 95 MB -->
 	</bean>
 
 	<!-- Make CSS, Javascript, image files a static resource -->
