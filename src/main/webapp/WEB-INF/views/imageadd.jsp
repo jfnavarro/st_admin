@@ -56,7 +56,7 @@
 
 		<div>
 			<form:form method="POST" commandName="imageform"
-				action="${contextPath}/image/submitadd" class="form-horizontal"
+				action="${contextPath}/image/compressed/submitadd" class="form-horizontal"
 				enctype="multipart/form-data">
 
 				<!--  	<spring:bind path="fileName">

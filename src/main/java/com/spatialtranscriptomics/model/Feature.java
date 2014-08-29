@@ -7,8 +7,8 @@
 
 package com.spatialtranscriptomics.model;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+//import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 /**

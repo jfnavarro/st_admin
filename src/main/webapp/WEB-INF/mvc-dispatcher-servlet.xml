@@ -24,12 +24,18 @@
 
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
+                        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" >
+                            <property name="supportedMediaTypes" value="image/jpeg" />
+                        </bean> <!-- to upload Image files -->
 			<bean
 				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> <!-- to upload JSON files -->
 				<property name="supportedMediaTypes" value="multipart/form-data" />
+                                
 			</bean>
-			<bean
-				class="org.springframework.http.converter.BufferedImageHttpMessageConverter" /> <!-- to upload Image files -->
+			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter">
+                            
+                        </bean> <!-- to upload Image files -->
+                        
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
@@ -48,7 +54,7 @@
 
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="maxUploadSize" value="100000000" /> <!-- max. filesize of 95 MB -->
+		<property name="maxUploadSize" value="1000000000" /> <!-- max. filesize of 1 GB -->
 	</bean>
 
 	<!-- Make CSS, Javascript, image files a static resource -->

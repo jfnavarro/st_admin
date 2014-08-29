@@ -7,12 +7,15 @@
 
 package com.spatialtranscriptomics.controller;
 
+import com.spatialtranscriptomics.form.ImageForm;
+import com.spatialtranscriptomics.model.ImageMetadata;
+import com.spatialtranscriptomics.model.JPEGWrapper;
+import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,11 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.spatialtranscriptomics.form.ImageForm;
-import com.spatialtranscriptomics.model.ImageMetadata;
-import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
-import java.io.IOException;
 
 /**
  * This class is Spring MVC controller class for the URL "/image". It implements the methods available at this URL and returns views (.jsp pages) with models or image payload (BufferedImage).
@@ -52,17 +50,34 @@ public class ImageController {
 		return new ModelAndView("imagelist", "imagemetadata", imageMetadata);
 	}
 
-	// get image
+	// get decompressed image
 	@RequestMapping(value = "{id:.+}", method = RequestMethod.GET)
 	public @ResponseBody
 	BufferedImage get(@PathVariable String id) {
 		BufferedImage img = imageService.find(id);
 		return img;
 	}
+        
+        
+        // get compressed image
+	@RequestMapping(value = "/compressed/{id:.+}", method = RequestMethod.GET, produces = "image/jpeg")
+	public @ResponseBody
+	byte[] getCompressed(@PathVariable String id) {
+            JPEGWrapper img = imageService.findCompressedAsJSON(id);
+            byte[] imgdata = img.getImage();
+            //System.out.println(imgdata.length);
+            return imgdata;
+	}
 
 	// add
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public ModelAndView add() {
+		return new ModelAndView("imageadd", "imageform", new ImageForm());
+	}
+        
+        // add
+	@RequestMapping(value = "/compressed/add", method = RequestMethod.GET)
+	public ModelAndView addCompressed() {
 		return new ModelAndView("imageadd", "imageform", new ImageForm());
 	}
 
@@ -92,6 +107,41 @@ public class ImageController {
                     try {
 			imageService.addFromFile(imageForm.getImageFile());
 			ModelAndView model = new ModelAndView("imagelist", "imagemetadata",	imageService.list());
+			model.addObject("msg", "Image imported.");
+			return model;
+                    } catch (IOException ex) {
+                        ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
+			model.addObject("err", "Error importing image. Format seems invalid.");
+			return model;
+                    }
+		}
+	}
+        
+        // add submit
+	@RequestMapping(value = "/compressed/submitadd", method = RequestMethod.POST)
+	public// @ResponseBody
+	ModelAndView submitAddCompressed(@ModelAttribute("imageform") @Valid ImageForm imageForm, BindingResult result) {
+		if (result.hasErrors()) {
+			ModelAndView model = new ModelAndView("imageadd", "imageform", imageForm);
+			model.addObject("errors", result.getAllErrors());
+			return model;
+		}
+
+		// Check if image already exists
+		List<ImageMetadata> imd = imageService.list();
+		List<String> imageNames = new ArrayList<String>();
+		for (ImageMetadata im : imd) {
+			imageNames.add(im.getFilename());
+		}
+		if (imageNames.contains(imageForm.getFileName())) {
+			ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
+			model.addObject("err", "An image with this name already exists. Choose another name or delete existing image.");
+			return model;
+		}
+		else {
+                    try {
+			imageService.addFromFileCompressedAsJSON(imageForm.getImageFile());
+			ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imageService.list());
 			model.addObject("msg", "Image imported.");
 			return model;
                     } catch (IOException ex) {

@@ -8,9 +8,11 @@
 package com.spatialtranscriptomics.service;
 
 import com.spatialtranscriptomics.model.ImageMetadata;
+import com.spatialtranscriptomics.model.JPEGWrapper;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
+import org.springframework.http.HttpEntity;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
@@ -21,9 +23,13 @@ public interface ImageService {
 	public List<ImageMetadata> list();
 
 	public BufferedImage find(String id);
+        
+        public JPEGWrapper findCompressedAsJSON(String id);
 
 	public void addFromFile(CommonsMultipartFile imageFile) throws IOException;
 
 	public void delete(String id);
+        
+        public JPEGWrapper addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException;
 
 }

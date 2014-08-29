@@ -65,7 +65,7 @@
 
 
 		<div>
-			<a href="<c:url value="/image/add"/>">Import image</a>
+			<a href="<c:url value="/image/compressed/add"/>">Import image</a>
 		</div>
 
 
@@ -84,8 +84,8 @@
 				<c:forEach var="image" items="${imagemetadata}">
 					<tr>
 
-						<td><a href="<c:url value="/image/"/>${image.filename}"
-							target="_blank">${image.filename}</a></td>
+						
+                                                <td><a href="<c:url value="/image/compressed/"/>${image.filename}" target="_blank">${image.filename}</a></td>
                                                 <td><small><fmt:formatDate value="${image.created}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                                                 <td><small><fmt:formatDate value="${image.lastModified}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
