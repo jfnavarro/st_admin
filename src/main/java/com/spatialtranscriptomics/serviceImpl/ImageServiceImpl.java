@@ -93,7 +93,7 @@ public class ImageServiceImpl implements ImageService {
         
         @Override
 	public JPEGWrapper addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
-            System.out.println("Adding image");
+            //System.out.println("Adding image");
             String url = appConfig.getProperty("url.image");
             url += "/compressedjson";
             
