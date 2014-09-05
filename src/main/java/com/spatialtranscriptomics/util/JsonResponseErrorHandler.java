@@ -10,8 +10,8 @@ package com.spatialtranscriptomics.util;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.codehaus.jackson.map.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;

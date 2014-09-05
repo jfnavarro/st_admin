@@ -7,7 +7,7 @@
 
 package com.spatialtranscriptomics.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.model.Feature;
@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

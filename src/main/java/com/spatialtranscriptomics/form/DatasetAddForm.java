@@ -34,6 +34,9 @@ public class DatasetAddForm {
 
 	String experimentId;
 
+        // NOT USED RIGHT NOW.
+        //String chipId; // not required when adding a dataset
+        
         /**
          * Constructor.
          */
@@ -79,6 +82,29 @@ public class DatasetAddForm {
 	public void setExperimentId(String experimentId) {
 		this.experimentId = experimentId;
 	}
+        
+//        /**
+//         * Returns the chip ID.
+//         * @return the chip ID.
+//         */
+//	public String getChipId() {
+//            if (chipId != null && (chipId.equals("") || chipId.equals("None"))) {
+//                chipId = null;
+//            }
+//            return chipId;
+//	}
+//
+//        /**
+//         * Sets the chip ID.
+//         * @param chipId the chip ID.
+//         */
+//	public void setChipId(String chipId) {
+//            if (chipId != null && (chipId.equals("") || chipId.equals("None"))) {
+//                this.chipId = null;
+//            } else {
+//                this.chipId = chipId;
+//            }
+//	}
 
         /**
          * Returns the dataset.
