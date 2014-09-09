@@ -89,12 +89,5 @@ public class PipelineStatsServiceImpl implements PipelineStatsService {
 		secureRestTemplate.delete(url + id);
 	}
 	
-        @Override
-	public void deleteForExperiment(String experimentId) {
-		PipelineStats stats = findForPipelineExperiment(experimentId);
-		if (stats != null) {
-			delete(stats.getId());
-		}
-	}
 
 }

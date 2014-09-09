@@ -115,12 +115,6 @@ public class ChipController {
 	// delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
-		List<ImageAlignment> imals = imagealignmentService.deleteForChip(id);
-		if (imals != null) {
-			for (ImageAlignment imal : imals) {
-				datasetService.setUnabledForImageAlignment(imal.getId());
-			}
-		}
 		chipService.delete(id);
 		ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
 		success.addObject("msg", "Chip deleted.");

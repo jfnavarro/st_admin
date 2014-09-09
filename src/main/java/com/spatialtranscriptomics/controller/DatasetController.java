@@ -260,10 +260,7 @@ public class DatasetController {
 	// delete
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
-		featureService.deleteAll(id);
 		datasetService.delete(id);
-		selectionService.deleteForDataset(id);
-		datasetinfoService.deleteForDataset(id);
 		ModelAndView success = new ModelAndView("datasetlist", "datasetList", datasetService.list());
 		success.addObject("msg", "Dataset deleted.");
 		return success;

@@ -91,25 +91,5 @@ public class DatasetInfoServiceImpl implements DatasetInfoService {
 		String url = appConfig.getProperty("url.datasetinfo");
 		secureRestTemplate.delete(url + id);
 	}
-	
-        @Override
-	public void deleteForDataset(String datasetId) {
-		List<DatasetInfo> dsis = listForDataset(datasetId);
-		if (dsis ==  null) { return; }
-		String url = appConfig.getProperty("url.datasetinfo");
-		for (DatasetInfo dsi : dsis) {
-			secureRestTemplate.delete(url + dsi.getId());
-		}
-	}
-
-        @Override
-	public void deleteForAccount(String accountId) {
-		List<DatasetInfo> dsis = listForAccount(accountId);
-		if (dsis ==  null) { return; }
-		String url = appConfig.getProperty("url.datasetinfo");
-		for (DatasetInfo dsi : dsis) {
-			secureRestTemplate.delete(url + dsi.getId());
-		}
-	}
 
 }

@@ -214,9 +214,7 @@ public class PipelineExperimentController {
 		if (exp.getEmr_jobflow_id() != null) {
 			emrService.stopJobFlow(exp.getEmr_jobflow_id());
 		}
-		s3Service.deleteExperimentData(id);
 		pipelineexperimentService.delete(id);
-		pipelinestatsService.deleteForExperiment(id);
 		ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
 		success.addObject("msg", "Experiment deleted.");
 		return success;

@@ -27,8 +27,4 @@ public interface DatasetService {
 	public void update(Dataset dataset);
 
 	public void delete(String id);
-	
-	public void setUnabledForImageAlignment(String imalId);
-
-        public void clearAccountCreator(String accountId);
 }

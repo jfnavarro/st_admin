@@ -129,11 +129,6 @@ public class AccountController {
 	@RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
 	public ModelAndView delete(@PathVariable String id) {
 		accountService.delete(id);
-		datasetinfoService.deleteForAccount(id);
-                taskService.deleteForAccount(id);
-                selectionService.deleteForAccount(id);
-                datasetService.clearAccountCreator(id);
-                pipelineExperimentService.clearAccount(id);
 		ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
 		success.addObject("msg", "Account deleted.");
 		return success;

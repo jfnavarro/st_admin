@@ -35,5 +35,4 @@ public interface S3Service {
 	
 	public List<Feature> getFeaturesAsList(String experimentId);
         
-        public void deleteImageData(List<String> imageNames);
 }

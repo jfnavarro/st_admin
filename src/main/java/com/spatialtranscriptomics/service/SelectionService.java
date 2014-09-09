@@ -32,7 +32,4 @@ public interface SelectionService {
 
 	public void delete(String id);
 	
-	public void deleteForDataset(String datasetId);
-        
-        public void deleteForAccount(String accountId);
 }

@@ -129,18 +129,6 @@ public class ImageAlignmentController {
 		ImageAlignment imal = imagealignmentService.find(id);
 		if (imal != null) {
 			imagealignmentService.delete(id);
-			datasetService.setUnabledForImageAlignment(id);
-			HashSet<String> todel = new HashSet<String>(1024);
-			todel.add(imal.getFigure_blue());
-			todel.add(imal.getFigure_red());
-			List<ImageAlignment> imals = imagealignmentService.list();
-			for (ImageAlignment ia : imals) {
-				if (!ia.getId().equals(id)) {
-					todel.remove(ia.getFigure_blue());
-					todel.remove(ia.getFigure_red());
-				}
-			}
-			s3service.deleteImageData(new ArrayList<String>(todel));
 		}
 		ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
 		success.addObject("msg", "ImageAlignment deleted.");

@@ -27,6 +27,4 @@ public interface PipelineStatsService {
 	public void update(PipelineStats stats);
 
 	public void delete(String id);
-	
-        public void deleteForExperiment(String experimentId);
 }

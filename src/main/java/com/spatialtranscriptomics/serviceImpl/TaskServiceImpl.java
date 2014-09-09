@@ -84,15 +84,4 @@ public class TaskServiceImpl implements TaskService {
 		return list;
 	}
         
-        @Override
-	public void deleteForAccount(String accountId) {
-		List<Task> ts = findForAccount(accountId);
-		if (ts == null) { return; }
-		String url = appConfig.getProperty("url.task");
-		for (Task t : ts) {
-			secureRestTemplate.delete(url + t.getId());
-		}
-	}
-
-
 }

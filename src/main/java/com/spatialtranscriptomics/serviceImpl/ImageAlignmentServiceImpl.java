@@ -83,16 +83,5 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 		return imalList;
 	}
 	
-        @Override
-	public List<ImageAlignment> deleteForChip(String chipId) {
-		//System.out.println("about to delete chip");
-		List<ImageAlignment> imals = findForChip(chipId);
-		//System.out.println("imal size" + (imals == null ? 0 : imals.size()));
-		if (imals == null) { return null; }
-		for (ImageAlignment imal : imals) {
-			delete(imal.getId());
-		}
-		return imals;
-	} 
 
 }

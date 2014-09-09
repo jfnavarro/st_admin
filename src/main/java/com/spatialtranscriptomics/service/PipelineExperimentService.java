@@ -27,6 +27,4 @@ public interface PipelineExperimentService {
 	public void update(PipelineExperiment experiment);
 
 	public void delete(String id);
-	
-        public void clearAccount(String accountId);
 }
