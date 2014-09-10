@@ -96,7 +96,7 @@ public class ChipServiceImpl implements ChipService {
 	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.chip");
-		secureRestTemplate.delete(url + id);
+		secureRestTemplate.delete(url + id + "?cascade=true");
 	}
 
 }

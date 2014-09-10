@@ -39,7 +39,7 @@ public class SelectionServiceImpl implements SelectionService {
 
 	@Override
 	public Selection find(String id) {
-		String url = appConfig.getProperty("url.selection");
+		String url = appConfig.getProperty("url.selection") + "all/";
 		url += id;
 		Selection sel = secureRestTemplate.getForObject(url, Selection.class);
 		return sel;
@@ -47,7 +47,7 @@ public class SelectionServiceImpl implements SelectionService {
 
 	@Override
 	public List<Selection> list() {
-		String url = appConfig.getProperty("url.selection");
+		String url = appConfig.getProperty("url.selection") + "all/";
 		Selection[] eArray = secureRestTemplate.getForObject(url,
 				Selection[].class);
 		List<Selection> eList = Arrays.asList(eArray);

@@ -69,7 +69,6 @@ public class ImageServiceImpl implements ImageService {
 
         @Override
 	public void delete(String id) {
-
 		String url = appConfig.getProperty("url.image");
 		secureRestTemplate.delete(url + id);
 	}

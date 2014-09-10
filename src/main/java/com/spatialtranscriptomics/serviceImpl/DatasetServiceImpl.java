@@ -39,7 +39,7 @@ public class DatasetServiceImpl implements DatasetService {
 
         @Override
 	public Dataset find(String id) {
-		String url = appConfig.getProperty("url.dataset");
+		String url = appConfig.getProperty("url.dataset") + "all/";
 		url += id;
 		Dataset dataset = secureRestTemplate.getForObject(url, Dataset.class);
 		return dataset;
@@ -47,7 +47,7 @@ public class DatasetServiceImpl implements DatasetService {
 
         @Override
 	public List<Dataset> list() {
-		String url = appConfig.getProperty("url.dataset");
+		String url = appConfig.getProperty("url.dataset") + "all/";
 		Dataset[] dsArray = secureRestTemplate.getForObject(url,
 				Dataset[].class);
 		List<Dataset> dsList = Arrays.asList(dsArray);
@@ -56,7 +56,7 @@ public class DatasetServiceImpl implements DatasetService {
 	
         @Override
 	public List<Dataset> listForAccount(String accountId) {
-		String url = appConfig.getProperty("url.dataset") + "?account=" + accountId;
+		String url = appConfig.getProperty("url.dataset") + "all/?account=" + accountId;
 		Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
 		if (dsArray == null) { return null; }
 		List<Dataset> dsList = Arrays.asList(dsArray);
@@ -81,7 +81,7 @@ public class DatasetServiceImpl implements DatasetService {
         @Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.dataset");
-		secureRestTemplate.delete(url + id);
+		secureRestTemplate.delete(url + id + "?cascade=true");
 	}
 	
         

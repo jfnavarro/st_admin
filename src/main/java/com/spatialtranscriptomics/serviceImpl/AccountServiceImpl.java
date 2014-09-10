@@ -44,7 +44,7 @@ public class AccountServiceImpl implements AccountService {
 
         @Override
 	public Account find(String id) {
-		String url = appConfig.getProperty("url.account");
+		String url = appConfig.getProperty("url.account") + "all/";
 		url += id;
 		Account acc = secureRestTemplate.getForObject(url, Account.class);
 		return acc;
@@ -52,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public List<Account> list() {
-		String url = appConfig.getProperty("url.account");
+		String url = appConfig.getProperty("url.account") + "all/";
 		Account[] accountArray = secureRestTemplate.getForObject(url,
 				Account[].class);
 		List<Account> accountList = Arrays.asList(accountArray);
@@ -77,12 +77,12 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.account");
-		secureRestTemplate.delete(url + id);
+		secureRestTemplate.delete(url + id + "?cascade=true");
 	}
 
         @Override
 	public List<Account> findForDataset(String datasetId) {
-		String url = appConfig.getProperty("url.account")  + "?dataset=" + datasetId;
+		String url = appConfig.getProperty("url.account")  + "all/?dataset=" + datasetId;
 		Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
 		List<Account> accountList = Arrays.asList(accountArray);
 		return accountList;

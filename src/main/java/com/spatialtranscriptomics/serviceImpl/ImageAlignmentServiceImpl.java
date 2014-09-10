@@ -69,7 +69,7 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 	@Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.imagealignment");
-		secureRestTemplate.delete(url + id);
+		secureRestTemplate.delete(url + id + "?cascade=true");
 	}
 
         @Override
