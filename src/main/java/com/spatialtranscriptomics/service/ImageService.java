@@ -30,6 +30,6 @@ public interface ImageService {
 
 	public void delete(String id);
         
-        public JPEGWrapper addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException;
+        public String addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException;
 
 }

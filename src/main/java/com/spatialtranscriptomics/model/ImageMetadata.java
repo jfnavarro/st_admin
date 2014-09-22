@@ -7,7 +7,10 @@
 
 package com.spatialtranscriptomics.model;
 
+import com.spatialtranscriptomics.util.SpatialStringUtils;
+import java.beans.Transient;
 import java.util.Date;
+import org.joda.time.DateTime;
 
 
 
@@ -21,31 +24,54 @@ import java.util.Date;
 public class ImageMetadata implements IImageMetadata {
 
 	String filename;
-        Date created;
-	Date lastModified;
+        DateTime created;
+	DateTime lastModified;
+        long size;
 
+        @Override
 	public String getFilename() {
 		return this.filename;
 	}
 
+        @Override
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
 
-        public Date getCreated() {
+        @Override
+        public DateTime getCreated() {
             return this.created;
 	}
 
-	public void setCreated(Date created) {
+        @Override
+	public void setCreated(DateTime created) {
             this.created = created;
 	}
         
-	public Date getLastModified() {
+        @Override
+	public DateTime getLastModified() {
             return this.lastModified;
 	}
 
-	public void setLastModified(Date lastModified) {
+        @Override
+	public void setLastModified(DateTime lastModified) {
             this.lastModified = lastModified;
 	}
+        
+        @Override
+        public long getSize() {
+            return this.size;
+        }
+        
+        @Override
+        public void setSize(long size) {
+            this.size = size;
+        }
+        
+        @Transient
+        @Override
+        public String getReadableSize() {
+            return SpatialStringUtils.humanReadableByteCount(this.size);
+        }
 
 }

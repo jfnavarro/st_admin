@@ -6,8 +6,10 @@
 
 package com.spatialtranscriptomics.model;
 
-
-interface IJPEGWrapper {
+/**
+ * This interface defines the JPEGWrapper model. Should reflect the corresponding model in ST API.
+ */
+public interface IJPEGWrapper {
     
     public String getFilename();
     

@@ -91,7 +91,7 @@ public class ImageServiceImpl implements ImageService {
 	}
         
         @Override
-	public JPEGWrapper addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
+	public String addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
             //System.out.println("Adding image");
             String url = appConfig.getProperty("url.image");
             url += "/compressedjson";
@@ -99,7 +99,7 @@ public class ImageServiceImpl implements ImageService {
             JPEGWrapper img = new JPEGWrapper();
             img.setFilename(imageFile.getOriginalFilename());
             img.setImage(IOUtils.toByteArray(imageFile.getInputStream()));
-            JPEGWrapper resp = secureRestTemplate.postForObject(url, img, JPEGWrapper.class);
+            String resp = secureRestTemplate.postForObject(url, img, String.class);
             return resp;
 	}
 

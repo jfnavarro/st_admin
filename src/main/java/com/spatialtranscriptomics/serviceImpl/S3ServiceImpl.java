@@ -201,7 +201,7 @@ public class S3ServiceImpl implements S3Service {
 	}
 
 	// Returns output from an S3 experiment as a stream.
-	private InputStream getOutputFromS3(String experimentId) {
+	public InputStream getOutputFromS3(String experimentId) {
 		String path = experimentsPath + experimentId + "/output";
 		// String path = "experiments/" + "test" + "/output";
 

@@ -8,6 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 import java.util.Date;
+import org.joda.time.DateTime;
 
 /**
  * This interface defines the ImageMetadata model. Should reflect the corresponding model in ST API.
@@ -16,13 +17,21 @@ import java.util.Date;
 public interface IImageMetadata {
 
 	public String getFilename();
+        
+        public void setFilename(String filename);
 
-	public Date getLastModified();
+	public DateTime getLastModified();
         
-        public void setLastModified(Date d);
+        public void setLastModified(DateTime d);
         
-        public Date getCreated();
+        public DateTime getCreated();
         
-        public void setCreated(Date d);
+        public void setCreated(DateTime d);
+        
+        public long getSize();
+        
+        public void setSize(long size);
+        
+        public String getReadableSize();
 
 }

@@ -74,6 +74,7 @@
 				<tr>
 
 					<th>Name</th>
+                                        <th>Size</th>
                                         <th>Created</th>
 					<th>Last modified</th>
 					<th></th>
@@ -86,8 +87,9 @@
 
 						
                                                 <td><a href="<c:url value="/image/compressed/"/>${image.filename}" target="_blank">${image.filename}</a></td>
-                                                <td><small><fmt:formatDate value="${image.created}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
-                                                <td><small><fmt:formatDate value="${image.lastModified}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td>${image.getReadableSize()}</td>
+                                                <td><small><fmt:formatDate value="${image.created.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
+                                                <td><small><fmt:formatDate value="${image.lastModified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal" data-toggle="modal"
 							data-id="${image.filename}"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>

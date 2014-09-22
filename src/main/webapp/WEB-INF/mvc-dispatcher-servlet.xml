@@ -25,17 +25,21 @@
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
                         <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" >
-                            <property name="supportedMediaTypes" value="image/jpeg" />
-                        </bean> <!-- to upload Image files -->
+                            <property name="supportedMediaTypes">
+                                <list>
+                                    <value>image/jpeg</value>
+                                    <value>application/gzip</value>
+                                </list>
+                            </property>
+                        </bean> <!-- to upload compressed Image files -->
 			<bean
 				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> <!-- to upload JSON files -->
 				<property name="supportedMediaTypes" value="multipart/form-data" />
                                 
 			</bean>
-			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter">
-                            
-                        </bean> <!-- to upload Image files -->
-                        
+			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter" /> <!-- to upload decompressed Image files -->
+                        <bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+                        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
@@ -55,6 +59,7 @@
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="1000000000" /> <!-- max. filesize of 1 GB -->
+                <property name="maxInMemorySize" value="10000000" /> <!-- max in memory 10MB (larger cached with files) --> 
 	</bean>
 
 	<!-- Make CSS, Javascript, image files a static resource -->

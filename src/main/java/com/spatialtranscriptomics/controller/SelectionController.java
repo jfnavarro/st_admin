@@ -27,7 +27,6 @@ import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.Selection;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.FeatureServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
 
@@ -47,9 +46,6 @@ public class SelectionController {
 	
 	@Autowired
 	DatasetServiceImpl datasetService;
-
-	@Autowired
-	FeatureServiceImpl featureService;
 	
 	
 	// get
@@ -74,14 +70,14 @@ public class SelectionController {
 	}
 	
 	
-	// get feature list for selection
-	@RequestMapping(value = "/{id}/features", method = RequestMethod.GET)
-	public ModelAndView getFeatures(@PathVariable String id) {
-		List<Feature> features = featureService.findForSelection(id);
-		ModelAndView success = new ModelAndView("selectionfeaturelist", "featureList", features);
-		success.addObject("selection", selectionService.find(id));
-		return success;
-	}
+//	// get feature list for selection
+//	@RequestMapping(value = "/{id}/features", method = RequestMethod.GET)
+//	public ModelAndView getFeatures(@PathVariable String id) {
+//		List<Feature> features = featureService.findForSelection(id);
+//		ModelAndView success = new ModelAndView("selectionfeaturelist", "featureList", features);
+//		success.addObject("selection", selectionService.find(id));
+//		return success;
+//	}
 
 	
 	// add
