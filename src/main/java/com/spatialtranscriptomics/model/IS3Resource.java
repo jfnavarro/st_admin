@@ -7,13 +7,21 @@
 package com.spatialtranscriptomics.model;
 
 /**
- * This interface defines the FeaturesWrapper model. Should reflect the corresponding model in ST API.
+ * This interface defines the S3Resource model. Should reflect the corresponding model in ST API.
  */
-public interface IFeaturesWrapper {
+public interface IS3Resource {
     
-    public String getDatasetId();
+    public String getContentType();
     
-    public void setDatasetId(String id);
+    public void setContentType(String type);
+    
+    public String getContentEncoding();
+    
+    public void setContentEncoding(String encoding);
+    
+    public String getFilename();
+    
+    public void setFilename(String filename);
     
     public byte[] getFile();
     

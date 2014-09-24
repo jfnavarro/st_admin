@@ -8,7 +8,7 @@
 package com.spatialtranscriptomics.service;
 
 import com.spatialtranscriptomics.model.ImageMetadata;
-import com.spatialtranscriptomics.model.JPEGWrapper;
+import com.spatialtranscriptomics.model.S3Resource;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +24,7 @@ public interface ImageService {
 
 	public BufferedImage find(String id);
         
-        public JPEGWrapper findCompressedAsJSON(String id);
+        public S3Resource findCompressedAsJSON(String id);
 
 	public void addFromFile(CommonsMultipartFile imageFile) throws IOException;
 

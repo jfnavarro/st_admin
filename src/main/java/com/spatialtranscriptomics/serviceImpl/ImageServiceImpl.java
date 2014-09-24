@@ -8,7 +8,7 @@
 package com.spatialtranscriptomics.serviceImpl;
 
 import com.spatialtranscriptomics.model.ImageMetadata;
-import com.spatialtranscriptomics.model.JPEGWrapper;
+import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.service.ImageService;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -49,10 +49,10 @@ public class ImageServiceImpl implements ImageService {
 	}
 
         @Override
-        public JPEGWrapper findCompressedAsJSON(String id) {
+        public S3Resource findCompressedAsJSON(String id) {
             String url = appConfig.getProperty("url.image");
             url += "/compressedjson/" + id;
-            JPEGWrapper img = secureRestTemplate.getForObject(url, JPEGWrapper.class);
+            S3Resource img = secureRestTemplate.getForObject(url, S3Resource.class);
             return img;
         }
         
@@ -96,9 +96,12 @@ public class ImageServiceImpl implements ImageService {
             String url = appConfig.getProperty("url.image");
             url += "/compressedjson";
             
-            JPEGWrapper img = new JPEGWrapper();
+            S3Resource img = new S3Resource();
             img.setFilename(imageFile.getOriginalFilename());
-            img.setImage(IOUtils.toByteArray(imageFile.getInputStream()));
+            byte[] bytes = IOUtils.toByteArray(imageFile.getInputStream());
+            img.setFile(bytes);
+            img.setContentType("image/jpeg");
+            img.setSize(bytes.length);
             String resp = secureRestTemplate.postForObject(url, img, String.class);
             return resp;
 	}

@@ -9,7 +9,7 @@ package com.spatialtranscriptomics.controller;
 
 import com.spatialtranscriptomics.form.ImageForm;
 import com.spatialtranscriptomics.model.ImageMetadata;
-import com.spatialtranscriptomics.model.JPEGWrapper;
+import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.serviceImpl.ImageServiceImpl;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -63,8 +63,8 @@ public class ImageController {
 	@RequestMapping(value = "/compressed/{id:.+}", method = RequestMethod.GET, produces = "image/jpeg")
 	public @ResponseBody
 	byte[] getCompressed(@PathVariable String id) {
-            JPEGWrapper img = imageService.findCompressedAsJSON(id);
-            byte[] imgdata = img.getImage();
+            S3Resource img = imageService.findCompressedAsJSON(id);
+            byte[] imgdata = img.getFile();
             //System.out.println(imgdata.length);
             return imgdata;
 	}

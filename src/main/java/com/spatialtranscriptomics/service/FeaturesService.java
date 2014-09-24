@@ -9,7 +9,7 @@ package com.spatialtranscriptomics.service;
 
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
-import com.spatialtranscriptomics.model.FeaturesWrapper;
+import com.spatialtranscriptomics.model.S3Resource;
 import java.util.List;
 
 /**
@@ -21,7 +21,7 @@ public interface FeaturesService {
     
     public List<FeaturesMetadata> listMetadata();
     
-    public FeaturesWrapper find(String id);
+    public S3Resource find(String id);
     
     public Feature[] parse(byte[] bytes);
 }

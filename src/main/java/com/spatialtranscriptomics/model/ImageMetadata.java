@@ -23,11 +23,22 @@ import org.joda.time.DateTime;
 
 public class ImageMetadata implements IImageMetadata {
 
+        String imageType;
 	String filename;
         DateTime created;
 	DateTime lastModified;
         long size;
 
+        @Override
+        public String getImageType() {
+            return this.imageType;
+        }
+
+        @Override
+        public void setImageType(String imageType) {
+            this.imageType = imageType;
+        }
+        
         @Override
 	public String getFilename() {
 		return this.filename;

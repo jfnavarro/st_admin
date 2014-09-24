@@ -10,7 +10,7 @@ import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
-import com.spatialtranscriptomics.model.FeaturesWrapper;
+import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.service.FeaturesService;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -65,7 +65,7 @@ public class FeaturesServiceImpl implements FeaturesService {
             System.out.println("Suceeded zipping: " + zipbytes.length + " bytes (compression factor " + (bytes.length / (double) zipbytes.length));
                         
             String url = appConfig.getProperty("url.features");
-            FeaturesWrapper wrap = new FeaturesWrapper(id, zipbytes);
+            S3Resource wrap = new S3Resource("application/json", "gzip", id, zipbytes);
             System.out.println("Trying put on " + url + id);
             secureRestTemplate.put(url + id, wrap);
             System.out.println("Made put");
@@ -92,9 +92,9 @@ public class FeaturesServiceImpl implements FeaturesService {
      * @return the file with compressed contents.
      */
     @Override
-    public FeaturesWrapper find(String id) {
+    public S3Resource find(String id) {
         String url = appConfig.getProperty("url.features") + id;
-        FeaturesWrapper fw = secureRestTemplate.getForObject(url, FeaturesWrapper.class);
+        S3Resource fw = secureRestTemplate.getForObject(url, S3Resource.class);
         return fw;
     }
     

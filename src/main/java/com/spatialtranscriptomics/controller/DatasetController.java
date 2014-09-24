@@ -15,9 +15,9 @@ import com.spatialtranscriptomics.model.Chip;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
-import com.spatialtranscriptomics.model.FeaturesWrapper;
 import com.spatialtranscriptomics.model.ImageAlignment;
 import com.spatialtranscriptomics.model.PipelineExperiment;
+import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
@@ -28,7 +28,11 @@ import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -40,6 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -323,9 +328,25 @@ public class DatasetController {
 	@RequestMapping(value = "/features/{id}", method = RequestMethod.GET)
 	public void getFeatures(@PathVariable String id, HttpServletResponse response) {
             try {
-                FeaturesWrapper fw = featuresService.find(id);
+                S3Resource fw = featuresService.find(id);
                 response.setContentType("application/json");
                 response.setHeader("Content-Encoding", "gzip");
+                
+                
+//                File f = new File("/Users/joelsjostrand/Downloads/" + id + ".downloaded.gz");
+//                FileOutputStream output = new FileOutputStream(f);
+//                IOUtils.write(fw.getFile(), output);
+//                output.close();
+//                f = new File("/Users/joelsjostrand/Downloads/test.json");
+//                ObjectMapper mapper = new ObjectMapper();
+//                S3Resource res = mapper.readValue(f, S3Resource.class);
+//                System.out.println(res.getFilename());
+//                f = new File("/Users/joelsjostrand/Downloads/test.json.gz");
+//                output = new FileOutputStream(f);
+//                IOUtils.write(res.getFile(), output);
+//                output.close();
+                
+                
                 InputStream is = new ByteArrayInputStream(fw.getFile());
                 IOUtils.copy(is, response.getOutputStream());
                 response.flushBuffer();
@@ -426,5 +447,4 @@ public class DatasetController {
 		return this.datasetService;
 	}
 	
-        
 }
