@@ -67,6 +67,7 @@ public class AccountController {
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ModelAndView get(@PathVariable String id) {
+        logger.info("Entering show view of account " + id);
         Account acc = accountService.find(id);
         ModelAndView success = new ModelAndView("accountshow", "account", acc);
         List<Dataset> datasets = datasetService.listForAccount(id);
@@ -80,6 +81,7 @@ public class AccountController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public ModelAndView list() {
+        logger.info("Entering list view of accounts");
         return new ModelAndView("accountlist", "accountList", accountService.list());
     }
 
@@ -89,6 +91,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add() {
+        logger.info("Entering add view of account.");
         return new ModelAndView("accountadd", "account", new Account());
     }
 
@@ -108,6 +111,7 @@ public class AccountController {
         accountService.add(acc);
         ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account created.");
+        logger.info("Added account " + acc.getId());
         return success;
 
     }
@@ -119,6 +123,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
+        logger.info("Entering edit view of account " + id);
         return new ModelAndView("accountedit", "account", accountService.find(id));
     }
 
@@ -138,6 +143,7 @@ public class AccountController {
         accountService.update(acc);
         ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account saved.");
+        logger.info("Edited account " + acc.getId());
         return success;
     }
 
@@ -151,6 +157,7 @@ public class AccountController {
         accountService.delete(id);
         ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account deleted.");
+        logger.info("Deleted account " + id);
         return success;
     }
 
