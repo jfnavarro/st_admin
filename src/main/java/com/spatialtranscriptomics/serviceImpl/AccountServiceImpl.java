@@ -4,7 +4,6 @@
  * Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
-
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
@@ -25,67 +24,68 @@ import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.service.AccountService;
 
 /**
- * This class implements the store/retrieve logic to the ST API for the data model class "Account".
- * The connection to the ST API is handled in a RestTemplate object, which is configured in mvc-dispatcher-servlet.xml
+ * This class implements the store/retrieve logic to the ST API for the data
+ * model class "Account". The connection to the ST API is handled in a
+ * RestTemplate object, which is configured in mvc-dispatcher-servlet.xml
  */
-
 @Service
 public class AccountServiceImpl implements AccountService {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(AccountServiceImpl.class);
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger
+            .getLogger(AccountServiceImpl.class);
 
-	@Autowired
-	RestOperations secureRestTemplate;
+    @Autowired
+    RestOperations secureRestTemplate;
 
-	@Autowired
-	Properties appConfig;
+    @Autowired
+    Properties appConfig;
 
-        @Override
-	public Account find(String id) {
-		String url = appConfig.getProperty("url.account") + "all/";
-		url += id;
-		Account acc = secureRestTemplate.getForObject(url, Account.class);
-		return acc;
-	}
+    @Override
+    public Account find(String id) {
+        String url = appConfig.getProperty("url.account") + "all/";
+        url += id;
+        Account acc = secureRestTemplate.getForObject(url, Account.class);
+        return acc;
+    }
 
-	@Override
-	public List<Account> list() {
-		String url = appConfig.getProperty("url.account") + "all/";
-		Account[] accountArray = secureRestTemplate.getForObject(url,
-				Account[].class);
-		List<Account> accountList = Arrays.asList(accountArray);
-		return accountList;
-	}
+    @Override
+    public List<Account> list() {
+        String url = appConfig.getProperty("url.account") + "all/";
+        Account[] accountArray = secureRestTemplate.getForObject(url,
+                Account[].class);
+        List<Account> accountList = Arrays.asList(accountArray);
+        return accountList;
+    }
 
-	@Override
-	public Account add(Account acc) {
-		String url = appConfig.getProperty("url.account");
-		Account accResponse = secureRestTemplate.postForObject(url, acc,
-				Account.class);
-		return accResponse;
-	}
+    @Override
+    public Account add(Account acc) {
+        String url = appConfig.getProperty("url.account");
+        Account accResponse = secureRestTemplate.postForObject(url, acc,
+                Account.class);
+        return accResponse;
+    }
 
-	@Override
-	public void update(Account acc) {
-		String url = appConfig.getProperty("url.account");
-		String id = acc.getId();
-		secureRestTemplate.put(url + id, acc);
-	}
+    @Override
+    public void update(Account acc) {
+        String url = appConfig.getProperty("url.account");
+        String id = acc.getId();
+        secureRestTemplate.put(url + id, acc);
+    }
 
-	@Override
-	public void delete(String id) {
-		String url = appConfig.getProperty("url.account");
-		secureRestTemplate.delete(url + id + "?cascade=true");
-	}
+    @Override
+    public void delete(String id) {
+        String url = appConfig.getProperty("url.account");
+        secureRestTemplate.delete(url + id + "?cascade=true");
+    }
 
-        @Override
-	public List<Account> findForDataset(String datasetId) {
-		String url = appConfig.getProperty("url.account")  + "all/?dataset=" + datasetId;
-		Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
-		List<Account> accountList = Arrays.asList(accountArray);
-		return accountList;
-	}
+    @Override
+    public List<Account> findForDataset(String datasetId) {
+        String url = appConfig.getProperty("url.account") + "all/?dataset=" + datasetId;
+        Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
+        List<Account> accountList = Arrays.asList(accountArray);
+        return accountList;
+    }
 
 }

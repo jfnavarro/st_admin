@@ -121,6 +121,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             throws IOException {
         
         if (!uri.toString().toLowerCase().contains("password")) {
+            // Log prior to adding access tokens not to give away those in the log file.
             logger.info(method.toString() + " " + uri.toString());
         }
         OAuth2AccessToken accessToken = getAccessToken();

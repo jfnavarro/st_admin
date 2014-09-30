@@ -134,7 +134,8 @@ public class DatasetController {
             success.addObject("imagealignment", imal);
         }
         Account creator = accountService.find(dataset.getCreated_by_account_id());
-        success.addObject("accountcreator", creator == null ? "Unknown" : creator.getUsername());
+        success.addObject("accountcreator", creator == null ?
+                "Unknown" : creator.getUsername());
         return success;
 
     }
@@ -199,8 +200,8 @@ public class DatasetController {
 
         // Compute quartiles.
         Feature[] features = featuresService.parse(bytes);
-        double[] overall_hit_quartiles = new double[100];
-        double[] gene_pooled_hit_quartiles = new double[100];
+        double[] overall_hit_quartiles = new double[5];
+        double[] gene_pooled_hit_quartiles = new double[5];
         // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
         int[] stats = Feature.computeStats(features, overall_hit_quartiles, gene_pooled_hit_quartiles);
         beingCreated.setOverall_feature_count(stats[0]);
@@ -215,7 +216,15 @@ public class DatasetController {
         Dataset dsResult = datasetService.add(beingCreated);
 
         // update features file, now that we know the ID.
-        featuresService.addUpdate(dsResult.getId(), bytes);
+        try {
+                S3Resource s3res = S3Resource.createGZipS3Resource("application/json", dsResult.getId(), bytes);
+                featuresService.addUpdate(dsResult.getId(), s3res);
+            } catch (IOException ex) {
+                logger.error("Failed to compress features file.");
+                ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
+                model.addObject("featureerror", "Error creating compressed features file.");
+                return model;
+            }
 
         // Return list view.
         ModelAndView success = list();
@@ -273,7 +282,7 @@ public class DatasetController {
                 bytes = IOUtils.toByteArray(stream);
             } catch (IOException ex) {
                 logger.error("Failed to convert S3 feature stream to byte array when editing dataset " + datasetEditForm.getDataset().getId());
-                ModelAndView model = new ModelAndView("datasetdit", "datasetform", datasetEditForm);
+                ModelAndView model = new ModelAndView("datasetedit", "datasetform", datasetEditForm);
                 model.addObject("featureerror", "Error creating features from selected experiment.");
                 return model;
             }
@@ -285,8 +294,8 @@ public class DatasetController {
         if (bytes != null) {
             // Compute quartiles.
             Feature[] features = featuresService.parse(bytes);
-            double[] overall_hit_quartiles = new double[100];
-            double[] gene_pooled_hit_quartiles = new double[100];
+            double[] overall_hit_quartiles = new double[5];
+            double[] gene_pooled_hit_quartiles = new double[5];
             // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
             int[] stats = Feature.computeStats(features, overall_hit_quartiles, gene_pooled_hit_quartiles);
             beingUpdated.setOverall_feature_count(stats[0]);
@@ -297,7 +306,16 @@ public class DatasetController {
             beingUpdated.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
 
             // Update file.
-            featuresService.addUpdate(beingUpdated.getId(), bytes);
+            try {
+                S3Resource s3res = S3Resource.createGZipS3Resource("application/json", beingUpdated.getId(), bytes);
+                featuresService.addUpdate(beingUpdated.getId(), s3res);
+            } catch (IOException ex) {
+                logger.error("Failed to compress features file.");
+                ModelAndView model = new ModelAndView("datasetdit", "datasetform", datasetEditForm);
+                model.addObject("featureerror", "Error creating compressed features file.");
+                return model;
+            }
+                
         }
 
         // Update dataset.

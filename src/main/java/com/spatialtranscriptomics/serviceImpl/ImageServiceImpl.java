@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.serviceImpl;
 
 import com.spatialtranscriptomics.model.ImageMetadata;
@@ -17,93 +16,88 @@ import java.util.List;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
- * This class implements the store/retrieve logic to the ST API for the data model class "ImageMetadata" and image payload (BufferedImage).
- * The connection to the ST API is handled in a RestTemplate object, which is configured in mvc-dispather-servlet.xml
+ * This class implements the store/retrieve logic to the ST API for the data
+ * model class ImageMetadata (lightweight detail listing) and actual image payload
+ * (either as through S3Resource with JPEG content -- recommended or via
+ * BufferedImage -- discouraged). The connection to the ST API is handled in a
+ * RestTemplate object, which is configured in mvc-dispather-servlet.xml
  */
-
 @Service
 public class ImageServiceImpl implements ImageService {
 
-	@Autowired
-	RestTemplate secureRestTemplate;
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger.getLogger(ImageServiceImpl.class);
 
-	@Autowired
-	Properties appConfig;
+    @Autowired
+    RestTemplate secureRestTemplate;
 
-        @Override
-	public List<ImageMetadata> list() {
+    @Autowired
+    Properties appConfig;
 
-		String url = appConfig.getProperty("url.image");
-		ImageMetadata[] imgMetadataArray = secureRestTemplate.getForObject(url,
-				ImageMetadata[].class);
-		return Arrays.asList(imgMetadataArray);
-	}
+    @Override
+    public List<ImageMetadata> list() {
+        String url = appConfig.getProperty("url.image");
+        ImageMetadata[] imgMetadataArray = secureRestTemplate.getForObject(url,
+                ImageMetadata[].class);
+        return Arrays.asList(imgMetadataArray);
+    }
 
-        @Override
-        public S3Resource findCompressedAsJSON(String id) {
-            String url = appConfig.getProperty("url.image");
-            url += "/compressedjson/" + id;
-            S3Resource img = secureRestTemplate.getForObject(url, S3Resource.class);
-            return img;
+    @Override
+    public S3Resource findCompressedAsJSON(String id) {
+        String url = appConfig.getProperty("url.image");
+        url += "/compressedjson/" + id;
+        S3Resource img = secureRestTemplate.getForObject(url, S3Resource.class);
+        return img;
+    }
+
+    @Override
+    public BufferedImage find(String id) {
+        String url = appConfig.getProperty("url.image");
+        url += id;
+        BufferedImage img = secureRestTemplate.getForObject(url,
+                BufferedImage.class);
+        return img;
+    }
+
+    @Override
+    public void delete(String id) {
+        String url = appConfig.getProperty("url.image");
+        secureRestTemplate.delete(url + id);
+    }
+
+    @Override
+    public void addFromFile(CommonsMultipartFile imageFile) throws IOException {
+        String url = appConfig.getProperty("url.image");
+        url += imageFile.getOriginalFilename();
+
+        BufferedImage bi = ImageIO.read(imageFile.getInputStream());
+        if (bi == null) {
+            throw new IOException("Empty or incorrect image file.");
         }
-        
-        
-        @Override
-	public BufferedImage find(String id) {
+        secureRestTemplate.put(url, bi);
+    }
 
-		String url = appConfig.getProperty("url.image");
-		url += id;
-		BufferedImage img = secureRestTemplate.getForObject(url,
-				BufferedImage.class);
-		return img;
-	}
+    @Override
+    public void addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
+        String url = appConfig.getProperty("url.image");
+        url += "/compressedjson";
 
-        @Override
-	public void delete(String id) {
-		String url = appConfig.getProperty("url.image");
-		secureRestTemplate.delete(url + id);
-	}
-
-        @Override
-	public void addFromFile(CommonsMultipartFile imageFile) throws IOException {
-            String url = appConfig.getProperty("url.image");
-            url += imageFile.getOriginalFilename();
-
-            //try {
-            //System.out.println("Reading image");
-            BufferedImage bi = ImageIO.read(imageFile.getInputStream());
-            if (bi == null) { throw new IOException(); }
-            //System.out.println("Read image, storing it");
-            secureRestTemplate.put(url, bi);
-            //System.out.println("Stored image");
-            //} catch (IOException e) {
-            //	e.printStackTrace();
-            //}
-	}
-        
-        @Override
-	public String addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
-            //System.out.println("Adding image");
-            String url = appConfig.getProperty("url.image");
-            url += "/compressedjson";
-            
-            S3Resource img = new S3Resource();
-            img.setFilename(imageFile.getOriginalFilename());
-            byte[] bytes = IOUtils.toByteArray(imageFile.getInputStream());
-            img.setFile(bytes);
-            img.setContentType("image/jpeg");
-            img.setSize(bytes.length);
-            String resp = secureRestTemplate.postForObject(url, img, String.class);
-            return resp;
-	}
+        S3Resource img = new S3Resource();
+        img.setFilename(imageFile.getOriginalFilename());
+        byte[] bytes = IOUtils.toByteArray(imageFile.getInputStream());
+        img.setFile(bytes);
+        img.setContentType("image/jpeg");
+        img.setContentEncoding("");
+        img.setSize(bytes.length);
+        secureRestTemplate.put(url, img);
+    }
 
 }

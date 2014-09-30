@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.service;
 
 import java.util.List;
@@ -16,16 +15,43 @@ import com.spatialtranscriptomics.model.ImageAlignment;
  */
 public interface ImageAlignmentService {
 
-	public ImageAlignment find(String id);
+    /**
+     * Retrieves an image alignment.
+     * @param id the ID.
+     * @return the image alignment.
+     */
+    public ImageAlignment find(String id);
 
-	public List<ImageAlignment> list();
-	
-	public List<ImageAlignment> findForChip(String chipId);
+    /**
+     * Lists all image alignments.
+     * @return the image alignment.
+     */
+    public List<ImageAlignment> list();
 
-	public ImageAlignment create(ImageAlignment imal);
+    /**
+     * Retrieves the image alignments for a given chip.
+     * @param chipId the chip ID.
+     * @return the image alignments.
+     */
+    public List<ImageAlignment> findForChip(String chipId);
 
-	public void update(ImageAlignment imal);
+    /**
+     * Creates an image alignment.
+     * @param imal the alignment.
+     * @return the alignment with ID assigned.
+     */
+    public ImageAlignment create(ImageAlignment imal);
 
-	public void delete(String id);
-	
+    /**
+     * Updates an image alignment.
+     * @param imal the alignment.
+     */
+    public void update(ImageAlignment imal);
+
+    /**
+     * Deletes an image alignment.
+     * @param id the ID.
+     */
+    public void delete(String id);
+
 }

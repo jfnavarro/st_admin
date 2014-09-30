@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
@@ -20,67 +19,67 @@ import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.service.PipelineExperimentService;
 
 /**
- * This class implements the store/retrieve logic to the ST API for the data model class "PipelineExperiment".
- * The connection to the ST API is handled in a RestTemplate object, which is configured in mvc-dispather-servlet.xml
+ * This class implements the store/retrieve logic to the ST API for the data
+ * model class "PipelineExperiment". The connection to the ST API is handled in
+ * a RestTemplate object, which is configured in mvc-dispather-servlet.xml
  */
-
 @Service
 public class PipelineExperimentServiceImpl implements PipelineExperimentService {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(PipelineExperimentServiceImpl.class);
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger
+            .getLogger(PipelineExperimentServiceImpl.class);
 
-	@Autowired
-	RestTemplate secureRestTemplate;
+    @Autowired
+    RestTemplate secureRestTemplate;
 
-	@Autowired
-	Properties appConfig;
+    @Autowired
+    Properties appConfig;
 
-	@Override
-	public PipelineExperiment find(String id) {
-		String url = appConfig.getProperty("url.pipelineexperiment");
-		url += id;
-		PipelineExperiment experiment = secureRestTemplate.getForObject(url, PipelineExperiment.class);
-		return experiment;
-	}
+    @Override
+    public PipelineExperiment find(String id) {
+        String url = appConfig.getProperty("url.pipelineexperiment");
+        url += id;
+        PipelineExperiment experiment = secureRestTemplate.getForObject(url, PipelineExperiment.class);
+        return experiment;
+    }
 
-	@Override
-	public List<PipelineExperiment> list() {
-		String url = appConfig.getProperty("url.pipelineexperiment");
-		PipelineExperiment[] eArray = secureRestTemplate.getForObject(url,
-				PipelineExperiment[].class);
-		List<PipelineExperiment> eList = Arrays.asList(eArray);
-		return eList;
-	}
+    @Override
+    public List<PipelineExperiment> list() {
+        String url = appConfig.getProperty("url.pipelineexperiment");
+        PipelineExperiment[] eArray = secureRestTemplate.getForObject(url,
+                PipelineExperiment[].class);
+        List<PipelineExperiment> eList = Arrays.asList(eArray);
+        return eList;
+    }
 
-	@Override
-	public PipelineExperiment add(PipelineExperiment experiment) {
-		String url = appConfig.getProperty("url.pipelineexperiment");
-		PipelineExperiment eResponse = secureRestTemplate.postForObject(url, experiment, PipelineExperiment.class);
-		return eResponse;
-	}
+    @Override
+    public PipelineExperiment add(PipelineExperiment experiment) {
+        String url = appConfig.getProperty("url.pipelineexperiment");
+        PipelineExperiment eResponse = secureRestTemplate.postForObject(url, experiment, PipelineExperiment.class);
+        return eResponse;
+    }
 
-	@Override
-	public void update(PipelineExperiment experiment) {
-		String url = appConfig.getProperty("url.pipelineexperiment");
-		String id = experiment.getId();
-		secureRestTemplate.put(url + id, experiment);
-	}
+    @Override
+    public void update(PipelineExperiment experiment) {
+        String url = appConfig.getProperty("url.pipelineexperiment");
+        String id = experiment.getId();
+        secureRestTemplate.put(url + id, experiment);
+    }
 
-        @Override
-	public void delete(String id) {
-		String url = appConfig.getProperty("url.pipelineexperiment");
-		secureRestTemplate.delete(url + id);
-	}
+    @Override
+    public void delete(String id) {
+        String url = appConfig.getProperty("url.pipelineexperiment");
+        secureRestTemplate.delete(url + id);
+    }
 
-	@Override
-	public List<PipelineExperiment> findForAccount(String accountId) {
-		String url = appConfig.getProperty("url.pipelineexperiment") + "?account=" + accountId;
-		PipelineExperiment[] arr = secureRestTemplate.getForObject(url, PipelineExperiment[].class);
-		List<PipelineExperiment> list = Arrays.asList(arr);
-		return list;
-	}
-        
+    @Override
+    public List<PipelineExperiment> findForAccount(String accountId) {
+        String url = appConfig.getProperty("url.pipelineexperiment") + "?account=" + accountId;
+        PipelineExperiment[] arr = secureRestTemplate.getForObject(url, PipelineExperiment[].class);
+        List<PipelineExperiment> list = Arrays.asList(arr);
+        return list;
+    }
 
 }

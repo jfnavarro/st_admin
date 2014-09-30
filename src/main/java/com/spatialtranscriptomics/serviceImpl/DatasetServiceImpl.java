@@ -27,6 +27,7 @@ import com.spatialtranscriptomics.service.DatasetService;
 @Service
 public class DatasetServiceImpl implements DatasetService {
 
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(DatasetServiceImpl.class);

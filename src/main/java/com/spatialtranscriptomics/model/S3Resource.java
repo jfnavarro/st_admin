@@ -6,14 +6,18 @@
 
 package com.spatialtranscriptomics.model;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPOutputStream;
+
 /**
  * This class wraps an arbitrary file resource from S3 into JSON.
  * The file is stored in a  byte array, and the size of the byte array and
  * the content type is passed along. A content encoding can be specified
  * if desired. 
  * <p/>
- * Sending contents of arbitrary types
- * may prove difficult, whereas JSON often works elegantly.
+ * Note: Sending contents of arbitrary types may yield difficulties, whereas JSON often works elegantly.
  */
 public class S3Resource implements IS3Resource {
     
@@ -39,10 +43,7 @@ public class S3Resource implements IS3Resource {
      * @param file file contents.
      */
     public S3Resource(String contentType, String filename, byte[] file) {
-        this.contentType = contentType;
-        this.filename = filename;
-        this.file = file;
-        this.size = file.length;
+        this(contentType, "", filename, file);
     }
     
     /**
@@ -58,6 +59,27 @@ public class S3Resource implements IS3Resource {
         this.filename = filename;
         this.file = file;
         this.size = file.length;
+    }
+    
+    /**
+     * Static constructor. Size is set automatically, as is content encoding.
+     * Gzips the contents.
+     * @param contentType content type, e.g. "application/xml"
+     * @param filename filename.
+     * @param file file contents.
+     * @return the resource.
+     */
+    public static S3Resource createGZipS3Resource(String contentType, String filename, byte[] file) throws IOException {
+        ByteArrayOutputStream zipbytesbos = new ByteArrayOutputStream(file.length / 20);
+        BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(zipbytesbos), file.length / 20);
+        bos.write(file);
+        bos.flush();
+        bos.close();
+        zipbytesbos.close();
+        byte[] zipbytes = zipbytesbos.toByteArray();
+        //System.out.println("Suceeded zipping: " + zipbytes.length + " bytes (compression factor " + (bytes.length / (double) zipbytes.length));
+        S3Resource wrap = new S3Resource(contentType, "gzip", filename, zipbytes);
+        return wrap;
     }
     
     @Override

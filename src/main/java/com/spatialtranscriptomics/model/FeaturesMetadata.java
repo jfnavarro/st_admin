@@ -5,14 +5,12 @@
  */
 package com.spatialtranscriptomics.model;
 
-import com.spatialtranscriptomics.util.SpatialStringUtils;
+import com.spatialtranscriptomics.util.StringOperations;
 import java.beans.Transient;
-import java.util.Date;
 import org.joda.time.DateTime;
 
 /**
- * This class implements the FeaturesMetadata object.
- *
+ * This class implements the FeaturesMetadata object. This has no correspondence with the API.
  */
 public class FeaturesMetadata implements IFeaturesMetadata {
 
@@ -20,8 +18,13 @@ public class FeaturesMetadata implements IFeaturesMetadata {
     String filename;
     DateTime lastModified;
     DateTime created;
-    long size;
+    long size;  // file size as no of bytes.
 
+    /**
+     * Default Constructor is required by Jackson.
+     */
+    public FeaturesMetadata() {}
+    
     @Override
     public String getDatasetId() {
         return this.datasetId;
@@ -75,7 +78,7 @@ public class FeaturesMetadata implements IFeaturesMetadata {
     @Transient
     @Override
     public String getReadableSize() {
-        return SpatialStringUtils.humanReadableByteCount(this.size);
+        return StringOperations.humanReadableByteCount(this.size);
     }
 
 }

@@ -14,14 +14,15 @@ import java.util.List;
 
 /**
  * This bean class maps a subset of the Feature post within a feature file to
- * proerties needed for statistics computations, etc. Only use fields are kept,
- * in order to keep heap size consumption down.
+ * properties needed for statistics computations, etc. It has no correspondnce with the API.
+ * Only use fields are kept,
+ * in order to keep heap size consumption down while parsing.
  */
 public class Feature implements IFeature {
 
-    //int x;
+    int x;
     
-    //int y;
+    int y;
     
     int hits;
 
@@ -29,25 +30,30 @@ public class Feature implements IFeature {
     
     String gene;
 
-    //@Override
-    //public int getX() {
-    //    return x;
-    //}
+    @Override
+    public int getX() {
+        return x;
+    }
 
-    //@Override
-    //public void setX(int x) {
-    //    this.x = x;
-    //}
+    @Override
+    public void setX(int x) {
+        this.x = x;
+    }
 
-    //@Override
-    //public int getY() {
-    //    return y;
-    //}
+    @Override
+    public int getY() {
+        return y;
+    }
 
-    //@Override
-    //public void setY(int y) {
-    //    this.y = y;
-    //}
+    @Override
+    public void setY(int y) {
+        this.y = y;
+    }
+    
+    /**
+     * Default Constructor is required by Jackson.
+     */
+    public Feature() {}
 
     public int getHits() {
         return hits;

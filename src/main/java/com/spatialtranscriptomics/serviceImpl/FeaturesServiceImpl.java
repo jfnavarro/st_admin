@@ -12,13 +12,10 @@ import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
 import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.service.FeaturesService;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.zip.GZIPOutputStream;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -29,14 +26,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * This class implements the store/retrieve logic to the ST API for the data model class FeatureWrapper that encapsulates
- * a features file with compressed contents.
- * The connection to the ST API is handled in a RestTemplate object, which is configured in mvc-dispather-servlet.xml
+ * This class implements the store/retrieve logic to the ST API for the data model class
+ * S3Resource that encapsulates a features file with compressed contents.
+ * It also provides a parsing feature for internal handling of the feature file contents.
+ * The connection to the ST API is handled in a RestTemplate object, which is
+ * configured in mvc-dispather-servlet.xml.
  */
 
 @Service
 public class FeaturesServiceImpl implements FeaturesService {
  
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
     private static final Logger logger = Logger
             .getLogger(FeaturesServiceImpl.class);
 
@@ -46,39 +46,14 @@ public class FeaturesServiceImpl implements FeaturesService {
     @Autowired
     Properties appConfig;
     
-    /**
-     * Adds or, in the case of an existing object, updates the features file.
-     * @param id dataset id.
-     * @param bytes the raw decompressed JSON file.
-     */
+    
     @Override
-    public void addUpdate(String id, byte[] bytes) {
-        try {
-            System.out.println("Attempting to zip features file with " + bytes.length + " bytes");
-            ByteArrayOutputStream zipbytesbos = new ByteArrayOutputStream(bytes.length / 20);
-            BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(zipbytesbos), bytes.length / 20);
-            bos.write(bytes);
-            bos.flush();
-            bos.close();
-            zipbytesbos.close();
-            byte[] zipbytes = zipbytesbos.toByteArray();
-            System.out.println("Suceeded zipping: " + zipbytes.length + " bytes (compression factor " + (bytes.length / (double) zipbytes.length));
-                        
-            String url = appConfig.getProperty("url.features");
-            S3Resource wrap = new S3Resource("application/json", "gzip", id, zipbytes);
-            System.out.println("Trying put on " + url + id);
-            secureRestTemplate.put(url + id, wrap);
-            System.out.println("Made put");
-            
-        } catch (IOException ex) {
-            logger.info("Failed to gzip feature file.");
-        }
+    public void addUpdate(String id, S3Resource resource) {
+        String url = appConfig.getProperty("url.features");
+        secureRestTemplate.put(url + id, resource);
     }
     
-    /**
-     * Lists metadata for feature files.
-     * @return metadata.
-     */
+    
     @Override
     public List<FeaturesMetadata> listMetadata() {
         String url = appConfig.getProperty("url.features");
@@ -86,11 +61,7 @@ public class FeaturesServiceImpl implements FeaturesService {
         return Arrays.asList(feats);
     }
     
-    /**
-     * Returns the features file of a dataset.
-     * @param id the dataset ID.
-     * @return the file with compressed contents.
-     */
+    
     @Override
     public S3Resource find(String id) {
         String url = appConfig.getProperty("url.features") + id;
@@ -98,24 +69,20 @@ public class FeaturesServiceImpl implements FeaturesService {
         return fw;
     }
     
-    /**
-     * Parses an features file into a list of model objects.
-     * @param bytes the raw decompressed file.
-     * @return the model objects.
-     */
+    
     @Override
     public Feature[] parse(byte[] bytes) {
         Feature[] features = null;
 
         try {
+            // Specify that unknown parameters should not be mapped.
             ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD, Visibility.ANY);
             mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            //byte[] bytes = featureFile.getBytes();
             features = (Feature[]) mapper.readValue(bytes, Feature[].class);
-            logger.debug(" features in file: " + features.length);
+            //logger.debug(" features in file: " + features.length);
             return features;
         } catch (IOException e) {
-            logger.debug("error parsing dataset: ");
+            logger.error("Error parsing features file.");
             e.printStackTrace();
             GenericExceptionResponse resp = new GenericExceptionResponse();
             resp.setError("Parse error");
