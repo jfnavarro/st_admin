@@ -38,6 +38,7 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 
     @Override
     public ImageAlignment find(String id) {
+        if (id == null || id.equals("")) { return null; }
         String url = appConfig.getProperty("url.imagealignment");
         url += id;
         ImageAlignment imal = secureRestTemplate.getForObject(url, ImageAlignment.class);

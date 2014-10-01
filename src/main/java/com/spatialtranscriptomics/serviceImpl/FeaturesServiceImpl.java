@@ -12,10 +12,17 @@ import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
 import com.spatialtranscriptomics.model.S3Resource;
 import com.spatialtranscriptomics.service.FeaturesService;
+import static com.spatialtranscriptomics.util.ByteOperations.gunzip;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.zip.GZIPInputStream;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
 import org.codehaus.jackson.annotate.JsonMethod;
@@ -69,25 +76,4 @@ public class FeaturesServiceImpl implements FeaturesService {
         return fw;
     }
     
-    
-    @Override
-    public Feature[] parse(byte[] bytes) {
-        Feature[] features = null;
-
-        try {
-            // Specify that unknown parameters should not be mapped.
-            ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD, Visibility.ANY);
-            mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-            features = (Feature[]) mapper.readValue(bytes, Feature[].class);
-            //logger.debug(" features in file: " + features.length);
-            return features;
-        } catch (IOException e) {
-            logger.error("Error parsing features file.");
-            e.printStackTrace();
-            GenericExceptionResponse resp = new GenericExceptionResponse();
-            resp.setError("Parse error");
-            resp.setError_description("Could not parse feature file. Wrong format?" + e.getStackTrace().toString());
-            throw new GenericException(resp);
-        }
-    }
 }

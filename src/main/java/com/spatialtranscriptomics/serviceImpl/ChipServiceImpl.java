@@ -42,6 +42,7 @@ public class ChipServiceImpl implements ChipService {
 
     @Override
     public Chip find(String id) {
+        if (id == null || id.equals("")) { return null; }
         String url = appConfig.getProperty("url.chip");
         url += id;
         Chip chip = secureRestTemplate.getForObject(url, Chip.class);

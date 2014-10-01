@@ -47,12 +47,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> list() {
         String url = appConfig.getProperty("url.task");
-        //System.out.println("Getting task");
+        
         Task[] eArray = secureRestTemplate.getForObject(url,
                 Task[].class);
-        //System.out.println("Got tasks: " + eArray.length);
+        
         List<Task> eList = Arrays.asList(eArray);
-        //System.out.println("Parsed tasks");
+        
         return eList;
     }
 

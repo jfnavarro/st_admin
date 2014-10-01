@@ -27,6 +27,8 @@ import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
+import com.spatialtranscriptomics.util.ComputeFeatureImage;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +37,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.io.IOUtils;
@@ -199,7 +202,7 @@ public class DatasetController {
         Dataset beingCreated = datasetAddForm.getDataset();
 
         // Compute quartiles.
-        Feature[] features = featuresService.parse(bytes);
+        Feature[] features = Feature.parse(bytes, false);
         double[] overall_hit_quartiles = new double[5];
         double[] gene_pooled_hit_quartiles = new double[5];
         // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
@@ -293,7 +296,7 @@ public class DatasetController {
         // Add file to S3, update quartiles.
         if (bytes != null) {
             // Compute quartiles.
-            Feature[] features = featuresService.parse(bytes);
+            Feature[] features = Feature.parse(bytes, false);
             double[] overall_hit_quartiles = new double[5];
             double[] gene_pooled_hit_quartiles = new double[5];
             // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
@@ -353,6 +356,7 @@ public class DatasetController {
     @RequestMapping(value = "/features/{id}", method = RequestMethod.GET)
     public void getFeatures(@PathVariable String id, HttpServletResponse response) {
         try {
+            logger.info("About to download features file for dataset " + id);
             S3Resource fw = featuresService.find(id);
             response.setContentType("application/json");
             response.setHeader("Content-Encoding", "gzip");
@@ -364,6 +368,58 @@ public class DatasetController {
             logger.error("Error getting or parsing features file for dataset " + id + " from API.");
             throw new RuntimeException("IOError writing features file to HTTP response");
         }
+    }
+    
+    /**
+     * Returns the features.
+     *
+     * @param id dataset ID.
+     * @param response HTTP response containing the file.
+     */
+    @RequestMapping(value = "/featureslist/{id}", method = RequestMethod.GET)
+    public @ResponseBody
+    Feature[] getFeaturesList(@PathVariable String id) {
+        logger.info("About to download and parse features file for dataset " + id);
+        S3Resource fw = featuresService.find(id);
+        Feature[] features = Feature.parse(fw.getFile(), true);
+        return features;
+    }
+    
+     /**
+     * Returns an image for inspecting the features.
+     *
+     * @param id dataset ID.
+     * @param response HTTP response containing the file.
+     */
+    @RequestMapping(value = "/featuresimage/{id}", method = RequestMethod.GET, produces = "image/bmp")
+    public @ResponseBody
+    BufferedImage getFeaturesImage(@PathVariable String id) {
+        logger.info("About to download and parse features file for dataset " + id + " to create inspection image");
+        Dataset d = datasetService.find(id);
+        if (d == null) return null;
+        System.out.println("Got dataset.");
+        ImageAlignment imal = imageAlignmentService.find(d.getImage_alignment_id());
+        System.out.println("Got imal.");
+        Chip chip = null;
+        if (imal != null) {
+            System.out.println("Got chip.");
+             chip = chipService.find(imal.getChip_id());
+        }
+        S3Resource fw = featuresService.find(id);
+        System.out.println("Got file.");
+        Feature[] features = Feature.parse(fw.getFile(), true);
+        System.out.println("Got " + features.length);
+        BufferedImage img;
+        try {
+            System.out.println("Creating image.");
+            img = ComputeFeatureImage.computeImage(chip, features);
+            System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            logger.error("Error creating features image for dataset " + id);
+            throw new RuntimeException("Error constructing features image");
+        }
+        return img;
     }
 
     /**

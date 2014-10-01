@@ -6,10 +6,18 @@
 
 package com.spatialtranscriptomics.model;
 
+import static com.spatialtranscriptomics.util.ByteOperations.gzip;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import org.apache.commons.io.IOUtils;
 
 /**
  * This class wraps an arbitrary file resource from S3 into JSON.
@@ -70,17 +78,12 @@ public class S3Resource implements IS3Resource {
      * @return the resource.
      */
     public static S3Resource createGZipS3Resource(String contentType, String filename, byte[] file) throws IOException {
-        ByteArrayOutputStream zipbytesbos = new ByteArrayOutputStream(file.length / 20);
-        BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(zipbytesbos), file.length / 20);
-        bos.write(file);
-        bos.flush();
-        bos.close();
-        zipbytesbos.close();
-        byte[] zipbytes = zipbytesbos.toByteArray();
+        byte[] zipbytes = gzip(file);
         //System.out.println("Suceeded zipping: " + zipbytes.length + " bytes (compression factor " + (bytes.length / (double) zipbytes.length));
         S3Resource wrap = new S3Resource(contentType, "gzip", filename, zipbytes);
         return wrap;
     }
+    
     
     @Override
     public String getContentType() {

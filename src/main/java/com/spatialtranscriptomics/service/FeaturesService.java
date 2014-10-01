@@ -37,10 +37,4 @@ public interface FeaturesService {
      */
     public S3Resource find(String id);
     
-    /**
-     * Parses an features file into a list of model objects.
-     * @param bytes the raw decompressed file.
-     * @return the model objects.
-     */
-    public Feature[] parse(byte[] bytes);
 }

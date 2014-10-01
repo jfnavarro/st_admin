@@ -6,11 +6,19 @@
  */
 package com.spatialtranscriptomics.model;
 
+import com.spatialtranscriptomics.exceptions.GenericException;
+import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
+import static com.spatialtranscriptomics.util.ByteOperations.gunzip;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.annotate.JsonMethod;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * This bean class maps a subset of the Feature post within a feature file to
@@ -149,4 +157,34 @@ public class Feature implements IFeature {
             q[i + 1] = hits.get(floor) * (1.0 - delta) + hits.get(ceil) * delta;  // No prob if ceil==floor...
         }
     }
+    
+    /**
+     * Parses features.
+     * @param bytes raw file.
+     * @param isGZipped true if raw file is gzipped.
+     * @return the features.
+     */
+    public static Feature[] parse(byte[] bytes, boolean isGZipped) {
+        Feature[] features = null;
+
+        try {
+            if (isGZipped) {
+                bytes = gunzip(bytes);
+            }
+            
+            // Specify that unknown parameters should not be mapped.
+            ObjectMapper mapper = new ObjectMapper().setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
+            mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            features = (Feature[]) mapper.readValue(bytes, Feature[].class);
+            //logger.debug(" features in file: " + features.length);
+            return features;
+        } catch (IOException e) {
+            e.printStackTrace();
+            GenericExceptionResponse resp = new GenericExceptionResponse();
+            resp.setError("Parse error");
+            resp.setError_description("Could not parse feature file. Wrong format?" + e.getStackTrace().toString());
+            throw new GenericException(resp);
+        }
+    }
+    
 }
