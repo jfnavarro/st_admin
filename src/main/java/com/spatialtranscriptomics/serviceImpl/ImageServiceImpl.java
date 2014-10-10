@@ -88,7 +88,7 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public void addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
         String url = appConfig.getProperty("url.image");
-        url += "/compressedjson";
+        url += ("/compressedjson/" + imageFile.getOriginalFilename());
 
         S3Resource img = new S3Resource();
         img.setFilename(imageFile.getOriginalFilename());
