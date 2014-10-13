@@ -366,15 +366,15 @@ public class DatasetController {
             response.flushBuffer();
         } catch (IOException ex) {
             logger.error("Error getting or parsing features file for dataset " + id + " from API.");
-            throw new RuntimeException("IOError writing features file to HTTP response");
+            throw new RuntimeException("IOError writing features file to HTTP response", ex);
         }
     }
     
     /**
-     * Returns the features.
+     * Returns the features parsed into model objects.
      *
      * @param id dataset ID.
-     * @param response HTTP response containing the file.
+     * @return the features parsed.
      */
     @RequestMapping(value = "/featureslist/{id}", method = RequestMethod.GET)
     public @ResponseBody
@@ -389,7 +389,7 @@ public class DatasetController {
      * Returns an image for inspecting the features.
      *
      * @param id dataset ID.
-     * @param response HTTP response containing the file.
+     * @return RGB image with one pixel per feature coordinate.
      */
     @RequestMapping(value = "/featuresimage/{id}", method = RequestMethod.GET, produces = "image/bmp")
     public @ResponseBody
@@ -397,27 +397,27 @@ public class DatasetController {
         logger.info("About to download and parse features file for dataset " + id + " to create inspection image");
         Dataset d = datasetService.find(id);
         if (d == null) return null;
-        System.out.println("Got dataset.");
+        //System.out.println("Got dataset.");
         ImageAlignment imal = imageAlignmentService.find(d.getImage_alignment_id());
-        System.out.println("Got imal.");
+        //System.out.println("Got imal.");
         Chip chip = null;
         if (imal != null) {
-            System.out.println("Got chip.");
-             chip = chipService.find(imal.getChip_id());
+            //System.out.println("Got chip.");
+            chip = chipService.find(imal.getChip_id());
         }
         S3Resource fw = featuresService.find(id);
-        System.out.println("Got file.");
+        //System.out.println("Got file.");
         Feature[] features = Feature.parse(fw.getFile(), true);
-        System.out.println("Got " + features.length);
+        //System.out.println("Got " + features.length);
         BufferedImage img;
         try {
-            System.out.println("Creating image.");
+            //System.out.println("Creating image.");
             img = ComputeFeatureImage.computeImage(chip, features);
-            System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
+            //System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
         } catch (IOException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
             logger.error("Error creating features image for dataset " + id);
-            throw new RuntimeException("Error constructing features image");
+            throw new RuntimeException("Error constructing features image", ex);
         }
         return img;
     }

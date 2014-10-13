@@ -57,10 +57,17 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      */
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-        String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
-
-        String role = authenticateAgainstAPI(username, password);
+        String username = null;
+        String password = null;
+        String role = null;
+        
+        try {
+            username = authentication.getName();
+            password = authentication.getCredentials().toString();
+            role = authenticateAgainstAPI(username, password);
+        } catch (Exception ex) {
+            throw new BadCredentialsException("Failed to autenticate " + username);
+        }
 
         if (role != null) {
             logger.info("Authenticated account " + username + " as having role " + role);

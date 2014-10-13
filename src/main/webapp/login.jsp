@@ -66,7 +66,7 @@ body {
 			</div>
 		</c:if>
 		<c:if test="${not empty param.authorization_error}">
-			<div class="alert alert-error">Login failed. You have to
+			<div class="alert alert-error">Login failed. You have to have
 				permissions to access this resource.</div>
 		</c:if>
 

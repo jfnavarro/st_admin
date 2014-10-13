@@ -173,9 +173,10 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             rethrow = e;
         } catch (InvalidTokenException e) {
             // Don't reveal the token value in case it is logged
+            logger.info("Invalid token for client=" + getClientId());
             rethrow = new OAuth2AccessDeniedException(
                     "Invalid token for client=" + getClientId());
-            logger.info("Invalid token for client=" + getClientId());
+            
         }
         if (accessToken != null && retryBadAccessTokens) {
             context.setAccessToken(null);
@@ -184,9 +185,9 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
                         responseExtractor);
             } catch (InvalidTokenException e) {
                 // Don't reveal the token value in case it is logged
+                logger.info("Invalid token for client=" + getClientId());
                 rethrow = new OAuth2AccessDeniedException(
                         "Invalid token for client=" + getClientId());
-                logger.info("Invalid token for client=" + getClientId());
             }
         }
         throw rethrow;
@@ -196,7 +197,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
      * @return the client id for this resource.
      */
     private String getClientId() {
-        return oauthResource.getClientId();
+        return (oauthResource == null ? "null" : oauthResource.getClientId());
     }
 
     /**
@@ -256,11 +257,12 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
         AccessTokenRequest accessTokenRequest = oauth2Context
                 .getAccessTokenRequest();
         if (accessTokenRequest == null) {
+            String id = this.oauthResource == null ? null : this.oauthResource.getId();
             logger.info("No OAuth 2 security context has been established. Unable to access resource '"
-                    + this.oauthResource.getId() + "'.");
+                    + id + "'.");
             throw new AccessTokenRequiredException(
                     "No OAuth 2 security context has been established. Unable to access resource '"
-                    + this.oauthResource.getId() + "'.", oauthResource);
+                    + id + "'.", oauthResource);
             
         }
 
@@ -278,8 +280,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
         }
         
         OAuth2AccessToken accessToken = null;
-        accessToken = accessTokenProvider.obtainAccessToken(oauthResource,
-                accessTokenRequest);
+        accessToken = accessTokenProvider.obtainAccessToken(oauthResource, accessTokenRequest);
         if (accessToken == null || accessToken.getValue() == null) {
             throw new IllegalStateException(
                     "Access token provider returned a null access token, which is illegal according to the contract.");
@@ -317,7 +318,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             URI update = new URI(uri.getScheme(), uri.getUserInfo(),
                     uri.getHost(), uri.getPort(), uri.getPath(), null, null);
             // now add the encoded query string and the then fragment
-            StringBuffer sb = new StringBuffer(update.toString());
+            StringBuilder sb = new StringBuilder(update.toString());
             sb.append("?");
             sb.append(query);
             if (uri.getFragment() != null) {

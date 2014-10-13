@@ -71,7 +71,7 @@ public class FeaturesServiceImpl implements FeaturesService {
     
     @Override
     public S3Resource find(String id) {
-        String url = appConfig.getProperty("url.features") + id;
+        String url = appConfig.getProperty("url.features") + "json/" + id;
         S3Resource fw = secureRestTemplate.getForObject(url, S3Resource.class);
         return fw;
     }
