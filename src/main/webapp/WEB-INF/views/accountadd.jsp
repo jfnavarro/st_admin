@@ -54,9 +54,19 @@
 			</div>
 		</c:if>
 
-		<!--<c:forEach var="err" items="${errors}" varStatus="idx">
+                <c:if test="${not empty specerror}">
+			<div class="alert alert-error">
+				<strong>Error: </strong>Your input is not valid: ${specerror}
+			</div>
+		</c:if>
+                
+            
+                <!--
+		<c:forEach var="err" items="${errors}" varStatus="idx">
 			<div class="alert alert-error">${err.defaultMessage}</div>
-		</c:forEach> -->
+		</c:forEach>-->
+                
+                
 
 		<div>
 			<form:form method="POST" commandName="account"
@@ -93,6 +103,17 @@
 						<div class="controls">
 							<form:input type="password" id="inputPassword"
 								placeholder="Password" path="password" />
+							<span class='help-inline'>${status.errorMessage}</span>
+						</div>
+					</div>
+				</spring:bind>
+                            
+                                <spring:bind path="passwordRepeat">
+					<div class="control-group  ${status.error ? 'error' : ''}">
+						<label class="control-label" for="inputPasswordRepeat">Repeat password</label>
+						<div class="controls">
+							<form:input type="password" id="inputPasswordRepeat"
+								placeholder="Password" path="passwordRepeat" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>

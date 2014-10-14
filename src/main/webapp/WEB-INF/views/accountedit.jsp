@@ -86,6 +86,17 @@
 						</div>
 					</div>
 				</spring:bind>
+                            
+                                <spring:bind path="passwordRepeat">
+					<div class="control-group  ${status.error ? 'error' : ''}">
+						<label class="control-label" for="inputPasswordRepeat">Repeat password</label>
+						<div class="controls">
+							<form:input type="password" id="inputPasswordRepeat"
+								placeholder="Password" path="passwordRepeat" />
+							<span class='help-inline'>${status.errorMessage}</span>
+						</div>
+					</div>
+				</spring:bind>
 
 				<spring:bind path="enabled">
 				<div class="control-group">

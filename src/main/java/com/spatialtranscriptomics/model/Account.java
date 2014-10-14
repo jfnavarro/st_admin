@@ -8,6 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -30,6 +31,9 @@ public class Account implements IAccount {
 	@Length(min = 4, message = "Password must have at least 4 characters.")
 	String password;
 	
+        @JsonIgnore
+        String passwordRepeat;
+        
 	@NotBlank
 	String role;
         
@@ -84,6 +88,16 @@ public class Account implements IAccount {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+        
+        @JsonIgnore
+        public String getPasswordRepeat() {
+		return passwordRepeat;
+	}
+
+        @JsonIgnore
+	public void setPasswordRepeat(String password) {
+            this.passwordRepeat = password;
 	}
 	
 	public String getRole() {

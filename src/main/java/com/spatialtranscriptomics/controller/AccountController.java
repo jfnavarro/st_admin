@@ -108,6 +108,13 @@ public class AccountController {
             model.addObject("errors", result.getAllErrors());
             return model;
         }
+        //System.out.println(acc.getPassword());
+        //System.out.println(acc.getPasswordRepeat());
+        if (!acc.getPassword().equals(acc.getPasswordRepeat())) {
+            ModelAndView model = new ModelAndView("accountadd", "account", acc);
+            model.addObject("specerror", "Password repeat mismatch. Please enter again.");
+            return model;
+        }
         accountService.add(acc);
         ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account created.");
@@ -124,7 +131,9 @@ public class AccountController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit view of account " + id);
-        return new ModelAndView("accountedit", "account", accountService.find(id));
+        Account acc = accountService.find(id);
+        acc.setPasswordRepeat(acc.getPassword());
+        return new ModelAndView("accountedit", "account", acc);
     }
 
     /**
@@ -138,6 +147,11 @@ public class AccountController {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("accountedit", "account", acc);
             model.addObject("errors", result.getAllErrors());
+            return model;
+        }
+        if (!acc.getPassword().equals(acc.getPasswordRepeat())) {
+            ModelAndView model = new ModelAndView("accountedit", "account", acc);
+            model.addObject("errors", "Password repeat mismatch. Please enter again.");
             return model;
         }
         accountService.update(acc);
