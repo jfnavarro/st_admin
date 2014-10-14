@@ -27,6 +27,7 @@ import com.spatialtranscriptomics.service.DatasetInfoService;
 @Service
 public class DatasetInfoServiceImpl implements DatasetInfoService {
 
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(DatasetInfoServiceImpl.class);
@@ -72,10 +73,10 @@ public class DatasetInfoServiceImpl implements DatasetInfoService {
 	@Override
 	public DatasetInfo add(DatasetInfo datasetinfo) {
 		String url = appConfig.getProperty("url.datasetinfo");
-		//System.out.println(url);
+		
 		DatasetInfo dsResponse = secureRestTemplate.postForObject(url, datasetinfo,
 				DatasetInfo.class);
-		//System.out.println(dsResponse);
+		
 		return dsResponse;
 	}
 
@@ -90,26 +91,6 @@ public class DatasetInfoServiceImpl implements DatasetInfoService {
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.datasetinfo");
 		secureRestTemplate.delete(url + id);
-	}
-	
-        @Override
-	public void deleteForDataset(String datasetId) {
-		List<DatasetInfo> dsis = listForDataset(datasetId);
-		if (dsis ==  null) { return; }
-		String url = appConfig.getProperty("url.datasetinfo");
-		for (DatasetInfo dsi : dsis) {
-			secureRestTemplate.delete(url + dsi.getId());
-		}
-	}
-
-        @Override
-	public void deleteForAccount(String accountId) {
-		List<DatasetInfo> dsis = listForAccount(accountId);
-		if (dsis ==  null) { return; }
-		String url = appConfig.getProperty("url.datasetinfo");
-		for (DatasetInfo dsi : dsis) {
-			secureRestTemplate.delete(url + dsi.getId());
-		}
 	}
 
 }

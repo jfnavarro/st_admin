@@ -27,6 +27,7 @@ import com.spatialtranscriptomics.service.DatasetService;
 @Service
 public class DatasetServiceImpl implements DatasetService {
 
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
 	@SuppressWarnings("unused")
 	private static final Logger logger = Logger
 			.getLogger(DatasetServiceImpl.class);
@@ -39,7 +40,7 @@ public class DatasetServiceImpl implements DatasetService {
 
         @Override
 	public Dataset find(String id) {
-		String url = appConfig.getProperty("url.dataset");
+		String url = appConfig.getProperty("url.dataset") + "all/";
 		url += id;
 		Dataset dataset = secureRestTemplate.getForObject(url, Dataset.class);
 		return dataset;
@@ -47,7 +48,7 @@ public class DatasetServiceImpl implements DatasetService {
 
         @Override
 	public List<Dataset> list() {
-		String url = appConfig.getProperty("url.dataset");
+		String url = appConfig.getProperty("url.dataset") + "all/";
 		Dataset[] dsArray = secureRestTemplate.getForObject(url,
 				Dataset[].class);
 		List<Dataset> dsList = Arrays.asList(dsArray);
@@ -56,7 +57,7 @@ public class DatasetServiceImpl implements DatasetService {
 	
         @Override
 	public List<Dataset> listForAccount(String accountId) {
-		String url = appConfig.getProperty("url.dataset") + "?account=" + accountId;
+		String url = appConfig.getProperty("url.dataset") + "all/?account=" + accountId;
 		Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
 		if (dsArray == null) { return null; }
 		List<Dataset> dsList = Arrays.asList(dsArray);
@@ -81,31 +82,8 @@ public class DatasetServiceImpl implements DatasetService {
         @Override
 	public void delete(String id) {
 		String url = appConfig.getProperty("url.dataset");
-		secureRestTemplate.delete(url + id);
+		secureRestTemplate.delete(url + id + "?cascade=true");
 	}
 	
-        @Override
-	public void setUnabledForImageAlignment(String imalId) {
-		List<Dataset> ds = list();
-		if (ds == null) { return; }
-		for (Dataset d : ds) {
-			if (d.getImage_alignment_id() != null && d.getImage_alignment_id().equals(imalId)) {
-				d.setEnabled(false);
-				d.setImage_alignment_id(null);
-				update(d);
-			}
-		}
-	}
         
-        @Override
-        public void clearAccountCreator(String accountId) {
-            List<Dataset> l = list();
-            for (Dataset d : l) {
-                if (d.getCreated_by_account_id() != null && d.getCreated_by_account_id().equals(accountId)) {
-                    d.setCreated_by_account_id(null);
-                    update(d);
-                }
-            }
-        }
-
 }

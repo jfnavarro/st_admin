@@ -5,7 +5,6 @@
 * 
 */
 
-
 package com.spatialtranscriptomics.component;
 
 import com.spatialtranscriptomics.model.Account;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * Enables static access to beans (which typically have been autowired as single instances).
+ * It provides access to the current user, among other things.
  */
 @Component
 public class StaticContextAccessor {
@@ -42,10 +42,18 @@ public class StaticContextAccessor {
         return instance.applicationContext.getBean(clazz);
     }
     
+    /**
+     * Sets the current user, for global access.
+     * @param user the user.
+     */
     public static void setCurrentUser(Account user) {
         currentUser = user;
     }
     
+    /**
+     * Returns the current user, for global access.
+     * @return 
+     */
     public static Account getCurrentUser() {
         return currentUser;
     }

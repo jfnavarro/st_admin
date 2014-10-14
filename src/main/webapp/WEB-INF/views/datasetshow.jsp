@@ -64,7 +64,7 @@
                         <dt>Created by</dt>
 			<dd>${accountcreator}&nbsp;</dd>
                         
-			<dt>Overall # of features</dt>
+			<dt>Overall # of features (# of unique events)</dt>
 			<dd>${dataset.overall_feature_count}&nbsp;</dd>
 			
 			<dt>Unique # of genes</dt>
@@ -98,9 +98,14 @@
 			<dt>Last modified</dt>
 			<dd>${dataset.last_modified.toDate()}&nbsp;</dd>
                         
-			<dt>Features</dt>
+			<dt>Features file</dt>
 			<dd>
-				<a href="<c:url value="/dataset/"/>${dataset.id}/features">Show</a>
+                                <a href="<c:url value="/dataset/features/"/>${dataset.id}" target="_blank">Download [${featuresMetadata[dataset.id].getReadableSize()}]</a> (right click and select "Save link as...")
+			</dd>
+                        
+                        <dt>Inspect expression</dt>
+			<dd>
+                                <a href="<c:url value="/dataset/featuresimage/"/>${dataset.id}" target="_blank">Download image</a> (right click and select "Save link as...")
 			</dd>
 		</dl>
 		

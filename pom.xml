@@ -4,7 +4,7 @@
 	<groupId>spatialtranscriptomics</groupId>
 	<artifactId>admin</artifactId>
 	<packaging>war</packaging>
-	<version>0.3</version>
+	<version>0.4</version>
 	<name>Spatial Transcriptomics Admin Console</name>
 	<url>http://maven.apache.org</url>
 
@@ -16,7 +16,8 @@
 		<spring.security.oauth.version>1.0.5.RELEASE</spring.security.oauth.version> 
 		<spring.osgi.range>[3.1.0,4.0.0)</spring.osgi.range>
 		<security.osgi.range>[3.1.0,4.0.0)</security.osgi.range>
-                <buildDir>${user.dir}</buildDir>
+        <!--<buildDir>${user.dir}</buildDir>-->
+        <buildDir>${basedir}/target</buildDir>
 	</properties>
 
 	<!-- MAVEN REPOSITORIES -->
@@ -268,13 +269,32 @@
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk</artifactId>
 			<version>1.7.11</version>
+		 <exclusions>
+		  <exclusion>
+		   <groupId>com.fasterxml.jackson.core</groupId>
+		   <artifactId>jackson-annotations</artifactId>
+		  </exclusion>
+		  <exclusion>
+		   <groupId>com.fasterxml.jackson.core</groupId>
+		   <artifactId>jackson-databind</artifactId>
+		  </exclusion>
+		  <exclusion>
+		   <groupId>com.fasterxml.jackson.core</groupId>
+		   <artifactId>jackson-core</artifactId>
+		  </exclusion>
+		 </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>provided</scope>
-		</dependency>
+                </dependency>
+	 <dependency>
+	  <groupId>net.sf.jmatchparser</groupId>
+	  <artifactId>jMatchParser-juniversalchardet</artifactId>
+	  <version>0.1</version>
+	 </dependency>
 	</dependencies>
 
 	<!-- BUILD -->

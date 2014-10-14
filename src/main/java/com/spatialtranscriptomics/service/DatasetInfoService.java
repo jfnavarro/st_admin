@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.service;
 
 import java.util.List;
@@ -16,22 +15,50 @@ import com.spatialtranscriptomics.model.DatasetInfo;
  */
 public interface DatasetInfoService {
 
-	public DatasetInfo find(String id);
+    /**
+     * Returns a dataset info.
+     * @param id the ID.
+     * @return the dataset info.
+     */
+    public DatasetInfo find(String id);
 
-	public List<DatasetInfo> list();
-	
-	public List<DatasetInfo> listForAccount(String accountId);
-	
-	public List<DatasetInfo> listForDataset(String datasetId);
+    /**
+     * Returns a list of all dataset infos.
+     * @return the dataset infos.
+     */
+    public List<DatasetInfo> list();
 
-	public DatasetInfo add(DatasetInfo datasetinfo);
+    /**
+     * Returns all dataset infos for an account.
+     * @param accountId the account ID.
+     * @return the dataset infos.
+     */
+    public List<DatasetInfo> listForAccount(String accountId);
 
-	public void update(DatasetInfo datasetinfo);
+    /**
+     * Returns all datasets for a dataset.
+     * @param datasetId the dataset ID.
+     * @return the dataset infos.
+     */
+    public List<DatasetInfo> listForDataset(String datasetId);
 
-	public void delete(String id);
-	
-	public void deleteForDataset(String datasetId);
-	
-	public void deleteForAccount(String accountId);
+    /**
+     * Adds a dataset info.
+     * @param datasetinfo the dataset info.
+     * @return the dataset info with ID assigned.
+     */
+    public DatasetInfo add(DatasetInfo datasetinfo);
+
+    /**
+     * Updates a dataset info.
+     * @param datasetinfo the dataset info.
+     */
+    public void update(DatasetInfo datasetinfo);
+
+    /**
+     * Deletes a dataset info.
+     * @param id the dataset info ID.
+     */
+    public void delete(String id);
 
 }

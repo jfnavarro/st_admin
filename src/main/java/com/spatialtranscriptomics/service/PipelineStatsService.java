@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.service;
 
 import java.util.List;
@@ -16,17 +15,42 @@ import com.spatialtranscriptomics.model.PipelineStats;
  */
 public interface PipelineStatsService {
 
-	public PipelineStats find(String id);
+    /**
+     * Retrieves a specified stats object.
+     * @param id the stats ID.
+     * @return the stats.
+     */
+    public PipelineStats find(String id);
 
-	public List<PipelineStats> list();
-	
-	public PipelineStats findForPipelineExperiment(String expId);
+    /**
+     * Retrieves all stats.
+     * @return the stats.
+     */
+    public List<PipelineStats> list();
 
-	public PipelineStats add(PipelineStats stats);
+    /**
+     * Retrieves the stats of a pipeline experiment.
+     * @param expId the experiment ID.
+     * @return the stats.
+     */
+    public PipelineStats findForPipelineExperiment(String expId);
 
-	public void update(PipelineStats stats);
+    /**
+     * Adds a stats object.
+     * @param stats the stats.
+     * @return the stats object with ID assigned.
+     */
+    public PipelineStats add(PipelineStats stats);
 
-	public void delete(String id);
-	
-        public void deleteForExperiment(String experimentId);
+    /**
+     * Updates a stats object.
+     * @param stats the stats.
+     */
+    public void update(PipelineStats stats);
+
+    /**
+     * Deletes a stats object.
+     * @param id the stats ID.
+     */
+    public void delete(String id);
 }

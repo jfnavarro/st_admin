@@ -8,6 +8,7 @@
 package com.spatialtranscriptomics.model;
 
 import java.util.List;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
@@ -21,40 +22,48 @@ import org.joda.time.DateTime;
  */
 public class Account implements IAccount {
 
-	public String id;
+	String id;
 	
 	@NotBlank
 	@Email(message = "Username must be a valid email address.")
-	public String username;
+	String username;
 	
 	@Length(min = 4, message = "Password must have at least 4 characters.")
-	public String password;
+	String password;
 	
-	@NotBlank
-	public String role;
-
-	//@NotBlank   // not possible...
-	public boolean enabled;
-	
-	public String institution;
-	
-	public String first_name;
-	
-	public String last_name;
-	
-	public String street_address;
-	
-	public String city;
-	
-	public String postcode;
-	
-	public String country;
-	
-	public List<String> granted_datasets;
+        @JsonIgnore
+        String passwordRepeat;
         
-        private DateTime created_at;
+	@NotBlank
+	String role;
+        
+	boolean enabled;
 	
-        private DateTime last_modified;
+	String institution;
+	
+	String first_name;
+	
+	String last_name;
+	
+	String street_address;
+	
+	String city;
+	
+	String postcode;
+	
+	String country;
+	
+        // Transient in API.
+	List<String> granted_datasets;
+        
+        DateTime created_at;
+	
+        DateTime last_modified;
+        
+        /**
+         * Default Constructor is required by Jackson.
+         */
+        public Account() {}
         
 	// id is set automatically by MongoDB
 	public String getId() {
@@ -79,6 +88,16 @@ public class Account implements IAccount {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+        
+        @JsonIgnore
+        public String getPasswordRepeat() {
+		return passwordRepeat;
+	}
+
+        @JsonIgnore
+	public void setPasswordRepeat(String password) {
+            this.passwordRepeat = password;
 	}
 	
 	public String getRole() {
@@ -153,12 +172,13 @@ public class Account implements IAccount {
 		this.country = country;
 	}
 
+        // Transient in API.
 	public List<String> getGranted_datasets() {
 		return this.granted_datasets;
 	}
 	
+        // Transient in API.
 	public void setGranted_datasets(List<String> grantedDatasets) {
-		//System.out.println("Setting datasets: " + grantedDatasets.size());
 		this.granted_datasets = grantedDatasets;
 	}
         

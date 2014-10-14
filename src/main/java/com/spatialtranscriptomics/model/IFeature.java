@@ -1,43 +1,33 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.model;
 
 /**
- * This interface defines the Feature model. Should reflect the corresponding model in ST API.
+ * This interface defines the Feature model.
  */
-
 public interface IFeature {
 
-	public String getId();
+    public String getGene();
 
-	public void setId(String id);
+    public void setGene(String gene);
 
-	public String getGene();
+    public int getX();
 
-	public void setGene(String gene);
-	
-	public String getAnnotation();
-	
-	public void setAnnotation(String ann);
+    public void setX(int x);
 
-	public int getX();
+    public int getY();
 
-	public void setX(int x);
+    public void setY(int y);
 
-	public int getY();
+    public int getHits();
 
-	public void setY(int y);
-	
-	public int getHits();
+    public void setHits(int hits);
 
-	public void setHits(int hits);
-	
-	public String getBarcode();
+    public String getBarcode();
 
-	public void setBarcode(String barcode);
+    public void setBarcode(String barcode);
 }

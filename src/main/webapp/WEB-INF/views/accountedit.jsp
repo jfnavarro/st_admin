@@ -6,7 +6,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Edit Account</title>
+<title>Edit account</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 
@@ -82,6 +82,17 @@
 						<div class="controls">
 							<form:input type="password" id="inputPassword"
 								placeholder="Password" path="password" />
+							<span class='help-inline'>${status.errorMessage}</span>
+						</div>
+					</div>
+				</spring:bind>
+                            
+                                <spring:bind path="passwordRepeat">
+					<div class="control-group  ${status.error ? 'error' : ''}">
+						<label class="control-label" for="inputPasswordRepeat">Repeat password</label>
+						<div class="controls">
+							<form:input type="password" id="inputPasswordRepeat"
+								placeholder="Password" path="passwordRepeat" />
 							<span class='help-inline'>${status.errorMessage}</span>
 						</div>
 					</div>

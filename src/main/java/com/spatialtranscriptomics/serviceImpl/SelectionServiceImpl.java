@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
@@ -20,102 +19,83 @@ import com.spatialtranscriptomics.model.Selection;
 import com.spatialtranscriptomics.service.SelectionService;
 
 /**
- * This class implements the store/retrieve logic to the ST API for the data model class "Selection".
- * The connection to the ST API is handled in a RestTemplate object, which is configured in mvc-dispather-servlet.xml
+ * This class implements the store/retrieve logic to the ST API for the data
+ * model class "Selection". The connection to the ST API is handled in a
+ * RestTemplate object, which is configured in mvc-dispather-servlet.xml
  */
-
 @Service
 public class SelectionServiceImpl implements SelectionService {
 
-	@SuppressWarnings("unused")
-	private static final Logger logger = Logger
-			.getLogger(SelectionServiceImpl.class);
+    // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
+    @SuppressWarnings("unused")
+    private static final Logger logger = Logger
+            .getLogger(SelectionServiceImpl.class);
 
-	@Autowired
-	RestTemplate secureRestTemplate;
+    @Autowired
+    RestTemplate secureRestTemplate;
 
-	@Autowired
-	Properties appConfig;
+    @Autowired
+    Properties appConfig;
 
-	@Override
-	public Selection find(String id) {
-		String url = appConfig.getProperty("url.selection");
-		url += id;
-		Selection sel = secureRestTemplate.getForObject(url, Selection.class);
-		return sel;
-	}
+    @Override
+    public Selection find(String id) {
+        String url = appConfig.getProperty("url.selection") + "all/";
+        url += id;
+        Selection sel = secureRestTemplate.getForObject(url, Selection.class);
+        return sel;
+    }
 
-	@Override
-	public List<Selection> list() {
-		String url = appConfig.getProperty("url.selection");
-		Selection[] eArray = secureRestTemplate.getForObject(url,
-				Selection[].class);
-		List<Selection> eList = Arrays.asList(eArray);
-		return eList;
-	}
+    @Override
+    public List<Selection> list() {
+        String url = appConfig.getProperty("url.selection") + "all/";
+        Selection[] eArray = secureRestTemplate.getForObject(url,
+                Selection[].class);
+        List<Selection> eList = Arrays.asList(eArray);
+        return eList;
+    }
 
-	@Override
-	public Selection add(Selection sel) {
-		String url = appConfig.getProperty("url.selection");
-		Selection eResponse = secureRestTemplate.postForObject(url, sel, Selection.class);
-		return eResponse;
-	}
+    @Override
+    public Selection add(Selection sel) {
+        String url = appConfig.getProperty("url.selection");
+        Selection eResponse = secureRestTemplate.postForObject(url, sel, Selection.class);
+        return eResponse;
+    }
 
-	@Override
-	public void update(Selection sel) {
-		String url = appConfig.getProperty("url.selection");
-		String id = sel.getId();
-		secureRestTemplate.put(url + id, sel);
-	}
+    @Override
+    public void update(Selection sel) {
+        String url = appConfig.getProperty("url.selection");
+        String id = sel.getId();
+        secureRestTemplate.put(url + id, sel);
+    }
 
-	@Override
-	public void delete(String id) {
-		String url = appConfig.getProperty("url.selection");
-		secureRestTemplate.delete(url + id);
-	}
-	
-        @Override
-	public void deleteForDataset(String datasetId) {
-		List<Selection> sels = findForDataset(datasetId);
-		if (sels == null) { return; }
-		String url = appConfig.getProperty("url.selection");
-		for (Selection sel : sels) {
-			secureRestTemplate.delete(url + sel.getId());
-		}
-	}
-        
-        @Override
-	public void deleteForAccount(String accountId) {
-		List<Selection> sels = findForAccount(accountId);
-		if (sels == null) { return; }
-		String url = appConfig.getProperty("url.selection");
-		for (Selection sel : sels) {
-			secureRestTemplate.delete(url + sel.getId());
-		}
-	}
+    @Override
+    public void delete(String id) {
+        String url = appConfig.getProperty("url.selection");
+        secureRestTemplate.delete(url + id);
+    }
 
-        @Override
-	public List<Selection> findForAccount(String accountId) {
-		String url = appConfig.getProperty("url.selection") + "?account=" + accountId;
-		Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
-		List<Selection> list = Arrays.asList(arr);
-		return list;
-	}
+    @Override
+    public List<Selection> findForAccount(String accountId) {
+        String url = appConfig.getProperty("url.selection") + "?account=" + accountId;
+        Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
+        List<Selection> list = Arrays.asList(arr);
+        return list;
+    }
 
-        @Override
-	public List<Selection> findForDataset(String datasetId) {
-		String url = appConfig.getProperty("url.selection") + "?dataset=" + datasetId;
-		Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
-		List<Selection> list = Arrays.asList(arr);
-		return list;
-	}
-	
-        @Override
-	public List<Selection> findForTask(String taskId) {
-		String url = appConfig.getProperty("url.selection") + "?task=" + taskId;
-		Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
-		List<Selection> list = Arrays.asList(arr);
-		return list;
-	}
+    @Override
+    public List<Selection> findForDataset(String datasetId) {
+        String url = appConfig.getProperty("url.selection") + "?dataset=" + datasetId;
+        Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
+        List<Selection> list = Arrays.asList(arr);
+        return list;
+    }
+
+    @Override
+    public List<Selection> findForTask(String taskId) {
+        String url = appConfig.getProperty("url.selection") + "?task=" + taskId;
+        Selection[] arr = secureRestTemplate.getForObject(url, Selection[].class);
+        List<Selection> list = Arrays.asList(arr);
+        return list;
+    }
 
 }

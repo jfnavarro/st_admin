@@ -1,10 +1,9 @@
 /*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
+ *Copyright © 2012 Spatial Transcriptomics AB
+ *Read LICENSE for more information about licensing terms
+ *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
+ * 
+ */
 package com.spatialtranscriptomics.service;
 
 import java.util.List;
@@ -16,23 +15,57 @@ import com.spatialtranscriptomics.model.Selection;
  */
 public interface SelectionService {
 
-	public Selection find(String id);
+    /**
+     * Retrieves a selection.
+     * @param id the selection ID.
+     * @return the selection.
+     */
+    public Selection find(String id);
 
-	public List<Selection> list();
-	
-	public List<Selection> findForAccount(String accountId);
-	
-	public List<Selection> findForDataset(String datasetId);
-	
-	public List<Selection> findForTask(String taskId);
+    /**
+     * Retrieves all selections.
+     * @return the selections.
+     */
+    public List<Selection> list();
 
-	public Selection add(Selection sel);
+    /**
+     * Retrieves all selections for an account.
+     * @param accountId  the account ID.
+     * @return the selections.
+     */
+    public List<Selection> findForAccount(String accountId);
 
-	public void update(Selection sel);
+    /**
+     * Retrieves all selections for a dataset.
+     * @param datasetId the dataset ID.
+     * @return the selections.
+     */
+    public List<Selection> findForDataset(String datasetId);
 
-	public void delete(String id);
-	
-	public void deleteForDataset(String datasetId);
-        
-        public void deleteForAccount(String accountId);
+    /**
+     * Retrieves all selections for a task.
+     * @param taskId  the task ID.
+     * @return the selections.
+     */
+    public List<Selection> findForTask(String taskId);
+
+    /**
+     * Adds a selection.
+     * @param sel the selection.
+     * @return the selection with ID assigned.
+     */
+    public Selection add(Selection sel);
+
+    /**
+     * Updates a selection.
+     * @param sel the selection.
+     */
+    public void update(Selection sel);
+
+    /**
+     * Deletes a selection.
+     * @param id the selection ID.
+     */
+    public void delete(String id);
+
 }
