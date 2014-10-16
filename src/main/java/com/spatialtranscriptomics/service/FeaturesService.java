@@ -7,7 +7,6 @@
 
 package com.spatialtranscriptomics.service;
 
-import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.model.FeaturesMetadata;
 import com.spatialtranscriptomics.model.S3Resource;
 import java.util.List;
