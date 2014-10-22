@@ -66,7 +66,9 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             password = authentication.getCredentials().toString();
             role = authenticateAgainstAPI(username, password);
         } catch (Exception ex) {
-            throw new BadCredentialsException("Failed to autenticate " + username);
+            String message = "Failed to autenticate " + username + " due to " + ex.getMessage();
+            logger.info(message);
+            throw new BadCredentialsException(message);
         }
 
         if (role != null) {
@@ -76,7 +78,9 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
             return auth;
         } else {
-            throw new BadCredentialsException("Failed to autenticate account or role of " + username);
+            String message = "Failed to autenticate account or role of " + username;
+            logger.info(message);
+            throw new BadCredentialsException(message);
         }
     }
 
@@ -122,7 +126,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             }
 
         } catch (RestClientException e) {
-            logger.error("Failed to authenticate user "+ username + " with secure rest remplate.");
+            logger.error("Failed to authenticate user " + username + " with secure rest remplate " + e.getMessage());
             return null;
         }
 
