@@ -94,21 +94,10 @@
 	<!-- Amazon AWS Configuration -->
 
 	<bean id="s3Client" class="com.amazonaws.services.s3.AmazonS3Client">
-		<constructor-arg>
-			<ref bean="awsCredentials" />
-		</constructor-arg>
 	</bean>
 
 	<bean id="emrClient"
 		class="com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient">
-		<constructor-arg>
-			<ref bean="awsCredentials" />
-		</constructor-arg>
-	</bean>
-
-	<bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials">
-		<constructor-arg type="String" value="${s3.accesskey}" />
-		<constructor-arg type="String" value="${s3.secretkey}" />
 	</bean>
 
 	<!-- Error handlers -->
