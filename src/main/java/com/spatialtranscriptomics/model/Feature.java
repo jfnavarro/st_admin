@@ -8,7 +8,6 @@ package com.spatialtranscriptomics.model;
 
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
-import static com.spatialtranscriptomics.util.ByteOperations.gunzip;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,14 +19,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
-import org.codehaus.jackson.annotate.JsonAutoDetect;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.MappingJsonFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * This bean class maps a subset of the Feature post within a feature file to
@@ -111,44 +105,6 @@ public class Feature implements IFeature {
         this.gene = gene;
     }
     
-//    /**
-//     * Helper. Computes feature stats.
-//     *
-//     * @param features
-//     * @param overall_hit_quartiles
-//     * @param gene_pooled_hit_quartiles
-//     * @return [overall_feature_count, overall_hit_count, unique_gene_count,
-//     * unique_barcode_count]
-//     */
-//    public static int[] computeStats(List<Feature> features, double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) {
-//        int n = features.size();
-//        int sum = 0;
-//        List<Integer> hits = new ArrayList<Integer>(n);
-//        HashMap<String, Integer> pooledHits = new HashMap<String, Integer>(n);
-//        HashSet<String> pooledBarcodes = new HashSet<String>(n);
-//        for (Feature f : features) {
-//            String gene = f.getGene().toUpperCase();
-//            String barcode = f.getBarcode().toUpperCase();
-//            int h = f.getHits();
-//            sum += h;
-//            hits.add(h);
-//            if (pooledHits.containsKey(gene)) {
-//                pooledHits.put(gene, pooledHits.get(gene) + h);
-//            } else {
-//                pooledHits.put(gene, h);
-//            }
-//            pooledBarcodes.add(barcode);
-//        }
-//        Collections.sort(hits);
-//        ArrayList<Integer> poolHits = new ArrayList<Integer>(pooledHits.values());
-//        Collections.sort(poolHits);
-//
-//        computeQuartiles(hits, overall_hit_quartiles);
-//        computeQuartiles(poolHits, gene_pooled_hit_quartiles);
-//
-//        // overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count
-//        return new int[]{n, sum, poolHits.size(), pooledBarcodes.size()};
-//    }
 
     /**
      * Helper. Computes quartiles of a sorted list.
@@ -178,7 +134,14 @@ public class Feature implements IFeature {
         }
     }
     
-   
+   /**
+    * Parses a file for the sake of stats computations.
+    * @param bytes file contents
+    * @param isGZipped true if gzipped file.
+    * @param overall_hit_quartiles return value hit quartiles.
+    * @param gene_pooled_hit_quartiles return value gene-pooled hit quartiles.
+    * @return overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count.
+    */
     public static int[] parse(byte[] bytes, boolean isGZipped, double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) {
         File temp = null;
         int[] stats = null;
@@ -221,7 +184,7 @@ public class Feature implements IFeature {
             //e.printStackTrace();
             GenericExceptionResponse resp = new GenericExceptionResponse();
             resp.setError("Parse error");
-            resp.setError_description("Could not parse feature file. Wrong format?" + e.getStackTrace().toString());
+            resp.setError_description("Could not parse JSON feature file. Wrong format?" + e.getStackTrace().toString());
             throw new GenericException(resp);
         } finally {
             if (temp != null) {
@@ -232,7 +195,9 @@ public class Feature implements IFeature {
         return stats;
     }
     
-    
+    /**
+     * Helper to parse().
+     */
     private static int[] parseStreamingly(File file, double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) throws IOException {
         
         JsonFactory f = new MappingJsonFactory();
