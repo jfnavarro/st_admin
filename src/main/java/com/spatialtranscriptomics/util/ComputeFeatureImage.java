@@ -24,7 +24,7 @@ public class ComputeFeatureImage {
      * @return the buffered image.
      * @throws IOException 
      */
-    public static BufferedImage computeImage(Chip chip, Feature[] features) throws IOException {
+    public static BufferedImage computeImage(Chip chip, List<Feature> features) throws IOException {
         BufferedImage img = null;
         try {
             int xdim = -1, ydim = -1;

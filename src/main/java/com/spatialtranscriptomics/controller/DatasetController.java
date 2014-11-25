@@ -27,6 +27,8 @@ import com.spatialtranscriptomics.serviceImpl.ImageAlignmentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
+import com.spatialtranscriptomics.util.ByteOperations;
+import static com.spatialtranscriptomics.util.ByteOperations.gzip;
 import com.spatialtranscriptomics.util.ComputeFeatureImage;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -181,8 +183,16 @@ public class DatasetController {
             model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
             return model;
         }
+        
+        // Validate gzip format.
+        if (!datasetAddForm.getFeatureFile().isEmpty() &&
+            !datasetAddForm.getFeatureFile().getOriginalFilename().endsWith("gz") &&
+            !datasetAddForm.getFeatureFile().getOriginalFilename().endsWith("gzip")) {
+            ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
+            model.addObject("featureerror", "The selected file must be gzipped with suffix .gz");
+            return model;
+        }
 
-        // read features file.
         byte[] bytes = null;
         if (!datasetAddForm.getFeatureFile().isEmpty()) {
             CommonsMultipartFile ffile = datasetAddForm.getFeatureFile();
@@ -190,7 +200,9 @@ public class DatasetController {
         } else if (datasetAddForm.getExperimentId() != null) {
             try {
                 InputStream stream = s3Service.getFeaturesAsJson(datasetAddForm.getExperimentId());
+                // TODO: This needs to be made zipped already at an earlier stage.
                 bytes = IOUtils.toByteArray(stream);
+                bytes = ByteOperations.gzip(bytes);
             } catch (IOException ex) {
                 logger.error("Failed to convert S3 feature stream to byte array when adding dataset.");
                 ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
@@ -202,32 +214,15 @@ public class DatasetController {
         Dataset beingCreated = datasetAddForm.getDataset();
 
         // Compute quartiles.
-        Feature[] features = Feature.parse(bytes, false);
-        double[] overall_hit_quartiles = new double[5];
-        double[] gene_pooled_hit_quartiles = new double[5];
-        // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
-        int[] stats = Feature.computeStats(features, overall_hit_quartiles, gene_pooled_hit_quartiles);
-        beingCreated.setOverall_feature_count(stats[0]);
-        beingCreated.setOverall_hit_count(stats[1]);
-        beingCreated.setUnique_gene_count(stats[2]);
-        beingCreated.setUnique_barcode_count(stats[3]);
-        beingCreated.setOverall_hit_quartiles(overall_hit_quartiles);;
-        beingCreated.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
+        computeStats(bytes, true, beingCreated);
 
         // add dataset
         beingCreated.setCreated_by_account_id(StaticContextAccessor.getCurrentUser().getId());
         Dataset dsResult = datasetService.add(beingCreated);
 
         // update features file, now that we know the ID.
-        try {
-                S3Resource s3res = S3Resource.createGZipS3Resource("application/json", dsResult.getId(), bytes);
-                featuresService.addUpdate(dsResult.getId(), s3res);
-            } catch (IOException ex) {
-                logger.error("Failed to compress features file.");
-                ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
-                model.addObject("featureerror", "Error creating compressed features file.");
-                return model;
-            }
+        S3Resource s3res = new S3Resource("application/json", "gzip", dsResult.getId(), bytes);
+        featuresService.addUpdate(dsResult.getId(), s3res);
 
         // Return list view.
         ModelAndView success = list();
@@ -235,6 +230,23 @@ public class DatasetController {
         logger.info("Successfully added dataset " + dsResult.getId());
         return success;
 
+    }
+    
+    /**
+     * Updates quartiles.
+     * @param ds dataset.
+     */
+    private void computeStats(byte[] bytes, boolean isGzipped, Dataset ds) {
+        double[] overall_hit_quartiles = new double[5];
+        double[] gene_pooled_hit_quartiles = new double[5];
+        // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
+        int[] stats = Feature.parse(bytes, isGzipped, overall_hit_quartiles, gene_pooled_hit_quartiles);
+        ds.setOverall_feature_count(stats[0]);
+        ds.setOverall_hit_count(stats[1]);
+        ds.setUnique_gene_count(stats[2]);
+        ds.setUnique_barcode_count(stats[3]);
+        ds.setOverall_hit_quartiles(overall_hit_quartiles);;
+        ds.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
     }
 
     /**
@@ -273,6 +285,15 @@ public class DatasetController {
             model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
             return model;
         }
+        
+        // Validate gzip format.
+        if (!datasetEditForm.getFeatureFile().isEmpty() &&
+            !datasetEditForm.getFeatureFile().getOriginalFilename().endsWith("gz") &&
+            !datasetEditForm.getFeatureFile().getOriginalFilename().endsWith("gzip")) {
+            ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetEditForm);
+            model.addObject("featureerror", "The selected file must be gzipped with suffix .gz");
+            return model;
+        }
 
         // Read features, if specified.
         byte[] bytes = null;
@@ -282,7 +303,9 @@ public class DatasetController {
         } else if (!datasetEditForm.getExperimentId().isEmpty()) {
             try {
                 InputStream stream = s3Service.getFeaturesAsJson(datasetEditForm.getExperimentId());
+                // TODO: This needs to be made zipped already at an earlier stage.
                 bytes = IOUtils.toByteArray(stream);
+                bytes = ByteOperations.gzip(bytes);
             } catch (IOException ex) {
                 logger.error("Failed to convert S3 feature stream to byte array when editing dataset " + datasetEditForm.getDataset().getId());
                 ModelAndView model = new ModelAndView("datasetedit", "datasetform", datasetEditForm);
@@ -296,28 +319,11 @@ public class DatasetController {
         // Add file to S3, update quartiles.
         if (bytes != null) {
             // Compute quartiles.
-            Feature[] features = Feature.parse(bytes, false);
-            double[] overall_hit_quartiles = new double[5];
-            double[] gene_pooled_hit_quartiles = new double[5];
-            // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
-            int[] stats = Feature.computeStats(features, overall_hit_quartiles, gene_pooled_hit_quartiles);
-            beingUpdated.setOverall_feature_count(stats[0]);
-            beingUpdated.setOverall_hit_count(stats[1]);
-            beingUpdated.setUnique_gene_count(stats[2]);
-            beingUpdated.setUnique_barcode_count(stats[3]);
-            beingUpdated.setOverall_hit_quartiles(overall_hit_quartiles);;
-            beingUpdated.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
+            computeStats(bytes, true, beingUpdated);
 
             // Update file.
-            try {
-                S3Resource s3res = S3Resource.createGZipS3Resource("application/json", beingUpdated.getId(), bytes);
-                featuresService.addUpdate(beingUpdated.getId(), s3res);
-            } catch (IOException ex) {
-                logger.error("Failed to compress features file.");
-                ModelAndView model = new ModelAndView("datasetdit", "datasetform", datasetEditForm);
-                model.addObject("featureerror", "Error creating compressed features file.");
-                return model;
-            }
+            S3Resource s3res = new S3Resource("application/json", "gzip", beingUpdated.getId(), bytes);
+            featuresService.addUpdate(beingUpdated.getId(), s3res);
                 
         }
 
@@ -370,57 +376,58 @@ public class DatasetController {
         }
     }
     
-    /**
-     * Returns the features parsed into model objects.
-     *
-     * @param id dataset ID.
-     * @return the features parsed.
-     */
-    @RequestMapping(value = "/featureslist/{id}", method = RequestMethod.GET)
-    public @ResponseBody
-    Feature[] getFeaturesList(@PathVariable String id) {
-        logger.info("About to download and parse features file for dataset " + id);
-        S3Resource fw = featuresService.find(id);
-        Feature[] features = Feature.parse(fw.getFile(), true);
-        return features;
-    }
+//    /**
+//     * Returns the features parsed into model objects.
+//     *
+//     * @param id dataset ID.
+//     * @return the features parsed.
+//     */
+//    @RequestMapping(value = "/featureslist/{id}", method = RequestMethod.GET)
+//    public @ResponseBody
+//    Feature[] getFeaturesList(@PathVariable String id) {
+//        logger.info("About to download and parse features file for dataset " + id);
+//        S3Resource fw = featuresService.find(id);
+//        List<Feature> features = Feature.parse(fw.getFile(), true);
+//        Feature[] feats = new Feature[features.size()];
+//        return feats;
+//    }
     
-     /**
-     * Returns an image for inspecting the features.
-     *
-     * @param id dataset ID.
-     * @return RGB image with one pixel per feature coordinate.
-     */
-    @RequestMapping(value = "/featuresimage/{id}", method = RequestMethod.GET, produces = "image/bmp")
-    public @ResponseBody
-    BufferedImage getFeaturesImage(@PathVariable String id) {
-        logger.info("About to download and parse features file for dataset " + id + " to create inspection image");
-        Dataset d = datasetService.find(id);
-        if (d == null) return null;
-        //System.out.println("Got dataset.");
-        ImageAlignment imal = imageAlignmentService.find(d.getImage_alignment_id());
-        //System.out.println("Got imal.");
-        Chip chip = null;
-        if (imal != null) {
-            //System.out.println("Got chip.");
-            chip = chipService.find(imal.getChip_id());
-        }
-        S3Resource fw = featuresService.find(id);
-        //System.out.println("Got file.");
-        Feature[] features = Feature.parse(fw.getFile(), true);
-        //System.out.println("Got " + features.length);
-        BufferedImage img;
-        try {
-            //System.out.println("Creating image.");
-            img = ComputeFeatureImage.computeImage(chip, features);
-            //System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
-        } catch (IOException ex) {
-            //ex.printStackTrace();
-            logger.error("Error creating features image for dataset " + id);
-            throw new RuntimeException("Error constructing features image", ex);
-        }
-        return img;
-    }
+//     /**
+//     * Returns an image for inspecting the features.
+//     *
+//     * @param id dataset ID.
+//     * @return RGB image with one pixel per feature coordinate.
+//     */
+//    @RequestMapping(value = "/featuresimage/{id}", method = RequestMethod.GET, produces = "image/bmp")
+//    public @ResponseBody
+//    BufferedImage getFeaturesImage(@PathVariable String id) {
+//        logger.info("About to download and parse features file for dataset " + id + " to create inspection image");
+//        Dataset d = datasetService.find(id);
+//        if (d == null) return null;
+//        //System.out.println("Got dataset.");
+//        ImageAlignment imal = imageAlignmentService.find(d.getImage_alignment_id());
+//        //System.out.println("Got imal.");
+//        Chip chip = null;
+//        if (imal != null) {
+//            //System.out.println("Got chip.");
+//            chip = chipService.find(imal.getChip_id());
+//        }
+//        S3Resource fw = featuresService.find(id);
+//        //System.out.println("Got file.");
+//        List<Feature> features = Feature.parse(fw.getFile(), true);
+//        //System.out.println("Got " + features.length);
+//        BufferedImage img;
+//        try {
+//            //System.out.println("Creating image.");
+//            img = ComputeFeatureImage.computeImage(chip, features);
+//            //System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
+//        } catch (IOException ex) {
+//            //ex.printStackTrace();
+//            logger.error("Error creating features image for dataset " + id);
+//            throw new RuntimeException("Error constructing features image", ex);
+//        }
+//        return img;
+//    }
 
     /**
      * Helper. Metadata.
