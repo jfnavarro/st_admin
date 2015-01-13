@@ -6,10 +6,9 @@
  */
 package com.spatialtranscriptomics.serviceImpl;
 
-import java.io.InputStream;
-import java.io.SequenceInputStream;
+import org.apache.commons.io.IOUtils;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -27,6 +26,8 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.service.S3Service;
 import com.spatialtranscriptomics.util.EMROutputParser;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * This class implements the read/write logic to the Amazon S3 file system with
@@ -189,27 +190,27 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public InputStream getFeaturesAsJson(String experimentId) {
+    public byte[] getFeaturesAsJson(String experimentId) throws IOException {
         logger.info("About to obtain JSON data from Amazon S3 for pipeline experiment " + experimentId);
         return new EMROutputParser().getJSON(getOutputFromS3(experimentId));
     }
 
     @Override
-    public InputStream getFeaturesAsCSV(String experimentId) {
+    public byte[] getFeaturesAsCSV(String experimentId) throws IOException {
         logger.info("About to obtain CSV data from Amazon S3 for pipeline experiment " + experimentId);
         return new EMROutputParser().getCSV(getOutputFromS3(experimentId));
     }
 
     @Override
-    public List<Feature> getFeaturesAsList(String experimentId) {
+    public List<Feature> getFeaturesAsList(String experimentId) throws IOException {
         logger.info("About to obtain Feature[] from Amazon S3 for pipeline experiment " + experimentId);
         return new EMROutputParser().getFeatures(getOutputFromS3(experimentId));
     }
 
     /**
-     * Returns output from an S3 experiment as a stream.
+     * Returns output from an S3 experiment as a byte array.
      */
-    private InputStream getOutputFromS3(String experimentId) {
+    private byte[] getOutputFromS3(String experimentId) throws IOException {
         String path = experimentsPath + experimentId + "/output";
         logger.info("Obtaining raw data from Amazon S3 bucket " + pipelineBucket +  " at " + path);
         
@@ -217,18 +218,15 @@ public class S3ServiceImpl implements S3Service {
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
 
-        List<InputStream> streams = new ArrayList<InputStream>();
-
+        ByteArrayOutputStream bos = new ByteArrayOutputStream(30 * 1024 * 1024);
         for (S3ObjectSummary os : objs) {
             S3Object obj = s3Client.getObject(pipelineBucket, os.getKey());
-            streams.add(obj.getObjectContent());
+            IOUtils.copy(obj.getObjectContent(), bos);
+            bos.flush();
+            obj.close();   // Close as soon as possible!
         }
-
-        InputStream is = new SequenceInputStream(
-                Collections.enumeration(streams));
-
-        return is;
-
+        bos.close();
+        return bos.toByteArray();
     }
 
     

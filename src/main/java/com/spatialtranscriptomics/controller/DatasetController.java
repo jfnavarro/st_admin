@@ -195,9 +195,8 @@ public class DatasetController {
             bytes = ffile.getBytes();
         } else if (datasetAddForm.getExperimentId() != null) {
             try {
-                InputStream stream = s3Service.getFeaturesAsJson(datasetAddForm.getExperimentId());
                 // TODO: This needs to be made zipped already at an earlier stage.
-                bytes = IOUtils.toByteArray(stream);
+                bytes = s3Service.getFeaturesAsJson(datasetAddForm.getExperimentId());
                 bytes = ByteOperations.gzip(bytes);
             } catch (IOException ex) {
                 logger.error("Failed to convert S3 feature stream to byte array when adding dataset.");
@@ -298,9 +297,8 @@ public class DatasetController {
             bytes = ffile.getBytes();
         } else if (!datasetEditForm.getExperimentId().isEmpty()) {
             try {
-                InputStream stream = s3Service.getFeaturesAsJson(datasetEditForm.getExperimentId());
                 // TODO: This needs to be made zipped already at an earlier stage.
-                bytes = IOUtils.toByteArray(stream);
+                bytes = s3Service.getFeaturesAsJson(datasetEditForm.getExperimentId());
                 bytes = ByteOperations.gzip(bytes);
             } catch (IOException ex) {
                 logger.error("Failed to convert S3 feature stream to byte array when editing dataset " + datasetEditForm.getDataset().getId());

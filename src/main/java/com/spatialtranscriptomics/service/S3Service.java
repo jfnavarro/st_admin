@@ -6,10 +6,10 @@
  */
 package com.spatialtranscriptomics.service;
 
-import java.io.InputStream;
 import java.util.List;
 
 import com.spatialtranscriptomics.model.Feature;
+import java.io.IOException;
 
 /**
  * Interface for the Amazon S3 service.
@@ -58,7 +58,7 @@ public interface S3Service {
      * @param experimentId the experiment ID.
      * @return the JSON contents.
      */
-    public InputStream getFeaturesAsJson(String experimentId);
+    public byte[] getFeaturesAsJson(String experimentId) throws IOException;
 
     /**
      * Parsing helper. Returns a standard CSV representation
@@ -66,7 +66,7 @@ public interface S3Service {
      * @param experimentId the experiment ID.
      * @return the CSV contents.
      */
-    public InputStream getFeaturesAsCSV(String experimentId);
+    public byte[] getFeaturesAsCSV(String experimentId) throws IOException;
 
     /**
      * Parsing helper. Returns a Features array
@@ -74,7 +74,7 @@ public interface S3Service {
      * @param experimentId the experiment ID.
      * @return the Features array contents.
      */
-    public List<Feature> getFeaturesAsList(String experimentId);
+    public List<Feature> getFeaturesAsList(String experimentId) throws IOException;
 
     
 }

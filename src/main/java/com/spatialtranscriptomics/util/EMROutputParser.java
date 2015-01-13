@@ -56,12 +56,13 @@ public class EMROutputParser {
     /**
      * Converts CSV stream to JSON.
      *
-     * @param is CSV stream
+     * @param bytes CSV bytes.
      * @return JSON stream.
      */
-    public InputStream getJSON(InputStream is) {
+    public byte[] getJSON(byte[] bytes) {
 
         try {
+            ByteArrayInputStream is = new ByteArrayInputStream(bytes);
             Map<String, Integer> map = getMapFromInputStream(is);
 
 	    // serialize into Json and return as Inputstream
@@ -69,12 +70,11 @@ public class EMROutputParser {
 
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(features);
-            InputStream result = new ByteArrayInputStream(
-                    json.getBytes("UTF-8"));
-            return result;
+            is.close();
+            return json.getBytes("UTF-8");
 
         } catch (IOException e) {
-            logger.error("Failed to convert CSV stream to JSON");
+            logger.error("Failed to convert CSV stream to JSON.");
             return null;
         }
     }
@@ -82,13 +82,14 @@ public class EMROutputParser {
     /**
      * Converts JSON stream to CSV.
      *
-     * @param is JSON stream.
+     * @param bytes JSON bytes.
      * @return CSV stream.
      */
-    public InputStream getCSV(InputStream is) {
+    public byte[] getCSV(byte[] bytes) {
 
         try {
-
+            
+            ByteArrayInputStream is = new ByteArrayInputStream(bytes);
             Map<String, Integer> map = getMapFromInputStream(is);
 
             // Serialize into CSV
@@ -99,14 +100,12 @@ public class EMROutputParser {
                         .append(cursor.getValue()).append("\n");
 
             }
-
-            InputStream result = new ByteArrayInputStream(txt.toString()
-                    .getBytes("UTF-8"));
-
-            return result;
+            is.close();
+            
+            return txt.toString().getBytes("UTF-8");
 
         } catch (IOException e) {
-            logger.error("Failed to convert JSON stream to CSV");
+            logger.error("Failed to convert JSON stream to CSV.");
             return null;
         }
     }
@@ -114,17 +113,16 @@ public class EMROutputParser {
     /**
      * Converts a CSV stream to a set of features.
      *
-     * @param is CSV stream.
+     * @param bytes CSV bytes.
      * @return features.
      */
-    public List<Feature> getFeatures(InputStream is) {
-
+    public List<Feature> getFeatures(byte[] bytes) {
+        
         Feature[] features;
 
         try {
             ObjectMapper mapper = new ObjectMapper();
-            features = (Feature[]) mapper.readValue(this.getJSON(is),
-                    Feature[].class);
+            features = (Feature[]) mapper.readValue(this.getJSON(bytes), Feature[].class);
             return Arrays.asList(features);
         } catch (Exception e) {
             logger.error("Failed to convert CSV stream to array of Features");

@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,12 +281,12 @@ public class PipelineExperimentController {
             byte[] wb;
 
             if (format.equals("json")) {
-                wb = IOUtils.toByteArray(s3Service.getFeaturesAsJson(id));
+                wb = s3Service.getFeaturesAsJson(id);
                 header.setContentType(new MediaType("text", "json"));
                 header.set("Content-Disposition", "attachment; filename=output_" + id + ".json");
                 logger.info("Downloading pipeline experiment output for  " + id + " as JSON.");
             } else {
-                wb = IOUtils.toByteArray(s3Service.getFeaturesAsCSV(id));
+                wb = s3Service.getFeaturesAsCSV(id);
                 header.setContentType(new MediaType("text", "csv"));
                 header.set("Content-Disposition", "attachment; filename=output_" + id + ".csv");
                 logger.info("Downloading pipeline experiment output for  " + id + " as CSV.");
