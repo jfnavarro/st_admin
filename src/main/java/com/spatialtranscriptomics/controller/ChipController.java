@@ -4,6 +4,7 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.controller;
 
 import com.spatialtranscriptomics.form.ChipForm;
@@ -27,8 +28,9 @@ import org.springframework.web.servlet.ModelAndView;
 /**
  * This class is Spring MVC controller class for the URL "/chip". It implements
  * the methods available at this URL and returns views (.jsp pages) with models
- * .
  */
+
+//TODO add option to download/update the chip file
 @Controller
 @RequestMapping("/chip")
 public class ChipController {
@@ -86,22 +88,28 @@ public class ChipController {
      * @return the list form.
      */
     @RequestMapping(value = "/submitimport", method = RequestMethod.POST)
-    public ModelAndView submitImport(@ModelAttribute("chipform") @Valid ChipForm chipForm, BindingResult result) {
+    public ModelAndView submitImport(
+            @ModelAttribute("chipform") @Valid ChipForm chipForm, 
+            BindingResult result) {
+        
+        // validate form
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("chipimport", "chipform", chipForm);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
+        
+        //add chip to DB
         try {
             chipService.addFromFile(chipForm.getChipFile(), chipForm.getName());
             ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
             success.addObject("msg", "Chip created.");
             logger.info("Succesfully imported chip " + chipForm.getFileName());
             return success;
-        } catch (IOException e) {
+        } catch (Exception e) {
             ModelAndView model = new ModelAndView("chipimport", "chipform", chipForm);
             model.addObject("errors", "Invalid chip file");
-            logger.error("Failed to import chip " + chipForm.getChipFile());
+            logger.error("Failed to import chip " + chipForm.getChipFile(), e);
             return model;
         }
     }
@@ -124,13 +132,18 @@ public class ChipController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public @ResponseBody
-    ModelAndView submitEdit(@ModelAttribute("chip") @Valid Chip chip, BindingResult result) {
+    public @ResponseBody ModelAndView submitEdit(
+            @ModelAttribute("chip") @Valid Chip chip, 
+            BindingResult result) {
+        
+        // validate form
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("chipedit", "chip", chip);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
+        
+        //update currently does not allow to change file
         chipService.update(chip);
         ModelAndView success = new ModelAndView("chiplist", "chipList", chipService.list());
         success.addObject("msg", "Chip saved.");

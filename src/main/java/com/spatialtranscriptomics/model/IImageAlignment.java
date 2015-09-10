@@ -14,33 +14,33 @@ import org.joda.time.DateTime;
  */
 public interface IImageAlignment {
 
-	public String getId();
+    public String getId();
 
-	public void setId(String id);
+    public void setId(String id);
 	
-	public String getName();
+    public String getName();
 	
-	public void setName(String name);
+    public void setName(String name);
 	
-	public String getChip_id();
+    public String getChip_id();
 	
-	public void setChip_id(String id);
+    public void setChip_id(String id);
 	
-	public String getFigure_red();
+    public String getFigure_red();
 	
-	public void setFigure_red(String fig);
+    public void setFigure_red(String fig);
 	
-	public String getFigure_blue();
+    public String getFigure_blue();
 	
-	public void setFigure_blue(String fig);
+    public void setFigure_blue(String fig);
 	
-	public double[] getAlignment_matrix();
+    public double[] getAlignment_matrix();
 	
-	public void setAlignment_matrix(double[] arr);
+    public void setAlignment_matrix(double[] arr);
         
-        public DateTime getCreated_at();
+    public DateTime getCreated_at();
 
-	public void setCreated_at(DateTime created);
+    public void setCreated_at(DateTime created);
 	
-	public DateTime getLast_modified();
+    public DateTime getLast_modified();
 }

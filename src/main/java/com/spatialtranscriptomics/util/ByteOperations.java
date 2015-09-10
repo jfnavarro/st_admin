@@ -26,8 +26,10 @@ public class ByteOperations {
      * @throws IOException 
      */
     public static byte[] gzip(byte[] bytes) throws IOException {
-        ByteArrayOutputStream zipbytesbos = new ByteArrayOutputStream(bytes.length / 10);
-        BufferedOutputStream bos = new BufferedOutputStream(new GZIPOutputStream(zipbytesbos), bytes.length / 10);
+        ByteArrayOutputStream zipbytesbos = 
+                new ByteArrayOutputStream(bytes.length / 10);
+        BufferedOutputStream bos = 
+                new BufferedOutputStream(new GZIPOutputStream(zipbytesbos), bytes.length / 10);
         bos.write(bytes);
         bos.flush();
         bos.close();
@@ -43,7 +45,8 @@ public class ByteOperations {
      * @throws IOException 
      */
     public static byte[] gunzip(byte[] zipbytes) throws IOException {
-        BufferedInputStream bis = new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(zipbytes)));
+        BufferedInputStream bis = 
+                new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(zipbytes)));
         ByteArrayOutputStream byos = new ByteArrayOutputStream(zipbytes.length * 20);
         BufferedOutputStream bos = new BufferedOutputStream(byos);
         IOUtils.copy(bis, bos);

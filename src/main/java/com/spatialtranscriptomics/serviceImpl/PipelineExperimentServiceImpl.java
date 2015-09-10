@@ -4,17 +4,16 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.spatialtranscriptomics.model.PipelineExperiment;
 import com.spatialtranscriptomics.service.PipelineExperimentService;
 
@@ -28,8 +27,7 @@ public class PipelineExperimentServiceImpl implements PipelineExperimentService 
 
     // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(PipelineExperimentServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(PipelineExperimentServiceImpl.class);
 
     @Autowired
     RestTemplate secureRestTemplate;
@@ -39,47 +37,47 @@ public class PipelineExperimentServiceImpl implements PipelineExperimentService 
 
     @Override
     public PipelineExperiment find(String id) {
-        String url = appConfig.getProperty("url.pipelineexperiment");
-        url += id;
-        PipelineExperiment experiment = secureRestTemplate.getForObject(url, PipelineExperiment.class);
-        return experiment;
+        String url = appConfig.getProperty("url.pipelineexperiment") + "/" + id;
+        return secureRestTemplate.getForObject(url, PipelineExperiment.class);
     }
 
     @Override
     public List<PipelineExperiment> list() {
         String url = appConfig.getProperty("url.pipelineexperiment");
-        PipelineExperiment[] eArray = secureRestTemplate.getForObject(url,
-                PipelineExperiment[].class);
-        List<PipelineExperiment> eList = Arrays.asList(eArray);
-        return eList;
+        try {
+            PipelineExperiment[] experimentsArray = secureRestTemplate.getForObject(url, PipelineExperiment[].class);
+            //TODO remove this
+            logger.info("Retrieving pipeline experiments array");
+            return Arrays.asList(experimentsArray);
+        } catch (Exception e) {
+            logger.info("Something happened retrieving experiments", e);
+        }
+        
+        return null;
     }
 
     @Override
     public PipelineExperiment add(PipelineExperiment experiment) {
         String url = appConfig.getProperty("url.pipelineexperiment");
-        PipelineExperiment eResponse = secureRestTemplate.postForObject(url, experiment, PipelineExperiment.class);
-        return eResponse;
+        return secureRestTemplate.postForObject(url, experiment, PipelineExperiment.class);
     }
 
     @Override
     public void update(PipelineExperiment experiment) {
-        String url = appConfig.getProperty("url.pipelineexperiment");
-        String id = experiment.getId();
-        secureRestTemplate.put(url + id, experiment);
+        String url = appConfig.getProperty("url.pipelineexperiment") + "/" + experiment.getId();
+        secureRestTemplate.put(url, experiment);
     }
 
     @Override
     public void delete(String id) {
         String url = appConfig.getProperty("url.pipelineexperiment");
-        secureRestTemplate.delete(url + id);
+        secureRestTemplate.delete(url + "/" + id);
     }
 
     @Override
     public List<PipelineExperiment> findForAccount(String accountId) {
-        String url = appConfig.getProperty("url.pipelineexperiment") + "?account=" + accountId;
-        PipelineExperiment[] arr = secureRestTemplate.getForObject(url, PipelineExperiment[].class);
-        List<PipelineExperiment> list = Arrays.asList(arr);
-        return list;
+        String url = appConfig.getProperty("url.pipelineexperiment") + "/?account=" + accountId;
+        return Arrays.asList(secureRestTemplate.getForObject(url, PipelineExperiment[].class));
     }
 
 }

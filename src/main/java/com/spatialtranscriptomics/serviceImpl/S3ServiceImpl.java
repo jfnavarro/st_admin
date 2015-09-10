@@ -4,26 +4,20 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.serviceImpl;
 
 import org.apache.commons.io.IOUtils;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.spatialtranscriptomics.model.Feature;
 import com.spatialtranscriptomics.service.S3Service;
 import com.spatialtranscriptomics.util.EMROutputParser;
 import java.io.ByteArrayOutputStream;
@@ -35,6 +29,8 @@ import java.io.IOException;
  * connection to the S3 is handled in a AmazonS3Client object, which is
  * configured in mvc-dispather-servlet.xml
  */
+//TODO methods share common code that can be factored out
+//TODO the logic to merge output from EMR and retrieve must be re-designed
 @Service
 public class S3ServiceImpl implements S3Service {
 
@@ -53,7 +49,7 @@ public class S3ServiceImpl implements S3Service {
     private @Value("${s3.experimentspath}")
     String experimentsPath;
 
-    private @Value("${s3.idfilespath}")
+    private @Value("${s3.idspath}")
     String idfilesPath;
 
     private @Value("${s3.annotationspath}")
@@ -62,41 +58,19 @@ public class S3ServiceImpl implements S3Service {
     private @Value("${s3.genomespath}")
     String genomesPath;
 
-    private @Value("${s3.bowtiepath}")
-    String bowtiePath;
-
-    @Override
-    public void deleteExperimentData(String experimentId) {
-        String path = experimentsPath + experimentId;
-        ObjectListing objects = s3Client.listObjects(pipelineBucket, path);
-        List<S3ObjectSummary> objs = objects.getObjectSummaries();
-        if (objs.isEmpty()) {
-            return;
-        }
-        List<DeleteObjectsRequest.KeyVersion> keysToDelete = new ArrayList<DeleteObjectsRequest.KeyVersion>();
-        for (S3ObjectSummary o : objs) {
-            KeyVersion kv = new DeleteObjectsRequest.KeyVersion(o.getKey());
-            keysToDelete.add(kv);
-        }
-        if (keysToDelete.isEmpty()) {
-            return;
-        }
-        DeleteObjectsRequest req = new DeleteObjectsRequest(pipelineBucket);
-        req.setKeys(keysToDelete);
-        s3Client.deleteObjects(req);
-        logger.info("Deleted pipeline experiment data on S3 for ID " + experimentId);
-    }
+    private @Value("${s3.contaminantpath}")
+    String contaminantPath;
 
     @Override
     public List<String> getInputFolders() {
+        
         logger.info("Assembling pipeline experiment input folders from Amazon S3");
-        List<String> result = new ArrayList<String>();
-
         ObjectListing objects = s3Client.listObjects(pipelineBucket, inputPath);
-
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
-
+        
+        //clean folder names and add them to result
+        List<String> result = new ArrayList<String>();
         for (S3ObjectSummary o : objs) {
             String s = o.getKey();
             String[] tokens = s.split("[/]");
@@ -108,15 +82,14 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public List<String> getIDFiles() {
+        
         logger.info("Assembling pipeline experiment ID files from Amazon S3");
-        List<String> result = new ArrayList<String>();
-
-        ObjectListing objects = s3Client.listObjects(pipelineBucket,
-                idfilesPath);
-
+        ObjectListing objects = s3Client.listObjects(pipelineBucket, idfilesPath);
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
 
+        //clean file names and add them to result
+        List<String> result = new ArrayList<String>();
         for (S3ObjectSummary o : objs) {
             String s = o.getKey();
             String[] tokens = s.split("[/]");
@@ -127,15 +100,14 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public List<String> getReferenceAnnotation() {
+        
         logger.info("Assembling pipeline experiment ref annotations from Amazon S3");
-        List<String> result = new ArrayList<String>();
-
-        ObjectListing objects = s3Client.listObjects(pipelineBucket,
-                annotationsPath);
-
+        ObjectListing objects = s3Client.listObjects(pipelineBucket, annotationsPath);
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
-
+        
+        //add file name to results
+        List<String> result = new ArrayList<String>();
         for (S3ObjectSummary o : objs) {
             result.add(getCleanName(o.getKey()));
         }
@@ -145,18 +117,14 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public List<String> getReferenceGenome() {
+        
         logger.info("Assembling pipeline experiment reference genomes from Amazon S3");
-        List<String> result = new ArrayList<String>();
-
-        ListObjectsRequest req = new ListObjectsRequest();
-        req.setBucketName(pipelineBucket);
-        req.setPrefix(genomesPath);
-        // req.setDelimiter("/");
-        ObjectListing objects = s3Client.listObjects(req);
-
+        ObjectListing objects = s3Client.listObjects(pipelineBucket, genomesPath);
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
-
+        
+        //clear file names and add them to result
+        List<String> result = new ArrayList<String>();
         for (S3ObjectSummary o : objs) {
             String s = o.getKey();
             String[] tokens = s.split("[/]");
@@ -167,19 +135,15 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public List<String> getBowtieFiles() {
-        logger.info("Assembling pipeline experiment Bowtie files from Amazon S3");
-        List<String> result = new ArrayList<String>();
-
-        ListObjectsRequest req = new ListObjectsRequest();
-        req.setBucketName(pipelineBucket);
-        req.setPrefix(bowtiePath);
-        // req.setDelimiter("/");
-        ObjectListing objects = s3Client.listObjects(req);
-
+    public List<String> getContaminantGenome() {
+        
+        logger.info("Assembling pipeline experiment RNA filter files from Amazon S3");
+        ObjectListing objects = s3Client.listObjects(pipelineBucket, contaminantPath);
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
 
+        //clear file names and add them to result
+        List<String> result = new ArrayList<String>();
         for (S3ObjectSummary o : objs) {
             String s = o.getKey();
             String[] tokens = s.split("[/]");
@@ -191,51 +155,65 @@ public class S3ServiceImpl implements S3Service {
 
     @Override
     public byte[] getFeaturesAsJson(String experimentId) throws IOException {
-        logger.info("About to obtain JSON data from Amazon S3 for pipeline experiment " + experimentId);
-        return new EMROutputParser().getJSON(getOutputFromS3(experimentId));
+        logger.info("About to obtain JSON features from Amazon "
+                + "S3 for pipeline experiment " + experimentId);
+        return new EMROutputParser().getJSON(getOutputFromS3(experimentId, "features"));
+    }
+    
+    @Override
+    public byte[] getExperimentQA(String experimentId) throws IOException {
+        logger.info("About to obtain JSON qa stats from Amazon "
+                + "S3 for pipeline experiment " + experimentId);
+        return new EMROutputParser().getQA(getOutputFromS3(experimentId, "qa"));
     }
 
     @Override
     public byte[] getFeaturesAsCSV(String experimentId) throws IOException {
-        logger.info("About to obtain CSV data from Amazon S3 for pipeline experiment " + experimentId);
-        return new EMROutputParser().getCSV(getOutputFromS3(experimentId));
-    }
-
-    @Override
-    public List<Feature> getFeaturesAsList(String experimentId) throws IOException {
-        logger.info("About to obtain Feature[] from Amazon S3 for pipeline experiment " + experimentId);
-        return new EMROutputParser().getFeatures(getOutputFromS3(experimentId));
+        logger.info("About to obtain CSV features from Amazon "
+                + "S3 for pipeline experiment " + experimentId);
+        return new EMROutputParser().getCSV(getOutputFromS3(experimentId, "features"));
     }
 
     /**
-     * Returns output from an S3 experiment as a byte array.
+     * Helper function that returns output from an S3 experiment as a byte array.
+     * @param keyword to distinguish between features, reads or qa
+     * @param experimentId the ID of the experiment to chose the folder name
+     * TODO this function needs redign. QA files need to be merged with
+     * a special method to aggregate. Besides, it is not good to rely on filenames.
+     * Ideally, an extra EMR step should be added to merge features.json, reads.json
+     * and qa.json
      */
-    private byte[] getOutputFromS3(String experimentId) throws IOException {
+    private byte[] getOutputFromS3(String experimentId, String keyword) throws IOException {
         String path = experimentsPath + experimentId + "/output";
         logger.info("Obtaining raw data from Amazon S3 bucket " + pipelineBucket +  " at " + path);
         
         ObjectListing objects = s3Client.listObjects(pipelineBucket, path);
         List<S3ObjectSummary> objs = objects.getObjectSummaries();
         objs.remove(0); // remove root directory
-
+        
+        //merge the files in the folder filtering by keyword. Files need
+        //to be merged as EMR will generate one file for each running node
         ByteArrayOutputStream bos = new ByteArrayOutputStream(30 * 1024 * 1024);
         for (S3ObjectSummary os : objs) {
             S3Object obj = s3Client.getObject(pipelineBucket, os.getKey());
-            IOUtils.copy(obj.getObjectContent(), bos);
-            bos.flush();
-            obj.close();   // Close as soon as possible!
+            //Filter : features | reads | QA
+            if (obj.getKey().contains(keyword)) {
+                IOUtils.copy(obj.getObjectContent(), bos);
+                bos.flush();
+                obj.close();   // Close as soon as possible!
+            }
         }
+        
         bos.close();
         return bos.toByteArray();
     }
 
-    
     /**
-     * Cleans the name by returning the last string before '/'.
+     * Helper function that cleans the name by returning the last string before '/'.
+     * @param path the folder path
      */
     private String getCleanName(String path) {
         String[] tokens = path.split("[/]");
         return tokens[tokens.length - 1];
     }
-
 }

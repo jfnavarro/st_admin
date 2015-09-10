@@ -4,11 +4,11 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.form;
 
 import com.spatialtranscriptomics.component.StaticContextAccessor;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.Range;
 
 /**
  * This class implements the model for the "create pipeline experiment form".
@@ -23,16 +23,7 @@ public class PipelineExperimentForm {
     private String experimentName;
 
     @NotBlank
-    private String numNodes;
-
-    @NotBlank
     private String accountId;
-
-    @NotBlank
-    private String nodeTypeMaster;
-
-    @NotBlank
-    private String nodeTypeSlave;
 
     @NotBlank
     private String folder;
@@ -46,7 +37,7 @@ public class PipelineExperimentForm {
     @NotBlank
     private String referenceGenome;
 
-    private String bowtieFile;
+    private String referenceContaminantGenome;
 
     private String htseqAnnotationMode;
 
@@ -69,8 +60,6 @@ public class PipelineExperimentForm {
     private int barcodeStartPos;
 
     private int idPosError;
-
-//	private int bowtieThreads;
     
     private int minQualityTrim;
 
@@ -82,111 +71,74 @@ public class PipelineExperimentForm {
 
     private String comments;
 
-    @Range(min = 1000, max = 1000000)
-    private int chunks;
-
+    private boolean incMolBarcodes;
+    
+    private int molBarcodesMissMatches;
+    
+    private int molBarcodesStart;
+    
+    private int molBarcodesEnd;
+    
+    private int molBarcodesMinClusterSize;
+    
     public PipelineExperimentForm() {
         this.accountId = StaticContextAccessor.getCurrentUser().getId();
     }
 
-    
     public String getExperimentName() {
         return experimentName;
     }
 
-    
     public void setExperimentName(String experimentName) {
         this.experimentName = experimentName;
     }
-
-    
-    public String getNumNodes() {
-        return numNodes;
-    }
-
-   
-    public void setNumNodes(String numNodes) {
-        this.numNodes = numNodes;
-    }
-
     
     public String getAccountId() {
         return accountId;
     }
 
-    
     public void setAccountId(String accountId) {
         this.accountId = accountId;
     }
 
-    
-    public String getNodeTypeMaster() {
-        return nodeTypeMaster;
-    }
-
-    
-    public void setNodeTypeMaster(String nodeTypeMaster) {
-        this.nodeTypeMaster = nodeTypeMaster;
-    }
-
-    
-    public String getNodeTypeSlave() {
-        return nodeTypeSlave;
-    }
-
-    
-    public void setNodeTypeSlave(String nodeTypeSlave) {
-        this.nodeTypeSlave = nodeTypeSlave;
-    }
-
-    
     public String getFolder() {
         return folder;
     }
 
-    
     public void setFolder(String folder) {
         this.folder = folder;
     }
 
-    
     public String getIdFile() {
         return idFile;
     }
 
-    
     public void setIdFile(String idFile) {
         this.idFile = idFile;
     }
 
-    
     public String getReferenceAnnotation() {
         return referenceAnnotation;
     }
 
-    
     public void setReferenceAnnotation(String referenceAnnotation) {
         this.referenceAnnotation = referenceAnnotation;
     }
 
-    
     public String getReferenceGenome() {
         return referenceGenome;
     }
 
-    
     public void setReferenceGenome(String referenceGenome) {
         this.referenceGenome = referenceGenome;
     }
-
    
-    public String getBowtieFile() {
-        return bowtieFile;
+    public String getContaminantGenome() {
+        return referenceContaminantGenome;
     }
 
-    
-    public void setBowtieFile(String bowtieFile) {
-        this.bowtieFile = bowtieFile;
+    public void setContaminantGenome(String referenceContaminantGenome) {
+        this.referenceContaminantGenome = referenceContaminantGenome;
     }
 
     public String getHtseqAnnotationMode() {
@@ -277,14 +229,6 @@ public class PipelineExperimentForm {
         this.idPosError = idPosError;
     }
 
-//	public int getBowtieThreads() {
-//		return bowtieThreads;
-//	}
-//
-//	public void setBowtieThreads(int bowtieThreads) {
-//		this.bowtieThreads = bowtieThreads;
-//	}
-    
     public int getMinQualityTrim() {
         return minQualityTrim;
     }
@@ -325,12 +269,44 @@ public class PipelineExperimentForm {
         this.comments = comments;
     }
 
-    public int getChunks() {
-        return chunks;
+    public boolean getIncMolBarcodes() {
+        return this.incMolBarcodes;
     }
 
-    public void setChunks(int chunks) {
-        this.chunks = chunks;
+    public void setIncMolBarcodes(boolean incMolBarcodes) {
+        this.incMolBarcodes = incMolBarcodes;
+    }
+    
+    public int getMolBarcodesMissMatches() {
+        return this.molBarcodesMissMatches;
+    }
+
+    public void setMolBarcodesMissMatches(int molBarcodesMissMatches) {
+        this.molBarcodesMissMatches = molBarcodesMissMatches;
+    }
+    
+    public int getMolBarcodesStart() {
+        return this.molBarcodesStart;
+    }
+    
+    public void setMolBarcodesStart(int molBarcodesStart) {
+        this.molBarcodesStart = molBarcodesStart;
+    }
+    
+    public int getMolBarcodesEnd() {
+        return this.molBarcodesEnd;
+    }
+
+    public void setMolBarcodesEnd(int molBarcodesEnd) {
+        this.molBarcodesEnd = molBarcodesEnd;
+    }
+    
+    public int getMolBarcodesMinClusterSize() {
+        return this.molBarcodesMinClusterSize;
+    }
+
+    public void setMolBarcodesMinClusterSize(int molBarcodesMinClusterSize) {
+        this.molBarcodesMinClusterSize = molBarcodesMinClusterSize;
     }
 
 }

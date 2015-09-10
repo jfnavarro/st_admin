@@ -1,45 +1,41 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Create dataset</title>
-        <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-              media="screen">
 
-            <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-            <script
-            src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-            <script
-            src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<head>
+<title>Create dataset</title>
 
-            <!-- Script to set the highlight the active menu in the header -->
-            <script>
-                $(document).ready(function(event) {
-                    $("#menuDataset").addClass("active");
-                });
-            </script>
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
-            <!-- Script to style file upload -->
-            <script type="text/javascript"
-            src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
+<!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
+<!-- Script to set the highlight the active menu in the header -->
+<script>
+    $(document).ready(function(event) {
+        $("#menuDataset").addClass("active");
+    });
+</script>
 
-    </head>
-    <body>
+<!-- Script to style file upload -->
+<script type="text/javascript" src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
+
+</head>
+
+<body>
         <c:import url="header.jsp"></c:import>
         <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
         <div class="container">
 
-
             <div class="page-header">
                 <h1>Create dataset</h1>
             </div>
-
 
             <c:if test="${not empty errors}">
                 <div class="alert alert-error">
@@ -60,7 +56,6 @@
                     <form:form method="POST" commandName="datasetform"
                                action="${contextPath}/dataset/submitadd" class="form-horizontal"
                                enctype="multipart/form-data">
-
 
                         <fieldset>
 
@@ -157,7 +152,7 @@
 
                                 <spring:bind path="featureFile">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
-                                        <label class="control-label" for="featureFile">Feature file</label>
+                                        <label class="control-label" for="featureFile">Features file(gz JSON)</label>
                                         <div class="control-group">
                                             <div class="controls">
                                                 <form:input type="file" id="featureFile"
@@ -173,86 +168,20 @@
 
                             </div>
 
-
                             <div class="span4">
 
                                 <legend>Information and statistics</legend>
-
-                                <!--
-                                <spring:bind path="dataset.overall_feature_count">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="overallFeatureCount">Overall feature count</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="overallFeatureCount"
-                                                placeholder="" path="dataset.overall_feature_count" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-
-                                <spring:bind path="dataset.unique_gene_count">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="uniqueGeneCount">Unique gene count</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="uniqueGeneCount"
-                                                placeholder="" path="dataset.unique_gene_count" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-
-                                <spring:bind path="dataset.unique_barcode_count">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="uniqueBarcodeCount">Unique barcode count</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="uniqueBarcodeCount"
-                                                placeholder="" path="dataset.unique_barcode_count" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-                                
-                                <spring:bind path="dataset.overall_hit_count">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="overallHitCount">Overall hit count</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="overallHitCount"
-                                                placeholder="" path="dataset.overall_hit_count" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-                                
-                                <spring:bind path="dataset.overall_hit_quartiles">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="overallHitQuartiles">Overall hit quartiles</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="overallHitQuartiles"
-                                                placeholder="" path="dataset.overall_hit_quartiles" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-                                
-                                <spring:bind path="dataset.gene_pooled_hit_quartiles">
-                                        <div class="control-group  ${status.error ? 'error' : ''}">
-                                                <label class="control-label" for="genePooledHitQuartiles">Gene-pooled hit quartiles</label>
-                                                <div class="controls">
-                                    <form:input type="text" id="genePooledHitQuartiles"
-                                                placeholder="" path="dataset.gene_pooled_hit_quartiles" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                </div>
-                        </div>
-                                </spring:bind>
-                                -->
-
-                                <spring:bind path="dataset.obo_foundry_terms">
+                                 
+                                <spring:bind path="qaFile">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
-                                        <label class="control-label" for="oboFoundryTerms">OBO Foundry terms</label>
-                                        <div class="controls">
-                                            <form:input type="text" id="obo_foundry_terms"
-                                                        placeholder="" path="dataset.obo_foundry_terms" />
-                                            <span class='help-inline'>${status.errorMessage}</span>
+                                        <label class="control-label" for="qaFile">QA Stats file(JSON)</label>
+                                        <div class="control-group">
+                                            <div class="controls">
+                                                <form:input type="file" id="qaFile"
+                                                            placeholder="QA Stats file" path="qaFile"
+                                                            class="filestyle" />
+                                                <span class='help-inline'>${status.errorMessage}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </spring:bind>
@@ -287,11 +216,10 @@
 
         </div>
 
-
         <!-- Load File upload style -->
         <script>
                 $(":file").filestyle({
-                    buttonText: "Choose .json file",
+                    buttonText: "Choose..",
                     classInput: "input-small"
                 });
         </script>

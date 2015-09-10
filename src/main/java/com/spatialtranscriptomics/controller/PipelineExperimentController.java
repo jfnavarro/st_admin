@@ -12,12 +12,12 @@ import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.form.PipelineExperimentForm;
 import com.spatialtranscriptomics.model.Account;
+import com.spatialtranscriptomics.model.Chip;
 import com.spatialtranscriptomics.model.PipelineExperiment;
-import com.spatialtranscriptomics.model.PipelineStats;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
+import com.spatialtranscriptomics.serviceImpl.ChipServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.EMRServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.PipelineStatsServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.S3ServiceImpl;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -49,23 +49,25 @@ import org.springframework.web.servlet.ModelAndView;
  * experiment output is fetched from Amazon S3. This controller presents forms
  * for starting jobs on Amazon EMR.
  */
+
+//TODO add option to create dataset from COMPLETED experiment
+
 @Controller
 @RequestMapping("/pipelineexperiment")
 public class PipelineExperimentController {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(PipelineExperimentController.class);
+    private static final Logger logger = Logger.getLogger(PipelineExperimentController.class);
 
     @Autowired
     PipelineExperimentServiceImpl pipelineexperimentService;
 
     @Autowired
-    PipelineStatsServiceImpl pipelinestatsService;
-
-    @Autowired
     EMRServiceImpl emrService;
 
+    @Autowired
+    ChipServiceImpl chipService;
+        
     @Autowired
     S3ServiceImpl s3Service;
 
@@ -81,35 +83,44 @@ public class PipelineExperimentController {
      */
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ModelAndView get(@PathVariable String id) {
-        logger.info("Entering show view for pipeline experiment " + id);
+        logger.info("Showing info for pipeline experiment " + id);
         PipelineExperiment exp = pipelineexperimentService.find(id);
-        ModelAndView success = new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
-
-        PipelineStats stats = pipelinestatsService.findForPipelineExperiment(id);
-        success.addObject("stats", stats);
-        JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
-
+        ModelAndView success = 
+                new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
+        
         // Update DB w. jobflow status. Should be turned into an Amazon callback, if available.
         // Note that we want to avoid doing too many pulls to Amazon, as Amazon has limits on operations.
+        JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
         String oldState = exp.getEmr_state() == null ? "" : exp.getEmr_state();
-        if (!oldState.equals("COMPLETED") && !oldState.equals("FAILED") && !oldState.equals("TERMINATED") && jobFlow != null) {
-            logger.info("Updating pipeline experiment " + id + " with state informatoin from Amazon.");
+        if (!oldState.equals("COMPLETED") && !oldState.equals("FAILED") 
+                && !oldState.equals("TERMINATED") && jobFlow != null) {
+            logger.info("Updating pipeline experiment " 
+                    + id + " with state informatoin from Amazon.");
             if (jobFlow.getExecutionStatusDetail().getState() != null) {
                 exp.setEmr_state(jobFlow.getExecutionStatusDetail().getState());
             }
+            
             if (jobFlow.getExecutionStatusDetail().getCreationDateTime() != null) {
-                exp.setEmr_creation_date_time(new DateTime(jobFlow.getExecutionStatusDetail().getCreationDateTime()));
+                exp.setEmr_creation_date_time(
+                        new DateTime(jobFlow.getExecutionStatusDetail().getCreationDateTime()));
             }
+            
             if (jobFlow.getExecutionStatusDetail().getEndDateTime() != null) {
-                exp.setEmr_end_date_time(new DateTime(jobFlow.getExecutionStatusDetail().getEndDateTime()));
+                exp.setEmr_end_date_time(
+                        new DateTime(jobFlow.getExecutionStatusDetail().getEndDateTime()));
             }
+            
             if (jobFlow.getExecutionStatusDetail().getLastStateChangeReason() != null) {
-                exp.setEmr_last_state_change_reason(jobFlow.getExecutionStatusDetail().getLastStateChangeReason());
+                exp.setEmr_last_state_change_reason(
+                        jobFlow.getExecutionStatusDetail().getLastStateChangeReason());
             }
+            
             pipelineexperimentService.update(exp);
         }
+        
         success.addObject("jobflow", jobFlow);
-        success.addObject("accountName", exp.getAccount_id() == null ? "" : accountService.find(exp.getAccount_id()).getUsername());
+        success.addObject("accountName", 
+                exp.getAccount_id() == null ? "" : accountService.find(exp.getAccount_id()).getUsername());
         return success;
     }
 
@@ -121,8 +132,14 @@ public class PipelineExperimentController {
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
     ModelAndView list() {
+        //TODO remove extra debugging logging
         logger.info("Entering list view for pipeline experiments");
-        ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+        List<PipelineExperiment> pipelineexperiments = pipelineexperimentService.list();
+        logger.info("list for pipeline experiments retrieved");
+        ModelAndView success = 
+                new ModelAndView("pipelineexperimentlist", 
+                        "pipelineexperimentList", pipelineexperiments);
+        logger.info("returning view for pipeline experiments");
         return success;
     }
 
@@ -135,7 +152,8 @@ public class PipelineExperimentController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit form for pipeline experiments");
-        return new ModelAndView("pipelineexperimentedit", "pipelineexperiment", pipelineexperimentService.find(id));
+        return new ModelAndView("pipelineexperimentedit", 
+                "pipelineexperiment", pipelineexperimentService.find(id));
     }
 
     /**
@@ -146,14 +164,22 @@ public class PipelineExperimentController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public ModelAndView submitEdit(@ModelAttribute("pipelineexperiment") @Valid PipelineExperiment pipelineexperiment, BindingResult result) {
+    public ModelAndView submitEdit(
+            @ModelAttribute("pipelineexperiment") @Valid PipelineExperiment pipelineexperiment, 
+            BindingResult result) {
+        // validate form
         if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("pipelineexperimentedit", "pipelineexperiment", pipelineexperiment);
+            ModelAndView model = 
+                    new ModelAndView("pipelineexperimentedit", "pipelineexperiment", pipelineexperiment);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
+        
+        // update experiment and return new list
         pipelineexperimentService.update(pipelineexperiment);
-        ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+        ModelAndView success = 
+                new ModelAndView("pipelineexperimentlist", 
+                        "pipelineexperimentList", pipelineexperimentService.list());
         success.addObject("msg", "PipelineExperiment saved.");
         logger.info("Successfully edited pipeline experiment " + pipelineexperiment.getId());
         return success;
@@ -167,7 +193,8 @@ public class PipelineExperimentController {
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create() {
         logger.info("Entering create view for pipeline experiment");
-        return new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", new PipelineExperimentForm());
+        return new ModelAndView("pipelineexperimentcreate", 
+                        "pipelineexperimentform", new PipelineExperimentForm());
     }
 
     /**
@@ -178,9 +205,14 @@ public class PipelineExperimentController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitcreate", method = RequestMethod.POST)
-    public ModelAndView submitCreate(@ModelAttribute("pipelineexperimentform") @Valid PipelineExperimentForm form, BindingResult result) {
+    public ModelAndView submitCreate(
+            @ModelAttribute("pipelineexperimentform") @Valid PipelineExperimentForm form, 
+            BindingResult result) {
+        
+        //validate form
         if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
+            ModelAndView model = 
+                    new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
@@ -190,11 +222,21 @@ public class PipelineExperimentController {
         pipelineexperiment.setName(form.getExperimentName());
         pipelineexperiment.setAccount_id(form.getAccountId());
         pipelineexperiment.setEmr_jobflow_id("Not yet received");
-
+        
+        // update some parameters
+        pipelineexperiment.setMapper_genome(form.getReferenceGenome());
+        pipelineexperiment.setAnnotation_genome(form.getReferenceGenome());
+        pipelineexperiment.setAnnotation_tool("BOWTIE2"); //TODO this should be a parameter 
+        pipelineexperiment.setMapper_tool("HTSEQ"); //TODO this should be a parameter
+        pipelineexperiment.setInput_files(form.getFolder());
+        
+        // save experiment
         pipelineexperiment = pipelineexperimentService.add(pipelineexperiment);
-
+        
+        // validate for creation
         if (pipelineexperiment == null || pipelineexperiment.getId() == null) {
-            ModelAndView addFail = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
+            ModelAndView addFail = 
+                    new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
             addFail.addObject("errors", "Could not create pipeline experiment. Try again.");
             return addFail;
         }
@@ -205,7 +247,8 @@ public class PipelineExperimentController {
         // Delete pipelineexperiment and return error if EMR jobflow could not be
         // started
         if (emrJobFlowId == null) {
-            ModelAndView awsFail = new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
+            ModelAndView awsFail = 
+                    new ModelAndView("pipelineexperimentcreate", "pipelineexperimentform", form);
             pipelineexperimentService.delete(pipelineexperiment.getId());
             awsFail.addObject("errors", "Could not start EMR Job. Try again.");
             return awsFail;
@@ -215,31 +258,9 @@ public class PipelineExperimentController {
         pipelineexperiment.setEmr_jobflow_id(emrJobFlowId);
         pipelineexperimentService.update(pipelineexperiment);
 
-        // TODO: Change to proper stats.
-        PipelineStats stats = new PipelineStats();
-        stats.setExperiment_id(pipelineexperiment.getId());
-        stats.setInput_files(new String[]{null});
-        stats.setOutput_files(new String[]{null});
-        stats.setParameters("Unknown");
-        stats.setStatus("COMPLETED");
-        stats.setNo_of_reads_mapped(-1);
-        stats.setNo_of_reads_annotated(-1);
-        stats.setNo_of_reads_mapped_with_find_indexes(-1);
-        stats.setNo_of_reads_contaminated(-1);
-        stats.setNo_of_barcodes_found(-1);
-        stats.setNo_of_genes_found(-1);
-        stats.setNo_of_transcripts_found(-1);
-        stats.setNo_of_reads_found(-1);
-        stats.setMapper_tool("Unknown");
-        stats.setMapper_genome("Unknown");
-        stats.setAnnotation_tool("Unknown");
-        stats.setAnnotation_genome("Unknown");
-        stats.setQuality_plots_file("Unknown");
-        stats.setLog_file("Unknown");
-        stats.setDoc_id("Unknown");
-        pipelinestatsService.add(stats);
-
-        ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+        ModelAndView success = 
+                new ModelAndView("pipelineexperimentlist", 
+                        "pipelineexperimentList", pipelineexperimentService.list());
         success.addObject("msg", "Experiment started.");
         logger.info("Succesfully created new pipeline experiment " + pipelineexperiment.getId());
         return success;
@@ -258,8 +279,11 @@ public class PipelineExperimentController {
             emrService.stopJobFlow(exp.getEmr_jobflow_id());
             logger.info("Stopped EMR job for pipeline experiment " + id);
         }
+        
         pipelineexperimentService.delete(id);
-        ModelAndView success = new ModelAndView("pipelineexperimentlist", "pipelineexperimentList", pipelineexperimentService.list());
+        ModelAndView success = 
+                new ModelAndView("pipelineexperimentlist", 
+                        "pipelineexperimentList", pipelineexperimentService.list());
         success.addObject("msg", "Experiment deleted.");
         logger.info("Deleted pipeline experiment " + id);
         return success;
@@ -274,8 +298,10 @@ public class PipelineExperimentController {
      * @return file as the body of an HTTP entity.
      */
     @RequestMapping(value = "/{id}/output", method = RequestMethod.GET, produces = "text/json")
-    public @ResponseBody
-    HttpEntity<byte[]> getOutput(@RequestParam(value = "format", required = true) String format, @PathVariable String id) {
+    public @ResponseBody HttpEntity<byte[]> getOutput(
+            @RequestParam(value = "format", required = true) String format, 
+            @PathVariable String id) {
+        
         try {
             HttpHeaders header = new HttpHeaders();
             byte[] wb;
@@ -283,14 +309,17 @@ public class PipelineExperimentController {
             if (format.equals("json")) {
                 wb = s3Service.getFeaturesAsJson(id);
                 header.setContentType(new MediaType("text", "json"));
+                //TODO add GZIP compression
                 header.set("Content-Disposition", "attachment; filename=output_" + id + ".json");
                 logger.info("Downloading pipeline experiment output for  " + id + " as JSON.");
             } else {
                 wb = s3Service.getFeaturesAsCSV(id);
                 header.setContentType(new MediaType("text", "csv"));
+                //TODO add GZIP compression
                 header.set("Content-Disposition", "attachment; filename=output_" + id + ".csv");
                 logger.info("Downloading pipeline experiment output for  " + id + " as CSV.");
             }
+            
             header.setContentLength(wb.length);
             return new HttpEntity<byte[]>(wb, header);
 
@@ -298,51 +327,96 @@ public class PipelineExperimentController {
             GenericExceptionResponse resp = new GenericExceptionResponse();
             resp.setError("Parse error");
             resp.setError_description("Could not parse pipeline experiment output. Does the output exist?");
-            logger.error("Error downloading pipeline experiment output for  " + id);
+            logger.error("Error downloading pipeline experiment output for  " + id, e);
             throw new GenericException(resp);
         }
     }
-
-    // Populate number of nodes choice fields
-    @ModelAttribute("numNodesChoices")
-    public Map<String, String> populateNumNodesChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
-        for (int i = 1; i <= 30; i++) {
-            choices.put(String.valueOf(i), String.valueOf(i));
+    
+    /**
+     * Downloads the qa stats output of an experiment in JSON format
+     *
+     * @param id the experiment id.
+     * @return file as the body of an HTTP entity.
+     */
+    @RequestMapping(value = "/{id}/qaoutput", method = RequestMethod.GET, produces = "text/json")
+    public @ResponseBody HttpEntity<byte[]> getQAoutput(@PathVariable String id) {
+        
+        try {
+            HttpHeaders header = new HttpHeaders();
+            byte[] wb;
+            wb = s3Service.getExperimentQA(id);
+            header.setContentType(new MediaType("text", "json"));
+            //TODO add GZIP compression
+            header.set("Content-Disposition", "attachment; filename=qastats_" + id + ".json");
+            logger.info("Downloading pipeline qa stats output for  " + id + " as JSON.");
+            header.setContentLength(wb.length);
+            return new HttpEntity<byte[]>(wb, header);
+        } catch (IOException e) {
+            GenericExceptionResponse resp = new GenericExceptionResponse();
+            resp.setError("Parse error");
+            resp.setError_description("Could not parse pipeline experiment qt "
+                    + "stats output. Does the output exist?");
+            logger.error("Error downloading pipeline qt stats output for  " + id, e);
+            throw new GenericException(resp);
         }
-        return choices;
+    }
+    
+    /**
+     * Creates a dataset with the features and qa stats of the experiment ID
+     *
+     * @param id the experiment id.
+     * @return file as the body of an HTTP entity.
+     */
+    @RequestMapping(value = "/{id}/createdataset", method = RequestMethod.GET, produces = "text/json")
+    public @ResponseBody HttpEntity<byte[]> createDataset(@PathVariable String id) {
+        //TODO finish this, simple get features file, qt stats file and redirects
+        //to datasets view with the form updated
+        GenericExceptionResponse resp = new GenericExceptionResponse();
+        resp.setError("NOT IMPLEMENTED");
+        resp.setError_description("NOT IMPLEMENTED");
+        logger.error("NOT IMPLEMENTED");
+        throw new GenericException(resp);
     }
 
-    // Populate node type choices.
-    @ModelAttribute("nodeTypeChoices")
-    public Map<String, String> populateNodeTypeChoices() {
+    /**
+     * Helper populates accounts.
+     * Used in the View to populate the granted accounts combo-box
+     * TODO duplicated in Datasets
+     * @return accounts.
+     */
+    @ModelAttribute("accountChoices")
+    public Map<String, String> populateAccountChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        InstanceType[] instanceTypes = com.amazonaws.services.ec2.model.InstanceType.values();
-        for (InstanceType t : instanceTypes) {
-            choices.put(t.toString(), t.name());
+        List<Account> accounts = accountService.list();
+        for (Account account : accounts) {
+            choices.put(account.getId(), account.getUsername());
         }
+        
         return choices;
     }
-
-    // populate folder choices
+    
+    // populate input files folder choices
     @ModelAttribute("folderChoices")
     public Map<String, String> populateFolderChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<String> l = s3Service.getInputFolders();
-        for (String t : l) {
-            choices.put(t, t);
+        List<String> files = s3Service.getInputFolders();
+        for (String file : files) {
+            choices.put(file, file);
         }
+        
         return choices;
     }
 
     // populate ID file choices.
+    //TODO duplicate in ImageAlignmentController
     @ModelAttribute("idFileChoices")
     public Map<String, String> populateIdFileChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<String> l = s3Service.getIDFiles();
-        for (String t : l) {
-            choices.put(t, t);
+        List<Chip> chips = chipService.list();
+        for (Chip chip : chips) {
+            choices.put(chip.getId(), chip.getName());
         }
+        
         return choices;
     }
 
@@ -350,10 +424,11 @@ public class PipelineExperimentController {
     @ModelAttribute("refAnnotationChoices")
     public Map<String, String> populateRefAnnotationChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<String> l = s3Service.getReferenceAnnotation();
-        for (String t : l) {
-            choices.put(t, t);
+        List<String> files = s3Service.getReferenceAnnotation();
+        for (String file : files) {
+            choices.put(file, file);
         }
+        
         return choices;
     }
 
@@ -361,21 +436,23 @@ public class PipelineExperimentController {
     @ModelAttribute("refGenomeChoices")
     public Map<String, String> populateRefGenomeChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<String> l = s3Service.getReferenceGenome();
-        for (String t : l) {
-            choices.put(t, t);
+        List<String> files = s3Service.getReferenceGenome();
+        for (String file : files) {
+            choices.put(file, file);
         }
+        
         return choices;
     }
 
-    // populate bowtie file choices
-    @ModelAttribute("bowtieFileChoices")
-    public Map<String, String> populateBowtieFileChoices() {
+    // populate rna filter file choices
+    @ModelAttribute("refContaminantChoices")
+    public Map<String, String> populateRefContaminantChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<String> l = s3Service.getBowtieFiles();
-        for (String t : l) {
-            choices.put(t, t);
+        List<String> files = s3Service.getContaminantGenome();
+        for (String file : files) {
+            choices.put(file, file);
         }
+        
         return choices;
     }
 
@@ -384,19 +461,9 @@ public class PipelineExperimentController {
     public Map<String, String> populateHtseqAnnotationChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
         choices.put("union", "union");
-        //choices.put("intersection-nonempty", "intersection-nonempty"); //hardcoded in jsp view, for pre-selection
+        //hardcoded in jsp view, for pre-selection
+        //choices.put("intersection-nonempty", "intersection-nonempty"); 
         choices.put("intersection-strict", "intersection-strict");
-        return choices;
-    }
-
-    // populate account choice fields for form
-    @ModelAttribute("accountChoices")
-    public Map<String, String> populateAccountChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<Account> l = accountService.list();
-        for (Account t : l) {
-            choices.put(t.getId(), t.getUsername());
-        }
         return choices;
     }
 

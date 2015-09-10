@@ -4,17 +4,14 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.controller;
 
 import com.spatialtranscriptomics.component.StaticContextAccessor;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.model.Dataset;
 import com.spatialtranscriptomics.serviceImpl.AccountServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.DatasetInfoServiceImpl;
 import com.spatialtranscriptomics.serviceImpl.DatasetServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.PipelineExperimentServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.SelectionServiceImpl;
-import com.spatialtranscriptomics.serviceImpl.TaskServiceImpl;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,13 +31,17 @@ import org.springframework.web.servlet.ModelAndView;
  * implements the methods available at this URL and returns views (.jsp pages)
  * with models.
  */
+
+//TODO: would be nice to show the experiments performed for an account
+//TODO: would be nice to do the password validation in the JSP page (Form)
+//TODO: the country selector should have pre-loaded countries
+//TODO: make the show granted datasets optional and not available for ADMIN users
 @Controller
 @RequestMapping("/account")
 public class AccountController {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(AccountController.class);
+    private static final Logger logger = Logger.getLogger(AccountController.class);
 
     @Autowired
     AccountServiceImpl accountService;
@@ -48,17 +49,6 @@ public class AccountController {
     @Autowired
     DatasetServiceImpl datasetService;
 
-    @Autowired
-    DatasetInfoServiceImpl datasetinfoService;
-
-    @Autowired
-    SelectionServiceImpl selectionService;
-
-    @Autowired
-    TaskServiceImpl taskService;
-
-    @Autowired
-    PipelineExperimentServiceImpl pipelineExperimentService;
 
     /**
      * Returns the show view of a specified account.
@@ -68,8 +58,8 @@ public class AccountController {
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
     public ModelAndView get(@PathVariable String id) {
         logger.info("Entering show view of account " + id);
-        Account acc = accountService.find(id);
-        ModelAndView success = new ModelAndView("accountshow", "account", acc);
+        ModelAndView success = 
+                new ModelAndView("accountshow", "account", accountService.find(id));
         List<Dataset> datasets = datasetService.listForAccount(id);
         success.addObject("datasets", datasets);
         return success;
@@ -102,21 +92,28 @@ public class AccountController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("account") @Valid Account acc, BindingResult result) {
+    public ModelAndView submitAdd(
+            @ModelAttribute("account") @Valid Account acc, 
+            BindingResult result) {
+        
+        //validate form errors
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("accountadd", "account", acc);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
-        //System.out.println(acc.getPassword());
-        //System.out.println(acc.getPasswordRepeat());
+        
+        //validate password
         if (!acc.getPassword().equals(acc.getPasswordRepeat())) {
             ModelAndView model = new ModelAndView("accountadd", "account", acc);
             model.addObject("specerror", "Password repeat mismatch. Please enter again.");
             return model;
         }
+        
+        //add account and return new list
         accountService.add(acc);
-        ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
+        ModelAndView success = 
+                new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account created.");
         logger.info("Added account " + acc.getId());
         return success;
@@ -143,19 +140,28 @@ public class AccountController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public ModelAndView submitEdit(@ModelAttribute("account") @Valid Account acc, BindingResult result) {
+    public ModelAndView submitEdit(
+            @ModelAttribute("account") @Valid Account acc, 
+            BindingResult result) {
+        
+        // validate form
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("accountedit", "account", acc);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
+        
+        // validate password
         if (!acc.getPassword().equals(acc.getPasswordRepeat())) {
             ModelAndView model = new ModelAndView("accountedit", "account", acc);
             model.addObject("errors", "Password repeat mismatch. Please enter again.");
             return model;
         }
+        
+        // update account and return new list
         accountService.update(acc);
-        ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
+        ModelAndView success = 
+                new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account saved.");
         logger.info("Edited account " + acc.getId());
         return success;
@@ -169,7 +175,8 @@ public class AccountController {
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable String id) {
         accountService.delete(id);
-        ModelAndView success = new ModelAndView("accountlist", "accountList", accountService.list());
+        ModelAndView success = 
+                new ModelAndView("accountlist", "accountList", accountService.list());
         success.addObject("msg", "Account deleted.");
         logger.info("Deleted account " + id);
         return success;
@@ -177,19 +184,22 @@ public class AccountController {
 
     /**
      * Populates dataset choice fields for views.
+     * @return a map of datasets selected (id - name)
      */
     @ModelAttribute("datasetChoices")
     public Map<String, String> populateDatasetChoices() {
         Map<String, String> choices = new LinkedHashMap<String, String>();
-        List<Dataset> l = datasetService.list();
-        for (Dataset t : l) {
-            choices.put(t.getId(), t.getName());
+        List<Dataset> datasets = datasetService.list();
+        for (Dataset dataset : datasets) {
+            choices.put(dataset.getId(), dataset.getName());
         }
+        
         return choices;
     }
 
     /**
-     * Static access to the account service.
+     * Static access to the account service
+     * @return the static bean of the service
      */
     public static AccountServiceImpl getStaticAccountService() {
         return StaticContextAccessor.getBean(AccountController.class).getAccountService();
@@ -197,6 +207,7 @@ public class AccountController {
 
     /**
      * Access to the account service.
+     * @return the account service member variable
      */
     public AccountServiceImpl getAccountService() {
         return this.accountService;

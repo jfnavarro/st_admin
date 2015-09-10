@@ -4,6 +4,7 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.auth;
 
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Arrays;
 import org.apache.log4j.Logger;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
@@ -55,8 +55,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2RestOperations {
     
-    private static final Logger logger = Logger
-            .getLogger(CustomOAuth2RestTemplate.class);
+    private static final Logger logger = Logger.getLogger(CustomOAuth2RestTemplate.class);
     
     @Autowired
     private ResourceOwnerPasswordResourceDetails oauthResource;
@@ -109,65 +108,66 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
     }
     
     @Override
-    public void setErrorHandler(ResponseErrorHandler errorHandler) {
+    public final void setErrorHandler(ResponseErrorHandler errorHandler) {
         if (!(errorHandler instanceof OAuth2ErrorHandler)) {
             errorHandler = new OAuth2ErrorHandler(errorHandler, oauthResource);
         }
+        
         super.setErrorHandler(errorHandler);
     }
     
     @Override
-    protected ClientHttpRequest createRequest(URI uri, HttpMethod method)
-            throws IOException {
+    protected ClientHttpRequest createRequest(URI uri, HttpMethod method) throws IOException {
         
         if (!uri.toString().toLowerCase().contains("password")) {
             // Log prior to adding access tokens not to give away those in the log file.
             logger.info(method.toString() + " " + uri.toString());
         }
-        OAuth2AccessToken accessToken = getAccessToken();
         
+        OAuth2AccessToken accessToken = getAccessToken();
         String tokenType = accessToken.getTokenType();
         if (!StringUtils.hasText(tokenType)) {
             tokenType = OAuth2AccessToken.BEARER_TYPE; // we'll assume basic
             // bearer token type if
             // none is specified.
         }
+        
+        // lets create the request appending access token
         if (OAuth2AccessToken.BEARER_TYPE.equalsIgnoreCase(tokenType)
                 || OAuth2AccessToken.OAUTH2_TYPE.equalsIgnoreCase(tokenType)) {
-            AuthenticationScheme bearerTokenMethod = oauthResource
-                    .getAuthenticationScheme();
+            AuthenticationScheme bearerTokenMethod = oauthResource.getAuthenticationScheme();
             if (AuthenticationScheme.query.equals(bearerTokenMethod)
                     || AuthenticationScheme.form.equals(bearerTokenMethod)) {
                 uri = appendQueryParameter(uri, accessToken);
             }
             
             ClientHttpRequest req = super.createRequest(uri, method);
-            
             if (AuthenticationScheme.header.equals(bearerTokenMethod)) {
                 req.getHeaders().add(
                         "Authorization",
                         String.format("%s %s", OAuth2AccessToken.BEARER_TYPE,
                                 accessToken.getValue()));
             }
+            
             return req;
         } else {
-            String message = "Unsupported access token type: " + tokenType;
+            final String message = "Unsupported access token type: " + tokenType;
             logger.info(message);
             throw new OAuth2AccessDeniedException(message);
-        }
-        
+        }  
     }
     
     @Override
     protected <T> T doExecute(URI url, HttpMethod method,
             RequestCallback requestCallback,
             ResponseExtractor<T> responseExtractor) throws RestClientException {
+        
         OAuth2AccessToken accessToken = context.getAccessToken();
         RuntimeException rethrow = null;
-        String invalidTokenMessage = "Invalid token for client=" + getClientId();
+        final String invalidTokenMessage = "Invalid token for client=" + getClientId();
+        
         try {
-            return super.doExecute(url, method, requestCallback,
-                    responseExtractor);
+            return super.doExecute(url, method, requestCallback, responseExtractor);
         } catch (AccessTokenRequiredException e) {
             rethrow = e;
         } catch (OAuth2AccessDeniedException e) {
@@ -175,21 +175,22 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             rethrow = e;
         } catch (InvalidTokenException e) {
             // Don't reveal the token value in case it is logged
-            logger.info(invalidTokenMessage);
-            rethrow = new OAuth2AccessDeniedException(invalidTokenMessage);
-            
+            logger.info(invalidTokenMessage, e);
+            rethrow = new OAuth2AccessDeniedException(invalidTokenMessage);   
         }
+        
+        // we try to do the request again one more time by setting access token to null
         if (accessToken != null && retryBadAccessTokens) {
             context.setAccessToken(null);
             try {
-                return super.doExecute(url, method, requestCallback,
-                        responseExtractor);
+                return super.doExecute(url, method, requestCallback, responseExtractor);
             } catch (InvalidTokenException e) {
                 // Don't reveal the token value in case it is logged
-                logger.info(invalidTokenMessage);
-                rethrow = new OAuth2AccessDeniedException(invalidTokenMessage);
+                logger.info(invalidTokenMessage, e);
+                throw new OAuth2AccessDeniedException(invalidTokenMessage);
             }
         }
+        
         throw rethrow;
     }
 
@@ -208,8 +209,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
      *
      * @return an access token
      */
-    public OAuth2AccessToken getAccessToken()
-            throws UserRedirectRequiredException {
+    public OAuth2AccessToken getAccessToken() throws UserRedirectRequiredException {
 
         OAuth2AccessToken accessToken = context.getAccessToken();
         
@@ -226,11 +226,14 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
                     if (stateToPreserve == null) {
                         stateToPreserve = "state";
                     }
+                    
                     context.setPreservedState(stateKey, stateToPreserve);
                 }
+                
                 throw e;
             }
         }
+        
         return accessToken;
     }
 
@@ -242,23 +245,21 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
     }
 
     /**
-     * Acquires an oauth access token.
+     * Acquires an OAuth access token.
      *
      * @param oauth2Context context.
      * @return an access token.
      * @throws UserRedirectRequiredException if a context has not been
      * established or if a null access token is acquired.
      */
-    protected OAuth2AccessToken acquireAccessToken(
-            OAuth2ClientContext oauth2Context)
+    protected OAuth2AccessToken acquireAccessToken(OAuth2ClientContext oauth2Context)
             throws UserRedirectRequiredException {
 
-        //System.out.println("Acquiring access token");
-        AccessTokenRequest accessTokenRequest = oauth2Context
-                .getAccessTokenRequest();
+        AccessTokenRequest accessTokenRequest = oauth2Context.getAccessTokenRequest();
         if (accessTokenRequest == null) {
-            String id = this.oauthResource == null ? null : this.oauthResource.getId();
-            String message = "No OAuth 2 security context has been established. Unable to access resource '"+ id + "'.";
+            final String id = this.oauthResource == null ? null : this.oauthResource.getId();
+            final String message = "No OAuth 2 security context has been established. "
+                    + "Unable to access resource '"+ id + "'.";
             logger.info(message);
             throw new AccessTokenRequiredException(message, oauthResource);
             
@@ -268,28 +269,31 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
         // current request.
         String stateKey = accessTokenRequest.getStateKey();
         if (stateKey != null) {
-            accessTokenRequest.setPreservedState(oauth2Context
-                    .removePreservedState(stateKey));
+            accessTokenRequest.setPreservedState(oauth2Context.removePreservedState(stateKey));
         }
         
+        // check for existing access token
         OAuth2AccessToken existingToken = oauth2Context.getAccessToken();
         if (existingToken != null) {
             accessTokenRequest.setExistingToken(existingToken);
         }
         
-        OAuth2AccessToken accessToken = null;
-        accessToken = accessTokenProvider.obtainAccessToken(oauthResource, accessTokenRequest);
+        // get a new access token
+        OAuth2AccessToken accessToken = 
+                accessTokenProvider.obtainAccessToken(oauthResource, accessTokenRequest);
         if (accessToken == null || accessToken.getValue() == null) {
-            String message = "Access token provider returned a null access token, which is illegal according to the contract.";
+            final String message = "Access token provider returned a null access token, "
+                    + "which is illegal according to the contract.";
             logger.info(message);
             throw new IllegalStateException(message);
         }
+        
         oauth2Context.setAccessToken(accessToken);
         return accessToken;
     }
 
     /**
-     * Appends a URI with the Oauth access token needed for access.
+     * Appends a URI with the OAuth access token needed for access.
      *
      * @param uri URI.
      * @param accessToken oauth access token for the session.
@@ -298,7 +302,6 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
     protected URI appendQueryParameter(URI uri, OAuth2AccessToken accessToken) {
         
         try {
-
             // TODO: there is some duplication with UriUtils here. Probably
             // unavoidable as long as this
             // method signature uses URI not String.
@@ -328,11 +331,11 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             return new URI(sb.toString());
             
         } catch (URISyntaxException e) {
-            String message = "Authentication error, could not parse URI " + e.getMessage();
+            final String message = "Authentication error, could not parse URI " + e.getMessage();
             logger.info(message);
             throw new IllegalArgumentException(message, e);
         } catch (UnsupportedEncodingException e) {
-            String message = "Authentication error, unsuppoted enconding in URI " + e.getMessage();
+            final String message = "Authentication error, unsuppoted enconding in URI " + e.getMessage();
             logger.info(message);
             throw new IllegalArgumentException(message, e);
         }

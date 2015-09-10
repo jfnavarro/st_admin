@@ -4,6 +4,7 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.service;
 
 import com.spatialtranscriptomics.model.Chip;
@@ -37,13 +38,14 @@ public interface ChipService {
     public Chip create(Chip chip);
 
     /**
-     * Adds a chip from a chip file.
+     * Adds a chip from a chip file. The chip parameters will be extracted from
+     * the file and the original file will be stored in S3
      * @param chipFile the file.
      * @param name the name of the chip.
-     * @return the chip with ID assigned.
+     * 
      * @throws IOException on read error.
      */
-    public Chip addFromFile(CommonsMultipartFile chipFile, String name) throws IOException;
+    public void addFromFile(CommonsMultipartFile chipFile, String name) throws IOException;
 
     /**
      * Updates a chip.

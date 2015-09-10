@@ -4,10 +4,10 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.service;
 
 import java.util.List;
-
 import com.spatialtranscriptomics.model.Account;
 
 /**

@@ -72,12 +72,20 @@
 		scope="session">
 		<property name="messageConverters">
 			<list>
-				<bean
-					class="org.springframework.http.converter.BufferedImageHttpMessageConverter" />
-				<bean
-					class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
-					<property name="supportedMediaTypes" value="application/json" />
-				</bean>
+                            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+                                <!--<property name="supportedMediaTypes" value="application/octet-stream"/>-->
+                                <property name="supportedMediaTypes" value="multipart/form-data" />
+                            </bean>
+                            <bean class="org.springframework.http.converter.FormHttpMessageConverter">
+                                <property name="supportedMediaTypes" value="multipart/form-data" />
+                            </bean>
+                            <bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+                            <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+                            <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> 
+				<!--<property name="supportedMediaTypes" value="multipart/form-data" />--> 
+                            </bean>
+                            <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter" /> <!-- to upload decompressed Image files -->
+                            <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
 			</list>
 		</property>
 		<property name="errorHandler" ref="jsonErrorHandler" />

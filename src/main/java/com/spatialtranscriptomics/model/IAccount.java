@@ -13,64 +13,67 @@ import org.joda.time.DateTime;
 /**
  * This interface defines the Account model. Should reflect the corresponding model in ST API.
  */
-
 public interface IAccount {
 
-	public String getId();
+    public String getId();
 
-	public void setId(String id);
+    public void setId(String id);
 	
-	public String getUsername();
+    public String getUsername();
 
-	public void setUsername(String username);
+    public void setUsername(String username);
 	
-	public String getPassword();
+    public String getPassword();
 
-	public void setPassword(String password);
+    public void setPassword(String password);
+    
+    public String getPasswordRepeat();
+
+    public void setPasswordRepeat(String password);
+    
+    public String getRole();
+
+    public void setRole(String role);
 	
-	public String getRole();
+    public boolean isEnabled();
 
-	public void setRole(String role);
+    public void setEnabled(boolean enabled);
 	
-	public boolean isEnabled();
+    public String getInstitution();
 
-	public void setEnabled(boolean enabled);
+    public void setInstitution(String institution);
 	
-	public String getInstitution();
+    public String getFirst_name();
 
-	public void setInstitution(String institution);
+    public void setFirst_name(String firstName);
 	
-	public String getFirst_name();
+    public String getLast_name();
 
-	public void setFirst_name(String firstName);
+    public void setLast_name(String lastName);
 	
-	public String getLast_name();
+    public String getStreet_address();
 
-	public void setLast_name(String lastName);
+    public void setStreet_address(String streetAddress);
+
+    public String getCity();
+
+    public void setCity(String city);
+
+    public String getPostcode();
+
+    public void setPostcode(String postcode);
+
+    public String getCountry();
+
+    public void setCountry(String country);
 	
-	public String getStreet_address();
+    public List<String> getGranted_datasets();
 
-	public void setStreet_address(String streetAddress);
+    public void setGranted_datasets(List<String> datasets);
 
-	public String getCity();
+    public DateTime getCreated_at();
 
-	public void setCity(String city);
-
-	public String getPostcode();
-
-	public void setPostcode(String postcode);
-
-	public String getCountry();
-
-	public void setCountry(String country);
+    public void setCreated_at(DateTime created);
 	
-	public List<String> getGranted_datasets();
-
-	public void setGranted_datasets(List<String> datasets);
-
-        public DateTime getCreated_at();
-
-	public void setCreated_at(DateTime created);
-	
-	public DateTime getLast_modified();
+    public DateTime getLast_modified();
 }

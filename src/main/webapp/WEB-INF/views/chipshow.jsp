@@ -1,18 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 <title>Chip details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Script to set the highlight the active menu in the header -->
 <script>
@@ -21,12 +17,12 @@
 	});
 </script>
 </head>
+
 <body>
 
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
-
 
 		<div class="page-header">
 			<h1>
@@ -34,8 +30,7 @@
 			</h1>
 		</div>
 		<div>
-			<a href="<c:url value="/chip/"/>">Back</a> | <a
-				href="<c:url value="/chip/"/>${chip.id}/edit">Edit chip</a>
+			<a href="<c:url value="/chip/"/>">Back</a> | <a href="<c:url value="/chip/"/>${chip.id}/edit">Edit chip</a>
 		</div>
 
 		<dl class="dl-horizontal">
@@ -75,8 +70,6 @@
 		<div></div>
 
 	</div>
-	<!-- /container -->
-
-
+                
 </body>
 </html>

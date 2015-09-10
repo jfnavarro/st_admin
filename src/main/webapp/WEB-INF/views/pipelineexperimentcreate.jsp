@@ -1,21 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Create pipeline experiment</title>
 
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Script to set the highlight the active menu in the header -->
 <script>
@@ -36,52 +33,30 @@
 			<h1>Create pipeline experiment</h1>
 		</div>
 
-
 		<c:if test="${not empty errors}">
 			<div class="alert alert-error">
 				<strong>Error: </strong>Your input is not valid. Please check the values in the form below.
 			</div>
 		</c:if>
 
-
 		<div>
 			<form:form method="POST" commandName="pipelineexperimentform"
 				action="${contextPath}/pipelineexperiment/submitcreate"
 				class="form-horizontal">
 
-
 				<div class="row">
+
 					<div class="span6">
-						<legend>EMR parameters</legend>
-
-						<!-- TODO VALIDATION -->
-
-						<div class="control-group">
+						<legend>Pipeline parameters</legend>
+                                                
+                                                <div class="control-group">
 							<label class="control-label" for="experimentName">Pipeline experiment name</label>
 							<div class="controls">
 								<form:input type="text" id="experimentName"
 									placeholder="Choose a name" path="experimentName" />
 							</div>
 						</div>
-
-
-						<div class="control-group">
-							<label class="control-label" for="numNodes">Number of instances</label>
-							<div class="controls">
-								<form:select id="numNodes" path="numNodes">
-									<option></option>
-									<form:options items="${numNodesChoices}" />
-								</form:select>
-							</div>
-						</div>
-						
-					</div>
-
-					<!-- end span -->
-
-
-					<div class="span6">
-						<legend>Pipeline parameters</legend>
+                                                        
 						<div class="control-group">
 							<label class="control-label" for="folder">Input data folder</label>
 							<div class="controls">
@@ -114,7 +89,7 @@
 						</div>
 
 						<div class="control-group">
-							<label class="control-label" for="referenceGenome">Reference genome bowtie2 index</label>
+							<label class="control-label" for="referenceGenome">Reference genome index</label>
 							<div class="controls">
 								<form:select id="referenceGenome" path="referenceGenome">
 									<option></option>
@@ -139,31 +114,9 @@
 						<div class="span6">
 
 							<div class="control-group">
-							<label class="control-label" for="nodeTypeMaster">Master instance type</label>
-							<div class="controls">
-								<form:select id="nodeTypeMaster" path="nodeTypeMaster">
-										<form:option selected="m1.large" label="M1Large (default)"
-											value="m1.large"></form:option>
-										<form:options items="${nodeTypeChoices}" />
-									</form:select>
-								</div>
-							</div>
-	
-							<div class="control-group">
-								<label class="control-label" for="nodeTypeSlave">Slave instance type</label>
-								<div class="controls">
-									<form:select id="nodeTypeSlave" path="nodeTypeSlave">
-										<form:option selected="m1.xlarge" label="M1XLarge (default)"
-											value="m1.xlarge"></form:option>
-										<form:options items="${nodeTypeChoices}" />
-									</form:select>
-								</div>
-							</div>
-
-							<div class="control-group">
 								<label class="control-label" for="allowMissed">Number of allowed mismatches for barcode mapping</label>
 								<div class="controls">
-									<form:input type="text" id="allowMissed" value="3"
+									<form:input type="text" style="text-align: right;"  id="allowMissed" value="3"
 										path="allowMissed" />
 								</div>
 							</div>
@@ -171,7 +124,7 @@
 							<div class="control-group">
 								<label class="control-label" for="kMerLength">Kmer for barcode mapping</label>
 								<div class="controls">
-									<form:input type="text" id="kMerLength" value="6"
+									<form:input type="text" style="text-align: right;" id="kMerLength" value="6"
 										path="kMerLength" />
 								</div>
 							</div>
@@ -179,13 +132,13 @@
 							<div class="control-group">
 								<label class="control-label" for="numBasesTrimFw">Number of bases to trim (forward)</label>
 								<div class="controls">
-									<form:input type="text" id="numBasesTrimFw" value="42"
+									<form:input type="text" style="text-align: right;" id="numBasesTrimFw" value="42"
 										path="numBasesTrimFw" />
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="numBasesTrimRev">Number of bases to trim (reverse)</label>
+								<label class="control-label"  for="numBasesTrimRev">Number of bases to trim (reverse)</label>
 								<div class="controls">
 									<form:input type="text" id="numBasesTrimRev" value="5"
 										path="numBasesTrimRev" />
@@ -195,40 +148,66 @@
 							<div class="control-group">
 								<label class="control-label" for="minSeqLength">Minimal sequence length after trimming</label>
 								<div class="controls">
-									<form:input type="text" id="minSeqLength" value="28"
+									<form:input type="text" style="text-align: right;" id="minSeqLength" value="28"
 										path="minSeqLength" />
 								</div>
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="BarcodeLength">Barcode length</label>
+								<label class="control-label" for="barcodeLength">Barcode length</label>
 								<div class="controls">
-									<form:input type="text" id="BarcodeLength" value="18"
-										path="BarcodeLength" />
+									<form:input type="text" style="text-align: right;" id="barcodeLength" value="18"
+										path="barcodeLength" />
 								</div>
 							</div>
-
+                                                                
+                                                </div>
+                                                
+                                                <div class="span4">
+                                                    
+                                                    	<div class="control-group">
+								<label class="control-label" for="molBarcodesMissMatches">Molecular barcodes allow. missmatches</label>
+								<div class="controls">
+									<form:input type="text" style="text-align: right;" id="molBarcodesMissMatches" value="2"
+										path="molBarcodesMissMatches" />
+								</div>
+							</div>
+                                                                
 							<div class="control-group">
-								<label class="control-label" for="phred64Quality">Use phred-64 quality system (reads)</label>
+								<label class="control-label" for="molBarcodesStart">Molecular barcodes start position</label>
 								<div class="controls">
-									<form:checkbox id="phred64Quality" path="phred64Quality" />
+									<form:input type="text" style="text-align: right;" id="molBarcodesStart" value="24"
+										path="molBarcodesStart" />
 								</div>
 							</div>
-
-							<!--  Alternative Layout for checkboxes:
-				<div class="control-group">
-					<label class="checkbox"> <form:checkbox path="phred64Quality" />Phred-64 quality</label>
-				</div>-->
-
-
-							
+                                                                
+							<div class="control-group">
+								<label class="control-label" for="molBarcodesEnd">Molecular barcodes end position</label>
+								<div class="controls">
+									<form:input type="text" style="text-align: right;" id="molBarcodesEnd" value="24"
+										path="molBarcodesEnd" />
+								</div>
+							</div>
+                                                                
+							<div class="control-group">
+								<label class="control-label" for="molBarcodesMinClusterSize">Molecular barcodes min. cluster size</label>
+								<div class="controls">
+									<form:input type="text" style="text-align: right;" id="molBarcodesMinClusterSize" value="1"
+										path="molBarcodesMinClusterSize" />
+								</div>
+							</div>                                                                
+						
 						</div>
-
+                                        </div>
+                                                                
+                                        <div class="row">
+                                            
 						<div class="span6">
+                                                    
 							<!-- Second column of optional parameters -->
 
 							<div class="control-group">
-								<label class="control-label" for="bowtieFile">Contaminant genome bowtie2 index</label>
+								<label class="control-label" for="bowtieFile">Contaminant genome index</label>
 								<div class="controls">
 									<form:select id="bowtieFile" path="bowtieFile">
 										<form:option selected="none" label="none" value=""></form:option>
@@ -252,7 +231,7 @@
 							<div class="control-group">
 								<label class="control-label" for="BarcodeStartPos">Barcode start position in the sequence</label>
 								<div class="controls">
-									<form:input type="text" id="BarcodeStartPos" value="0"
+									<form:input type="text" style="text-align: right;" id="BarcodeStartPos" value="0"
 										path="BarcodeStartPos" />
 								</div>
 							</div>
@@ -260,7 +239,7 @@
 							<div class="control-group">
 								<label class="control-label" for="idPosError">Barcode positional error</label>
 								<div class="controls">
-									<form:input type="text" id="idPosError" value="0"
+									<form:input type="text" style="text-align: right;" id="idPosError" value="0"
 										path="idPosError" />
 								</div>
 							</div>
@@ -268,7 +247,7 @@
 							<div class="control-group">
 								<label class="control-label" for="minQualityTrim">Minimum trimming quality</label>
 								<div class="controls">
-									<form:input type="text" id="minQualityTrim" value="20"
+									<form:input type="text" style="text-align: right;" id="minQualityTrim" value="20"
 										path="minQualityTrim" />
 								</div>
 							</div>
@@ -279,7 +258,9 @@
 									<form:checkbox id="htSeqDisregard" path="htSeqDisregard" />
 								</div>
 							</div>
-
+                                                </div>
+                                                                
+                                                <div class="span5">
 							<div class="control-group">
 								<label class="control-label" for="discardFw">Discard forward reads that map uniquely</label>
 								<div class="controls">
@@ -302,11 +283,19 @@
 							</div>
 
 							<div class="control-group">
-								<label class="control-label" for="chunks">Chunks size</label>
+								<label class="control-label" for="phred64Quality">Use phred-64 quality system (reads)</label>
 								<div class="controls">
-									<form:input type="text" id="chunks" value="10000" path="chunks" />
+									<form:checkbox id="phred64Quality" path="phred64Quality" />
 								</div>
 							</div>
+                                                                
+
+							<div class="control-group">
+								<label class="control-label" for="incMolBarcodes">Perform molecular barcodes PCR duplicates removal</label>
+								<div class="controls">
+									<form:checkbox id="incMolBarcodes" path="incMolBarcodes" />
+								</div>
+							</div>                                                               
 
 						</div>
 					</div>
@@ -321,6 +310,10 @@
 				</div>
 
 			</form:form>
+            		
+                        <div>
+                            <a href="<c:url value="/pipelineexperiment/"/>">Cancel</a>
+                        </div>
 		</div>
 
 	</div>

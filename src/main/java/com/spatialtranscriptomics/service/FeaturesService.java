@@ -8,7 +8,6 @@
 package com.spatialtranscriptomics.service;
 
 import com.spatialtranscriptomics.model.FeaturesMetadata;
-import com.spatialtranscriptomics.model.S3Resource;
 import java.util.List;
 
 /**
@@ -19,9 +18,9 @@ public interface FeaturesService {
     /**
      * Adds or (for an existing file) updates a features file.
      * @param id the dataset ID.
-     * @param file the file.
+     * @param file the file in byte array format.
      */
-    public void addUpdate(String id, S3Resource file);
+    public void addUpdate(String id, byte[] file);
     
     /**
      * Lists features metadata for all datasets.
@@ -30,10 +29,10 @@ public interface FeaturesService {
     public List<FeaturesMetadata> listMetadata();
     
     /**
-     * Finds the features file of a dataset.
+     * Finds and returns the features file of a dataset.
      * @param id the dataset ID.
-     * @return the features file.
+     * @return the features file in byte array.
      */
-    public S3Resource find(String id);
+    public String find(String id);
     
 }

@@ -1,35 +1,32 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-         pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Edit dataset</title>
-        <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-              media="screen">
 
-            <!-- Bootstrap and JQuery libraries, for the logout button and other JS features -->
-            <script
-            src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-            <script
-            src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<head>
+<title>Edit dataset</title>
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
-            <!-- Script to set the highlight the active menu in the header -->
-            <script>
-                $(document).ready(function(event) {
-                    $("#menuDataset").addClass("active");
-                });
-            </script>
+<!-- Bootstrap and JQuery libraries, for the logout button and other JS features -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
-            <!-- Script to style file upload -->
-            <script type="text/javascript"
-            src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
+<!-- Script to set the highlight the active menu in the header -->
+<script>
+    $(document).ready(function(event) {
+        $("#menuDataset").addClass("active");
+    });
+</script>
 
+<!-- Script to style file upload -->
+<script type="text/javascript" src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
 
-    </head>
-    <body>
+</head>
+
+<body>
 
         <c:import url="header.jsp"></c:import>
         <c:set var="contextPath" value="${pageContext.request.contextPath}" />
@@ -54,10 +51,6 @@
                     <strong>Error: </strong>${featureerror}
                 </div>
             </c:if>
-
-            <!--<c:forEach var="err" items="${errors}" varStatus="idx">
-                    <div class="alert alert-error">${err.defaultMessage}</div>
-            </c:forEach> -->
 
             <div class="row">
                 <form:form method="POST" commandName="datasetform"
@@ -154,20 +147,6 @@
                                 <strong>-- or --</strong>
                             </div>
 
-                            <!-- <spring:bind path="featureFile">
-                                    <div class="control-group  ${status.error ? 'error' : ''}">
-                                            <div class="control-group">
-                                                    <label class="control-label" for="featureFile">Feature
-                                                            File </label>
-                                                    <div class="controls">
-                                <form:input type="file" id="featureFile"
-                                            placeholder="Feature file" path="featureFile" />
-                                    <span class="help-inline"></span> <span class='help-inline'>${status.errorMessage}</span>
-                            </div>
-                    </div>
-            </div>
-                            </spring:bind> -->
-
                             <spring:bind path="featureFile">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
                                     <label class="control-label" for="featureFile">Feature file</label>
@@ -188,14 +167,16 @@
                         <div class="span4">
                             <legend>Statistics and comments</legend>
 
-                            <spring:bind path="dataset.obo_foundry_terms">
+                            <spring:bind path="qaFile">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
-                                    <label class="control-label" for="obo_foundry_terms">OBO Foundry terms</label>
-                                    <div class="controls">
-                                        <form:input type="text" id="obo_foundry_terms"
-                                                    placeholder=""
-                                                    path="dataset.obo_foundry_terms" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
+                                    <label class="control-label" for="qaFile">QA Stats file (leave empty to not update)</label>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <form:input type="file" id="qaFile"
+                                                        placeholder="QA Stats file" path="qaFile"
+                                                        class="filestyle" />
+                                            <span class='help-inline'>${status.errorMessage}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </spring:bind>
@@ -221,12 +202,6 @@
 
                     <form:input type="hidden" path="dataset.id" />
                     <form:input type="hidden" path="dataset.created_by_account_id" />
-                    <form:input type="hidden" path="dataset.overall_feature_count" />
-                    <form:input type="hidden" path="dataset.unique_gene_count" />
-                    <form:input type="hidden" path="dataset.unique_barcode_count" />
-                    <form:input type="hidden" path="dataset.overall_hit_count" />
-                    <form:input type="hidden" path="dataset.overall_hit_quartiles" />
-                    <form:input type="hidden" path="dataset.gene_pooled_hit_quartiles" />
                     <form:input type="hidden" path="dataset.created_at" />
                     <form:input type="hidden" path="dataset.last_modified" />
 
@@ -241,7 +216,7 @@
         <!-- Load File upload style -->
         <script>
                 $(":file").filestyle({
-                    buttonText: "Choose .json file",
+                    buttonText: "Choose .gz JSON file",
                     classInput: "input-small"
                 });
         </script>

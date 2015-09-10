@@ -10,7 +10,6 @@ import com.spatialtranscriptomics.component.StaticContextAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,7 +20,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-
 import com.spatialtranscriptomics.model.Account;
 import org.springframework.web.client.RestClientException;
 
@@ -38,8 +36,7 @@ import org.springframework.web.client.RestClientException;
 public class APIAuthenticationProvider implements AuthenticationProvider {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(APIAuthenticationProvider.class);
+    private static final Logger logger = Logger.getLogger(APIAuthenticationProvider.class);
 
     @Autowired
     CustomOAuth2RestTemplate secureRestTemplate;
@@ -55,8 +52,9 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      * @throws AuthenticationException a bad credentials object, should
      * authentication fail.
      */
-    public Authentication authenticate(Authentication authentication)
+    public Authentication authenticate(Authentication authentication) 
             throws AuthenticationException {
+        
         String username = null;
         String password = null;
         String role = null;
@@ -66,7 +64,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             password = authentication.getCredentials().toString();
             role = authenticateAgainstAPI(username, password);
         } catch (Exception ex) {
-            String message = "Failed to autenticate " + username + " due to " + ex.getMessage();
+            final String message = "Failed to autenticate " + username + " due to " + ex.getMessage();
             logger.info(message);
             throw new BadCredentialsException(message);
         }
@@ -78,7 +76,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
             return auth;
         } else {
-            String message = "Failed to autenticate account or role of " + username;
+            final String message = "Failed to autenticate account or role of " + username;
             logger.info(message);
             throw new BadCredentialsException(message);
         }
@@ -104,8 +102,8 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      * @return the user role ID, or null if authentication fails.
      */
     private String authenticateAgainstAPI(String username, String password) {
-        try {
-            
+        
+        try {    
             // set the given credentials to the secureRestTemplate
             secureRestTemplate.setResourceCredentials(username, password);
 
@@ -126,7 +124,8 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
             }
 
         } catch (RestClientException e) {
-            logger.error("Failed to authenticate user " + username + " with secure rest remplate " + e.getMessage());
+            logger.error("Failed to authenticate user " + username 
+                    + " with secure rest remplate " + e.getMessage());
             return null;
         }
 

@@ -13,25 +13,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.codehaus.jackson.map.ObjectMapper;
-//import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 
-import com.spatialtranscriptomics.exceptions.GenericException;
-import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
-import com.spatialtranscriptomics.model.Feature;
-import com.spatialtranscriptomics.model.IFeature;
-
 /**
- * This class parses the output of the Pipeline reducer and returns either Json or CSV. 
- * The methods in this class expect an UTF-8 encoded Inputstream containing a tab-separated CSV. 
+ * This class parses the output of the Pipeline reducer and returns either JSON or CSV (features),
+ * JSON(reads) or JSON(QA).
  * 
- * The CSVs must have the following columns:
+ * The methods in this class expect an UTF-8 encoded 
+ * Inputstream containing a tab-separated CSV (as expected from the pipeline output). 
+ * 
+ * The CSVs must have the following columns (in the case of features):
  * 
  * X (int)     Y (int)     Gene (string)     Barcode (string)     Hits (int)	
  * 
@@ -46,15 +41,22 @@ import com.spatialtranscriptomics.model.IFeature;
  * 231	275	Naa30	TGATATTTAATGTATTTAGGCCCTCCG	3
  * 
  * Each row must contain values for all columns. Missing/null values are not allowed.
+ * 
  */
+
+//TODO the logic of this class needs to change. The idea is that the EMR pipeline
+//will produce JSON files for features, reads and qa. This class will just
+//provide an API to retrieve the merged features, reads and qa stats.
+//features and qa stats need special aggregation rules
+//An alternative is to add an extra EMR step to do the merge/aggregation so this
+//class would just return the necessary files or just be removed
 public class EMROutputParser {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(EMROutputParser.class);
+    private static final Logger logger = Logger.getLogger(EMROutputParser.class);
 
     /**
-     * Converts CSV stream to JSON.
+     * Converts features in CSV stream to JSON.
      *
      * @param bytes CSV bytes.
      * @return JSON stream.
@@ -62,25 +64,23 @@ public class EMROutputParser {
     public byte[] getJSON(byte[] bytes) {
 
         try {
+            // serialize into Json and return as Inputstream
             ByteArrayInputStream is = new ByteArrayInputStream(bytes);
             Map<String, Integer> map = getMapFromInputStream(is);
-
-	    // serialize into Json and return as Inputstream
             List<EMROutputParser.JsonFeature> features = getFeaturesFromMap(map);
-
             ObjectMapper mapper = new ObjectMapper();
             String json = mapper.writeValueAsString(features);
             is.close();
             return json.getBytes("UTF-8");
 
         } catch (IOException e) {
-            logger.error("Failed to convert CSV stream to JSON.");
+            logger.error("Failed to convert CSV stream to JSON.", e);
             return null;
         }
     }
 
     /**
-     * Converts JSON stream to CSV.
+     * Converts features in JSON stream to CSV.
      *
      * @param bytes JSON bytes.
      * @return CSV stream.
@@ -88,50 +88,34 @@ public class EMROutputParser {
     public byte[] getCSV(byte[] bytes) {
 
         try {
-            
+            // Serialize into CSV
             ByteArrayInputStream is = new ByteArrayInputStream(bytes);
             Map<String, Integer> map = getMapFromInputStream(is);
-
-            // Serialize into CSV
             StringBuilder txt = new StringBuilder();
             for (Map.Entry<String, Integer> cursor : map.entrySet()) {
-
                 txt.append(cursor.getKey()).append("\t")
                         .append(cursor.getValue()).append("\n");
-
             }
-            is.close();
             
+            is.close();
             return txt.toString().getBytes("UTF-8");
 
         } catch (IOException e) {
-            logger.error("Failed to convert JSON stream to CSV.");
+            logger.error("Failed to convert JSON stream to CSV.", e);
             return null;
         }
     }
-
+    
     /**
-     * Converts a CSV stream to a set of features.
+     * Converts qa stats in JSON stream to JSON.
      *
-     * @param bytes CSV bytes.
-     * @return features.
+     * @param bytes JSON bytes.
+     * @return JSON  stream.
      */
-    public List<Feature> getFeatures(byte[] bytes) {
-        
-        Feature[] features;
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            features = (Feature[]) mapper.readValue(this.getJSON(bytes), Feature[].class);
-            return Arrays.asList(features);
-        } catch (Exception e) {
-            logger.error("Failed to convert CSV stream to array of Features");
-            GenericExceptionResponse resp = new GenericExceptionResponse();
-            resp.setError("Parse error");
-            resp.setError_description("Could not parse experiment output. Does the output exist?");
-            throw new GenericException(resp);
-        }
-
+    public byte[] getQA(byte[] bytes) {
+        //TODO IMPLEMENT
+        //stats needs to be merged by aggregation
+        return null;
     }
 
     /**
@@ -143,16 +127,15 @@ public class EMROutputParser {
     private Map<String, Integer> getMapFromInputStream(InputStream is) {
 
         try {
-            // merge and store into Map
+            // open tab delimited files to read features
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader ir = new BufferedReader(isr);
             String line;
-
+            // the idea is to aggregate the features by increasing hit counts
             Map<String, Integer> hm = new HashMap<String, Integer>();
             while ((line = ir.readLine()) != null) {
                 String[] parts = line.split("\t");
-                String key = parts[0] + "\t" + parts[1] + "\t" + parts[2]
-                        + "\t" + parts[3];
+                String key = parts[0] + "\t" + parts[1] + "\t" + parts[2] + "\t" + parts[3];
                 int value = Integer.parseInt(parts[4]);
                 if (hm.containsKey(key)) {
                     hm.put(key, hm.get(key) + value);
@@ -160,6 +143,7 @@ public class EMROutputParser {
                     hm.put(key, value);
                 }
             }
+            
             return hm;
 
         } catch (IOException e) {
@@ -175,8 +159,7 @@ public class EMROutputParser {
      * @param map the map.
      * @return the features.
      */
-    private List<EMROutputParser.JsonFeature> getFeaturesFromMap(
-            Map<String, Integer> map) {
+    private List<EMROutputParser.JsonFeature> getFeaturesFromMap(Map<String, Integer> map) {
 
         List<EMROutputParser.JsonFeature> features = new ArrayList<EMROutputParser.JsonFeature>();
 
@@ -200,9 +183,10 @@ public class EMROutputParser {
 
     
     /**
-     * Inner class used to serialize Features to Json Objects
+     * Inner class used to serialize Features to JSON Objects
+     * //TODO move outside the class
      */
-    private class JsonFeature implements IFeature {
+    private class JsonFeature {
 
         String barcode;
         String gene;

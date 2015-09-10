@@ -1,18 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Experiment details</title>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Script to set the highlight the active menu in the header -->
 <script>
@@ -52,15 +48,27 @@
 		<dl class="dl-horizontal">
 			<dt>Account</dt>
 			<dd>${accountName}&nbsp;</dd>
-			<dt>EMR job ID</dt>
+                        <dt>Mapping tool</dt>
+			<dd>${mapping_tool}&nbsp;</dd>
+                        <dt>Mapping genome</dt>
+			<dd>${mapping_genome}&nbsp;</dd>
+                        <dt>Annotation tool</dt>
+			<dd>${annotation_tool}&nbsp;</dd>
+                        <dt>Annotation genome</dt>
+			<dd>${annotation_genome}&nbsp;</dd>
+                        <dt>Chip</dt>
+			<dd>${chip_id}&nbsp;</dd>
+                        <dt>Input folder</dt>
+			<dd>${input_files_folder}&nbsp;</dd>
+			<dt>Job ID</dt>
 			<dd>${pipelineexperiment.emr_jobflow_id}&nbsp;</dd>
-                        <dt>EMR job state</dt>
+                        <dt>Job state</dt>
 			<dd>${pipelineexperiment.emr_state}&nbsp;</dd>
-			<dt>EMR job created</dt>
+			<dt>Job created</dt>
 			<dd>${pipelineexperiment.emr_creation_date_time}&nbsp;</dd>
-			<dt>EMR job ended</dt>
+			<dt>Job ended</dt>
 			<dd>${pipelineexperiment.emr_end_date_time}&nbsp;</dd>
-			<dt>EMR job last message</dt>
+			<dt>Job last message</dt>
 			<dd>${pipelineexperiment.emr_last_state_change_reason}&nbsp;</dd>
                         <dt>Created</dt>
 			<dd>${pipelineexperiment.created_at.toDate()}&nbsp;</dd>
@@ -68,38 +76,19 @@
 			<dd>${pipelineexperiment.last_modified.toDate()}&nbsp;</dd>
 		</dl>
 		
-		<c:if test="${not empty stats}">
-		<dl class="dl-horizontal">
-		  <dt>Statistics</dt>
-			<dd>
-				<a href="<c:url value="/pipelinestats/"/>${stats.id}">Show</a>
-			</dd>
-		</dl>
-		</c:if>
-		
 		<c:if test="${pipelineexperiment.emr_state == 'COMPLETED'}">
 			<dl class="dl-horizontal">
-				<dt>EMR job output</dt>
+				<dt>Experiment output results</dt>
 				<dd>
-					<a
-						href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=json">Download JSON</a> <br /> <a
-						href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=csv">Download CSV</a>
+					<a href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=json">Download features in JSON</a> <br/> 
+                                        <a href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/output?format=csv">Download features in CSV</a> <br/>
+                                        <a href="<c:url value="/pipelineexperiment/"/>${pipelineexperiment.id}/qafile">Download QA stats in JSON</a>
 				</dd>
+                                
+                                <!-- TODO add a button to be able to create a dataset from here -->
 			</dl>
 		</c:if>
 	</div>
 
-	<div id="deleteModal" class="modal hide fade" tabindex="-1">
-		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete pipeline experiment</h3>
-		</div>
-		<div class="modal-body">
-			<div>Are you sure you want to delete the pipeline experiment? This will
-				stop the EMR job and delete all data.</div>
-		</div>
-		<div class="modal-footer">
-			<div id="deleteBtn"></div>
-		</div>
-	</div>
 </body>
 </html>

@@ -1,19 +1,16 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Help</title>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Script to set the highlight the active menu in the header -->
 <script>
@@ -27,7 +24,6 @@
 
 	<c:import url="header.jsp"></c:import>
 
-
 	<div class="container">
 
 		<div class="page-header">
@@ -39,7 +35,7 @@
 
 		<div>
 			Create an experiment and run the Pipeline
-			<p />
+			<p/>
 			<ul>
 				<li>Go to the page "Experiments" --&gt; "Create Experiment".</li>
 				<li>Fill out the form, click on "optional parameters" to enter
@@ -86,7 +82,7 @@
 					need to be imported to the system.</li>
 				<li>Go to the page "Dataset" --&gt; "Create Dataset".</li>
 				<li>Select image alignment, granted accounts and enter the dataset information.</li>
-				<li>Select a .json Feature file from your local computer or an
+				<li>Select a GZIPPED JSON Feature file from your local computer or an
 					experiment that you ran earlier.</li>
 				<li>Click "Create" to import the Features and create the
 					Dataset.</li>
@@ -201,10 +197,6 @@
 
 
 	</div>
-	<!-- /container -->
-
-
-
 
 </body>
 </html>

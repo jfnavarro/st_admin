@@ -1,18 +1,15 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
 <title>Dataset Details</title>
 
 <!-- Boostrap and JQuery libraries, for the logout button and other JS features -->
-<script
-	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<script
-	src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
 <!-- Script to set the highlight the active menu in the header -->
 <script>
@@ -23,7 +20,6 @@
 
 </head>
 <body>
-
 	<c:import url="header.jsp"></c:import>
 
 	<div class="container">
@@ -42,14 +38,14 @@
 
 			<dt>Enabled</dt>
 			<dd>
-			<c:choose>
-    			<c:when test="${dataset.enabled == true}">
-        			<input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">&nbsp;
-    			</c:when>
-    			<c:otherwise>
-        			<input type="checkbox" name="chkEnabled" value="" onclick="return false">&nbsp;
-    			</c:otherwise>
-			</c:choose>
+                            <c:choose>
+                                <c:when test="${dataset.enabled == true}">
+                                    <input type="checkbox" name="chkEnabled" value="" checked="checked" onclick="return false">&nbsp;
+                                </c:when>
+                                <c:otherwise>
+                                    <input type="checkbox" name="chkEnabled" value="" onclick="return false">&nbsp;
+                                </c:otherwise>
+                            </c:choose>
 			</dd>
 
 			<dt>Tissue</dt>
@@ -64,30 +60,11 @@
                         <dt>Created by</dt>
 			<dd>${accountcreator}&nbsp;</dd>
                         
-			<dt>Overall # of features (# of unique events)</dt>
-			<dd>${dataset.overall_feature_count}&nbsp;</dd>
-			
-			<dt>Unique # of genes</dt>
-			<dd>${dataset.unique_gene_count}&nbsp;</dd>
-			
-			<dt>Unique # of barcodes</dt>
-			<dd>${dataset.unique_barcode_count}&nbsp;</dd>
-			
-			<dt>Overall # of hits</dt>
-			<dd>${dataset.overall_hit_count}&nbsp;</dd>
-			
-			<dt>Hit quartiles</dt>
-			<dd>[${dataset.overall_hit_quartiles[0]}, ${dataset.overall_hit_quartiles[1]}, ${dataset.overall_hit_quartiles[2]}, ${dataset.overall_hit_quartiles[3]}, ${dataset.overall_hit_quartiles[4]}]&nbsp;</dd>
-			
-			<dt>Gene-pooled hit quartiles</dt>
-			<dd>[${dataset.gene_pooled_hit_quartiles[0]}, ${dataset.gene_pooled_hit_quartiles[1]}, ${dataset.gene_pooled_hit_quartiles[2]}, ${dataset.gene_pooled_hit_quartiles[3]}, ${dataset.gene_pooled_hit_quartiles[4]}]&nbsp;</dd>
-			
-			<dt>OBO Foundry terms</dt>
+			<dt>QA Parameters</dt>
 			<dd>
-			<c:forEach var="term" items="${dataset.obo_foundry_terms}">
-				${term}&nbsp;&nbsp;
+			<c:forEach var="term" items="${dataset.qa_parameters}">
+				${term.key}:&nbsp; ${term.value} <br/>
 			</c:forEach>
-			&nbsp;
 			</dd>
 			
 			<dt>Comments</dt>
@@ -95,12 +72,18 @@
 			
                         <dt>Created</dt>
 			<dd>${dataset.created_at.toDate()}&nbsp;</dd>
+                        
 			<dt>Last modified</dt>
 			<dd>${dataset.last_modified.toDate()}&nbsp;</dd>
                         
 			<dt>Features file</dt>
 			<dd>
-                                <a href="<c:url value="/dataset/features/"/>${dataset.id}" target="_blank">Download [${featuresMetadata[dataset.id].getReadableSize()}]</a> (right click and select "Save link as...")
+                                <a href="<c:url value="/dataset/features/"/>${dataset.id}" target="_blank">Download [${featuresMetadata[dataset.id].getReadableSize()}]</a>
+			</dd>
+                        
+                        <dt>QA Stats file</dt>
+			<dd>
+                                <a href="<c:url value="/dataset/qafile/"/>${dataset.id}" target="_blank">Download </a>
 			</dd>
                         
 		</dl>
@@ -115,7 +98,5 @@
 		</dl>
 
 	</div>
-	<!-- /container -->
-
 </body>
 </html>

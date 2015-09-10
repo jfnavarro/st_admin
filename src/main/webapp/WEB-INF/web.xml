@@ -8,13 +8,6 @@
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
-        
-	
-        <!--
-        <listener>
-	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class> 
-	</listener>
-	-->
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -24,6 +17,16 @@
 			<param-value>org.springframework.web.servlet.FrameworkServlet.CONTEXT.spring</param-value>
 		</init-param>
 	</filter>
+
+        <filter>
+            <filter-name>multipartFilter</filter-name>
+            <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+        </filter>
+
+        <filter-mapping>
+            <filter-name>multipartFilter</filter-name>
+            <url-pattern>/rest/*</url-pattern>
+        </filter-mapping>
 
 	<filter-mapping>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -36,9 +39,9 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-            	/WEB-INF/mvc-dispatcher-servlet.xml,
-            	/WEB-INF/spring-security.xml
-            </param-value>
+                            /WEB-INF/mvc-dispatcher-servlet.xml,
+                            /WEB-INF/spring-security.xml
+                        </param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

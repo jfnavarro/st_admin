@@ -21,56 +21,47 @@
 	<mvc:default-servlet-handler />
 
 	<!-- Enable Image and JSON file uploads -->
-
 	<mvc:annotation-driven>
 		<mvc:message-converters register-defaults="true">
-                        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" >
-                            <property name="supportedMediaTypes">
-                                <list>
-                                    <value>image/jpeg</value>
-                                    <value>application/gzip</value>
-                                </list>
-                            </property>
-                        </bean> <!-- to upload compressed Image files -->
-			<bean
-				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"> <!-- to upload JSON files -->
-				<property name="supportedMediaTypes" value="multipart/form-data" />
-                                
-			</bean>
-			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter" /> <!-- to upload decompressed Image files -->
+                        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
+                            <!--<property name="supportedMediaTypes" value="application/octet-stream"/>-->
+                            <property name="supportedMediaTypes" value="multipart/form-data" />
+                        </bean>
+                        <bean class="org.springframework.http.converter.FormHttpMessageConverter">
+                            <property name="supportedMediaTypes" value="multipart/form-data" />
+                        </bean>
                         <bean class="org.springframework.http.converter.StringHttpMessageConverter" />
-                        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+                        <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                             <property name="supportedMediaTypes" value="application/json" />
+                             <!--<property name="supportedMediaTypes" value="multipart/form-data" />-->
+                        </bean>
+			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter" /> <!-- to upload decompressed Image files -->
+                        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />               
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
 	<!-- Enable Annotations -->
-
 	<context:component-scan base-package="com.spatialtranscriptomics.controller" />
 	<context:component-scan base-package="com.spatialtranscriptomics.serviceImpl" />
 	<context:component-scan base-package="com.spatialtranscriptomics.auth" />
 	
 	<!--  Enable startup bean and some "hacks". -->
-	
 	<bean id="startupHousekeeper" class="com.spatialtranscriptomics.component.StartupHousekeeper"/>
 	<bean id="staticContextAccessor" class="com.spatialtranscriptomics.component.StaticContextAccessor"/>
 	
 	<!-- File upload max. filesize -->
-
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="1000000000" /> <!-- max. filesize of 1 GB -->
-        <property name="maxInMemorySize" value="10000000" /> <!-- max in memory 10MB (larger cached with files) --> 
+                <property name="maxInMemorySize" value="10000000" /> <!-- max in memory 10MB (larger cached with files) --> 
 	</bean>
 
 	<!-- Make CSS, Javascript, image files a static resource -->
-
 	<mvc:resources mapping="/css/**" location="/css/" />
 	<mvc:resources mapping="/js/**" location="/js/" />
 	<mvc:resources mapping="/img/**" location="/img/" />
 
-	<!-- Configure view resolver (map views to .jps files in /WEB-INF/views/ 
-		) -->
+	<!-- Configure view resolver (map views to .jps files in /WEB-INF/views/ ) -->
 
 	<bean id="viewResolver"
 		class=" org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -83,7 +74,6 @@
 	</bean>
 
 	<!-- Enable access to application.properties values into Java -->
-
 	<bean id="appConfig"
 		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
 		<property name="location">
@@ -92,21 +82,25 @@
 	</bean>
 
 	<!-- Amazon AWS Configuration -->
-
-	<bean id="s3Client" class="com.amazonaws.services.s3.AmazonS3Client">
+        <!--REMOVE THIS WHEN RELEASING -->       
+        <bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials">
+            <constructor-arg index="0" value="${aws.id}"/>
+            <constructor-arg index="1" value="${aws.secret}"/>
+        </bean>        
+	
+        <bean id="s3Client" class="com.amazonaws.services.s3.AmazonS3Client">
+            <constructor-arg ref="awsCredentials"></constructor-arg>
 	</bean>
 
-	<bean id="emrClient"
-		class="com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient">
+	<bean id="emrClient" class="com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient">
+            <constructor-arg ref="awsCredentials"></constructor-arg>
 	</bean>
 
 	<!-- Error handlers -->
 
-	<bean id="jsonErrorHandler"
-		class="com.spatialtranscriptomics.util.JsonResponseErrorHandler" />
+	<bean id="jsonErrorHandler" class="com.spatialtranscriptomics.util.JsonResponseErrorHandler" />
 
-	<bean
-		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
 				<prop key="com.spatialtranscriptomics.exceptions.GenericException">error</prop>
@@ -115,7 +109,6 @@
 	</bean>
 
 	<!-- Enable Property Placeholder -->
-
 	<context:property-placeholder location="classpath:application.properties" />
 
 </beans>

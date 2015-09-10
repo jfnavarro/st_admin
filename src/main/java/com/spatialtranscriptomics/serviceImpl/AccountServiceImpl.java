@@ -4,22 +4,16 @@
  * Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-//import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.bind.annotation.ResponseBody;
-//import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestOperations;
-//import org.springframework.web.client.RestTemplate;
-//import org.springframework.http.HttpStatus;
-//import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.model.Account;
 import com.spatialtranscriptomics.service.AccountService;
 
@@ -33,8 +27,7 @@ public class AccountServiceImpl implements AccountService {
 
     // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(AccountServiceImpl.class);
+    private static final Logger logger = Logger.getLogger(AccountServiceImpl.class);
 
     @Autowired
     RestOperations secureRestTemplate;
@@ -44,34 +37,26 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account find(String id) {
-        String url = appConfig.getProperty("url.account") + "all/";
-        url += id;
-        Account acc = secureRestTemplate.getForObject(url, Account.class);
-        return acc;
+        String url = appConfig.getProperty("url.account") + "/" + id;
+        return secureRestTemplate.getForObject(url, Account.class);
     }
 
     @Override
     public List<Account> list() {
-        String url = appConfig.getProperty("url.account") + "all/";
-        Account[] accountArray = secureRestTemplate.getForObject(url,
-                Account[].class);
-        List<Account> accountList = Arrays.asList(accountArray);
-        return accountList;
+        String url = appConfig.getProperty("url.account");
+        return Arrays.asList(secureRestTemplate.getForObject(url, Account[].class));
     }
 
     @Override
     public Account add(Account acc) {
         String url = appConfig.getProperty("url.account");
-        Account accResponse = secureRestTemplate.postForObject(url, acc,
-                Account.class);
-        return accResponse;
+        return secureRestTemplate.postForObject(url, acc, Account.class);
     }
 
     @Override
     public void update(Account acc) {
-        String url = appConfig.getProperty("url.account");
-        String id = acc.getId();
-        secureRestTemplate.put(url + id, acc);
+        String url = appConfig.getProperty("url.account") + "/" + acc.getId();
+        secureRestTemplate.put(url, acc);
     }
 
     @Override
@@ -82,10 +67,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> findForDataset(String datasetId) {
-        String url = appConfig.getProperty("url.account") + "all/?dataset=" + datasetId;
-        Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
-        List<Account> accountList = Arrays.asList(accountArray);
-        return accountList;
+        String url = appConfig.getProperty("url.account") + "/?dataset=" + datasetId;
+        return Arrays.asList(secureRestTemplate.getForObject(url, Account[].class));
     }
 
 }

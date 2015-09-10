@@ -1,13 +1,12 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-	pageEncoding="ISO-8859-1"%>
-<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Spatial Transcriptomics Admin Console</title>
-<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
-	media="screen">
+<link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet" media="screen">
+    
 <style type="text/css">
 body {
 	padding-top: 60px;
@@ -52,24 +51,21 @@ body {
 						class="icon-bar"></span>
 				</button>
 				<a class="brand" href="#">ST Admin Console</a>
-
-				<!--/.nav-collapse -->
 			</div>
 		</div>
 	</div>
 
 	<div class="container">
 
-
 		<c:if test="${not empty param.authentication_error}">
 			<div class="alert alert-error">Login failed. Wrong credentials?
 			</div>
 		</c:if>
+            
 		<c:if test="${not empty param.authorization_error}">
 			<div class="alert alert-error">Login failed. You have to have
 				permissions to access this resource.</div>
 		</c:if>
-
 
 		<form class="form-signin" id="loginForm" name="loginForm"
 			action="<c:url value="/login.do"/>" method="post">
@@ -78,13 +74,10 @@ body {
 				name='j_username'> <input type="password"
 				class="input-block-level" placeholder="Password" name='j_password'>
 
-			<button class="btn btn-large btn-primary" type="submit" name="login">Sign
-				in</button>
+			<button class="btn btn-large btn-primary" type="submit" name="login">Sign in</button>
 		</form>
 
 	</div>
-	<!-- /container -->
-
 
 </body>
 </html>

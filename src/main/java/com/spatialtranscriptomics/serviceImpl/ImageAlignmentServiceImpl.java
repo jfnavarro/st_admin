@@ -4,17 +4,16 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.serviceImpl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
 import com.spatialtranscriptomics.model.ImageAlignment;
 import com.spatialtranscriptomics.service.ImageAlignmentService;
 
@@ -38,39 +37,32 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
 
     @Override
     public ImageAlignment find(String id) {
-        if (id == null || id.equals("")) { return null; }
-        String url = appConfig.getProperty("url.imagealignment");
-        url += id;
-        ImageAlignment imal = secureRestTemplate.getForObject(url, ImageAlignment.class);
-        return imal;
+        String url = appConfig.getProperty("url.imagealignment") + id;
+        return secureRestTemplate.getForObject(url, ImageAlignment.class);
     }
 
     @Override
     public List<ImageAlignment> list() {
         String url = appConfig.getProperty("url.imagealignment");
-        ImageAlignment[] imalArray = secureRestTemplate.getForObject(url, ImageAlignment[].class);
-        List<ImageAlignment> imalList = Arrays.asList(imalArray);
-        return imalList;
+        return Arrays.asList(secureRestTemplate.getForObject(url, ImageAlignment[].class));
     }
 
     @Override
     public ImageAlignment create(ImageAlignment imal) {
         String url = appConfig.getProperty("url.imagealignment");
-        ImageAlignment imalResponse = secureRestTemplate.postForObject(url, imal, ImageAlignment.class);
-        return imalResponse;
+        return secureRestTemplate.postForObject(url, imal, ImageAlignment.class);
     }
 
     @Override
     public void update(ImageAlignment imal) {
-        String url = appConfig.getProperty("url.imagealignment");
-        String id = imal.getId();
-        secureRestTemplate.put(url + id, imal);
+        String url = appConfig.getProperty("url.imagealignment") + imal.getId();
+        secureRestTemplate.put(url, imal);
     }
 
     @Override
     public void delete(String id) {
-        String url = appConfig.getProperty("url.imagealignment");
-        secureRestTemplate.delete(url + id + "?cascade=true");
+        String url = appConfig.getProperty("url.imagealignment") + id;
+        secureRestTemplate.delete(url);
     }
 
     @Override
@@ -79,11 +71,13 @@ public class ImageAlignmentServiceImpl implements ImageAlignmentService {
         if (url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
         }
+        
         url += "?chip=" + chipId;
         ImageAlignment[] imalArray = secureRestTemplate.getForObject(url, ImageAlignment[].class);
         if (imalArray == null) {
             return null;
         }
+        
         List<ImageAlignment> imalList = Arrays.asList(imalArray);
         return imalList;
     }

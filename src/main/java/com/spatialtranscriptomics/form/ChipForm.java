@@ -4,6 +4,7 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.form;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -16,15 +17,15 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 public class ChipForm {
 
-    /** Chip name, not filename. */
+    // Chip name, not filename. 
     @NotEmpty
     String name;
 
-    /** Filename. */
+    // Filename. 
     @NotEmpty
     String fileName;
 
-    /** Uploaded file. */
+    // Uploaded file. 
     CommonsMultipartFile chipFile;
 
     public CommonsMultipartFile getChipFile() {
@@ -40,7 +41,6 @@ public class ChipForm {
         return name;
     }
 
-    
     public void setName(String name) {
         this.name = name;
     }

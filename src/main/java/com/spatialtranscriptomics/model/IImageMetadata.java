@@ -4,9 +4,9 @@
  *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
  * 
  */
+
 package com.spatialtranscriptomics.model;
 
-import java.util.Date;
 import org.joda.time.DateTime;
 
 /**
