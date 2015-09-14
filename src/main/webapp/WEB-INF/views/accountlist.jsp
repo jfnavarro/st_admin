@@ -6,13 +6,15 @@
 <head>
 <title>Accounts</title>
 
+<!-- JQuery library -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/bootstrap.min.css"/>">
 <link rel="stylesheet" type="text/css" href="<c:url value="/css/dataTables.bootstrap.css"/>">
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
-<!-- JQuery and DataTable -->
-<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.1.js"></script>
+<!-- Fixed DataTable -->
 <script type="text/javascript" language="javascript" src="//cdn.datatables.net/1.10.3/js/jquery.dataTables.js"></script>
 <script type="text/javascript" language="javascript" src="<c:url value="/js/dataTables.bootstrap.js"/>"></script>
 
@@ -34,9 +36,6 @@ $(document).ready(function() {
 	$("#menuAccount").addClass("active");
     });
 </script>
-
-<!--  Script for Delete dialog -->
-<script src="<c:url value="/js/delete-dialog.js"/>"></script>
 
 </head>
 <body>
@@ -67,10 +66,10 @@ $(document).ready(function() {
 					<th>Role</th>
 					<th>Enabled</th>
 					<th>Institution</th>
-					<th>First name</th>
-					<th>Last name</th>
+					<th>First&nbsp;name</th>
+					<th>Last&nbsp;name</th>
                                         <th>Created</th>
-                                        <th>Last modified</th>
+                                        <th>Last&nbsp;modified</th>
 					<th></th>
 				</tr>
 
@@ -97,31 +96,37 @@ $(document).ready(function() {
                                                 <td><small>${account.last_modified.toDate()}</small></td>
                                                 
                                                 <!-- TODO add a checkbox to tell to not do cascade delete -->
-						<td><a href="#deleteModal" data-toggle="modal" data-endpoint="account" 
-							data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>
+						<td><a href="#deleteModal_${account.id}" data-toggle="modal" class="btn btn-danger btn-small">Delete</a>
 						</td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
-	</div>
-
-	<div id="deleteModal" class="modal hide fade" tabindex="-1">
-		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete account</h3>
-		</div>
-		<div class="modal-body">
-			<div>Are you sure you want to delete the account?<br/>
-			This will delete some related objects associated with the account.<br/>
-			Note that you may set the account disabled instead.
+	<c:forEach var="account" items="${accountList}">
+		<div id="deleteModal_${account.id}" class="modal hide fade" tabindex="-1">
+			<div class="modal-header">
+				<h3 id="deleteModalLabel">Delete account</h3>
 			</div>
+			<div class="modal-body">
+				<div>Are you sure you want to delete the account?<br/>
+					This will delete some related objects associated with the account.<br/>
+					Note that you may set the account disabled instead.
+				</div>
+			</div>
+			<div class="modal-footer">
+				<form method="POST" action="<c:url value="account/${account.id}/delete"/>" />
+				<div>
+					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</div>
+				</form>
+			</div>
+		</div>
+	</c:forEach>
 
-		</div>
-		<div class="modal-footer">
-			<div id="deleteBtn"></div>
-		</div>
 	</div>
+
 
 </body>
 </html>

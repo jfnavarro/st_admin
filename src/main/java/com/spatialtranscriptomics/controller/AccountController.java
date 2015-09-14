@@ -172,14 +172,12 @@ public class AccountController {
      * @param id the account id.
      * @return the list view.
      */
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id) {
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String delete(@PathVariable String id) {
         accountService.delete(id);
-        ModelAndView success = 
-                new ModelAndView("accountlist", "accountList", accountService.list());
-        success.addObject("msg", "Account deleted.");
+
         logger.info("Deleted account " + id);
-        return success;
+        return "redirect:/account";
     }
 
     /**
