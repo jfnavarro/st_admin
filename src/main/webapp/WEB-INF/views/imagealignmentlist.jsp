@@ -18,9 +18,6 @@
 	});
 </script>
 
-<!-- Script for Delete dialog -->
-<script src="<c:url value="/js/delete-dialog.js"/>"></script>
-
 </head>
 <body>
 
@@ -63,9 +60,9 @@
                                                 <td><a href="<c:url value="/image/compressed/"/>${imal.figure_blue}">${imal.figure_blue}</td>
                                                 <td><small><fmt:formatDate value="${imal.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                                                 <td><small><fmt:formatDate value="${imal.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
-						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${imal.id}" data-endpoint="imagealignment" 
+						<td><a href="#deleteModal_${imal.id}" data-toggle="modal"
 							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
+
 					</tr>
 				</c:forEach>
 			</tbody>
@@ -73,7 +70,8 @@
 
 	</div>
 
-	<div id="deleteModal" class="modal hide fade" tabindex="-1">
+	<c:forEach var="imal" items="${imagealignmentList}">
+	<div id="deleteModal_${imal.id}" class="modal hide fade" tabindex="-1">
 		<div class="modal-header">
 			<h3 id="deleteModalLabel">Delete image alignment</h3>
 		</div>
@@ -81,9 +79,16 @@
 			<div>Are you sure you want to delete the image alignment?<br/></div>
 		</div>
 		<div class="modal-footer">
-			<div id="deleteBtn"></div>
+			<form method="POST" action="<c:url value="imagealignment/${imal.id}/delete"/>" />
+				<div>
+				<!-- a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a -->
+					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
+					<button type="submit" class="btn btn-danger">Delete</button>
+				</div>
+			</form>
 		</div>
 	</div>
+	</c:forEach>
 
 </body>
 </html>

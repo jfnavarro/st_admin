@@ -169,8 +169,8 @@ public class ImageAlignmentController {
      * @param id the alignment.
      * @return the list view.
      */
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id) {
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String delete(@PathVariable String id) {
         
         ImageAlignment imal = imagealignmentService.find(id);
         if (imal != null) {
@@ -179,12 +179,10 @@ public class ImageAlignmentController {
         } else {
             logger.info("Could not find image alignment object in DB with id " + id);
         }
-        
-        ModelAndView success = 
-                new ModelAndView("imagealignmentlist", 
-                        "imagealignmentList", imagealignmentService.list());
-        success.addObject("msg", "ImageAlignment deleted.");
-        return success;
+
+        // Redirect to the normal list. This avoids the problem where the same POST request
+        // is resubmitted.
+        return "redirect:/imagealignment";
     }
 
     // populate chip choice fields for form
