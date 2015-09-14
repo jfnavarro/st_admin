@@ -61,14 +61,13 @@
                                                 <td><small><fmt:formatDate value="${imal.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                                                 <td><small><fmt:formatDate value="${imal.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
 						<td><a href="#deleteModal_${imal.id}" data-toggle="modal"
-							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
-
+							class="btn btn-danger btn-small">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
-	</div>
+
 
 	<c:forEach var="imal" items="${imagealignmentList}">
 	<div id="deleteModal_${imal.id}" class="modal hide fade" tabindex="-1">
@@ -79,9 +78,8 @@
 			<div>Are you sure you want to delete the image alignment?<br/></div>
 		</div>
 		<div class="modal-footer">
-			<form method="POST" action="<c:url value="imagealignment/${imal.id}/delete"/>" />
+			<form method="POST" action="<c:url value="/imagealignment/${imal.id}/delete"/>" />
 				<div>
-				<!-- a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a -->
 					<button type="button" class="btn" data-dismiss="modal">Cancel</button>
 					<button type="submit" class="btn btn-danger">Delete</button>
 				</div>
@@ -89,6 +87,8 @@
 		</div>
 	</div>
 	</c:forEach>
+
+	</div>
 
 </body>
 </html>

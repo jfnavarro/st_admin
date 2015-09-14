@@ -9,13 +9,18 @@ package com.spatialtranscriptomics.serviceImpl;
 import com.spatialtranscriptomics.model.ImageMetadata;
 import com.spatialtranscriptomics.service.ImageService;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
@@ -40,7 +45,6 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     Properties appConfig;
 
-    @Override
     public List<ImageMetadata> list() {
         String url = appConfig.getProperty("url.image");
         ImageMetadata[] imgMetadataArray = secureRestTemplate.getForObject(url,
@@ -48,27 +52,35 @@ public class ImageServiceImpl implements ImageService {
         return Arrays.asList(imgMetadataArray);
     }
 
-    @Override
     public BufferedImage find(String id) {
         String url = appConfig.getProperty("url.image") + id;
         return secureRestTemplate.getForObject(url, BufferedImage.class);
     }
 
-    @Override
     public void delete(String id) {
         String url = appConfig.getProperty("url.image");
         secureRestTemplate.delete(url + id);
     }
 
-    @Override
     public void addFromFile(CommonsMultipartFile imageFile) throws IOException {
-        String url = appConfig.getProperty("url.image") + imageFile.getOriginalFilename();
-        BufferedImage bi = ImageIO.read(imageFile.getInputStream());
-        if (bi == null) {
+        String imageFilename = imageFile.getOriginalFilename();
+        byte[] bytes = imageFile.getBytes();
+
+        // Get the image
+        InputStream in = new ByteArrayInputStream(bytes);
+        BufferedImage bufferedImage = ImageIO.read(in);
+
+        if(bufferedImage == null) {
             throw new IOException("Empty or incorrect image file.");
         }
-        
-        secureRestTemplate.put(url, bi);
-    }
 
+        // Put the image
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        HttpEntity<BufferedImage> entity = new HttpEntity<BufferedImage>(bufferedImage, headers);
+
+        String url = appConfig.getProperty("url.image") + imageFilename;
+        secureRestTemplate.put(url, entity);
+        logger.debug("Finished putting the image");
+   }
 }
