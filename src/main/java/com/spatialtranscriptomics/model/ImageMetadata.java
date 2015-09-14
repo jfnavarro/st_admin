@@ -83,5 +83,4 @@ public class ImageMetadata implements IImageMetadata {
     public String getReadableSize() {
         return StringOperations.humanReadableByteCount(this.size);
     }
-
 }

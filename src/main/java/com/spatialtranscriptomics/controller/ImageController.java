@@ -141,14 +141,12 @@ public class ImageController {
      * @param id the filename.
      * @return the list view.
      */
-    @RequestMapping(value = "/{id:.+}/delete", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id) {
+    @RequestMapping(value = "/{id:.+}/delete", method = RequestMethod.POST)
+    public String delete(@PathVariable String id) {
         imageService.delete(id);
-        List<ImageMetadata> imageMetadata = imageService.list();
-        ModelAndView success = new ModelAndView("imagelist", "imagemetadata", imageMetadata);
-        success.addObject("msg", "Image deleted.");
         logger.info("Deleted image "+ id);
-        return success;
+
+        return "redirect:/image";
     }
 
     /**

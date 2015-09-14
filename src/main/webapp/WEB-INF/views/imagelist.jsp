@@ -20,9 +20,6 @@
 	});
 </script>
 
-<!-- Script for Delete dialog -->
-<script src="<c:url value="/js/delete-dialog.js"/>"></script>
-
 <body>
 
 	<c:import url="header.jsp"></c:import>
@@ -62,33 +59,38 @@
 
 			</thead>
 			<tbody>
-				<c:forEach var="image" items="${imagemetadata}">
+				<c:forEach var="image" items="${imagemetadata}" varStatus="loop">
 					<tr>
                                                 <td><a href="<c:url value="/image/compressed/"/>${image.filename}" target="_blank">${image.filename}</a></td>
                                                 <td>${image.getReadableSize()}</td>
                                                 <td><small><fmt:formatDate value="${image.created.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                                                 <td><small><fmt:formatDate value="${image.lastModified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
-						<td><a href="#deleteModal" data-toggle="modal"
-							data-id="${image.filename}" data-endpoint="image" 
-							class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
+						<td><a href="#deleteModal_${loop.index}" data-toggle="modal"
+							class="btn btn-danger btn-small">Delete</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 
+		<c:forEach var="image" items="${imagemetadata}" varStatus="loop">
+			<div id="deleteModal_${loop.index}" class="modal hide fade" tabindex="-1">
+				<div class="modal-header">
+					<h3 id="deleteModalLabel">Delete image</h3>
+				</div>
+				<div class="modal-body">
+					<div>Are you sure you want to delete the image?<br/></div>
+				</div>
+				<div class="modal-footer">
+					<form method="POST" action="<c:url value="/image/${image.filename}/delete"/>" />
+					<div>
+						<button type="button" class="btn" data-dismiss="modal">Cancel</button>
+						<button type="submit" class="btn btn-danger">Delete</button>
+					</div>
+					</form>
+				</div>
+			</div>
+		</c:forEach>
 
-	</div>
-
-	<div id="deleteModal" class="modal hide fade" tabindex="-1">
-		<div class="modal-header">
-			<h3 id="deleteModalLabel">Delete image</h3>
-		</div>
-		<div class="modal-body">
-			<div>Are you sure you want to delete the image?</div>
-		</div>
-		<div class="modal-footer">
-			<div id="deleteBtn"></div>
-		</div>
 	</div>
 
 </body>
