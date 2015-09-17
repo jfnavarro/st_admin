@@ -8,3 +8,6 @@
 
 .settings/
 
+# IntelliJ IDE stuff
+.idea/
+
