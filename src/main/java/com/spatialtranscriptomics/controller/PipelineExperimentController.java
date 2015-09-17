@@ -6,8 +6,6 @@
  */
 package com.spatialtranscriptomics.controller;
 
-import com.amazonaws.services.ec2.model.InstanceType;
-import com.amazonaws.services.elasticmapreduce.model.JobFlowDetail;
 import com.spatialtranscriptomics.exceptions.GenericException;
 import com.spatialtranscriptomics.exceptions.GenericExceptionResponse;
 import com.spatialtranscriptomics.form.PipelineExperimentForm;
@@ -25,7 +23,6 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.apache.log4j.Logger;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -88,38 +85,7 @@ public class PipelineExperimentController {
         ModelAndView success = 
                 new ModelAndView("pipelineexperimentshow", "pipelineexperiment", exp);
         
-        // Update DB w. jobflow status. Should be turned into an Amazon callback, if available.
-        // Note that we want to avoid doing too many pulls to Amazon, as Amazon has limits on operations.
-        JobFlowDetail jobFlow = emrService.findJobFlow(exp.getEmr_jobflow_id());
-        String oldState = exp.getEmr_state() == null ? "" : exp.getEmr_state();
-        if (!oldState.equals("COMPLETED") && !oldState.equals("FAILED") 
-                && !oldState.equals("TERMINATED") && jobFlow != null) {
-            logger.info("Updating pipeline experiment " 
-                    + id + " with state informatoin from Amazon.");
-            if (jobFlow.getExecutionStatusDetail().getState() != null) {
-                exp.setEmr_state(jobFlow.getExecutionStatusDetail().getState());
-            }
-            
-            if (jobFlow.getExecutionStatusDetail().getCreationDateTime() != null) {
-                exp.setEmr_creation_date_time(
-                        new DateTime(jobFlow.getExecutionStatusDetail().getCreationDateTime()));
-            }
-            
-            if (jobFlow.getExecutionStatusDetail().getEndDateTime() != null) {
-                exp.setEmr_end_date_time(
-                        new DateTime(jobFlow.getExecutionStatusDetail().getEndDateTime()));
-            }
-            
-            if (jobFlow.getExecutionStatusDetail().getLastStateChangeReason() != null) {
-                exp.setEmr_last_state_change_reason(
-                        jobFlow.getExecutionStatusDetail().getLastStateChangeReason());
-            }
-            
-            pipelineexperimentService.update(exp);
-        }
-        
-        success.addObject("jobflow", jobFlow);
-        success.addObject("accountName", 
+        success.addObject("accountName",
                 exp.getAccount_id() == null ? "" : accountService.find(exp.getAccount_id()).getUsername());
         return success;
     }
