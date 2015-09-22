@@ -49,16 +49,11 @@ public class FeaturesServiceImpl implements FeaturesService {
     @Override
     public void addUpdate(String id, byte[] file) {
         String url = appConfig.getProperty("url.features");
-        //HttpHeaders headers = new HttpHeaders();
-        //List<MediaType> acceptableMediaTypes = new ArrayList<MediaType>();
-        //acceptableMediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
-        //headers.setAccept(acceptableMediaTypes);
-        //headers.set("Content-Type", "application/octet-stream");
-        // Add the gzip Accept-Encoding header
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Type", "application/json");
-        headers.set("Content-Encoding", "gzip");
-        HttpEntity<byte[]> entity = new HttpEntity(file, headers); 
+        HttpEntity<byte[]> entity = new HttpEntity(file, headers);
+        // TODO: This version of spring does not seem to deal very well with
+        // setting the Content-Type header to application/octet-stream.
+        // Revisit this after the upgrade to Spring 4.X
         try {
             secureRestTemplate.exchange(url + id, HttpMethod.PUT, entity, String.class);
         } catch(RestClientException e) {
