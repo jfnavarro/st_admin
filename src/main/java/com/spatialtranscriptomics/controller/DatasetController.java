@@ -330,13 +330,12 @@ public class DatasetController {
      * @param id dataset ID.
      * @return list form.
      */
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
-    public ModelAndView delete(@PathVariable String id) {
+    @RequestMapping(value = "/{id}/delete", method = RequestMethod.POST)
+    public String delete(@PathVariable String id) {
         datasetService.delete(id);
-        ModelAndView success = list();
-        success.addObject("msg", "Dataset deleted.");
         logger.info("Deleted dataset " + id);
-        return success;
+
+        return "redirect:/dataset";
     }
 
     /**
