@@ -340,11 +340,20 @@
                                 <artifactId>maven-compiler-plugin</artifactId>
                                 <version>2.3.2</version>
                                 <configuration>
-                                        <source>1.5</source>
-                                        <target>1.5</target>
+                                        <source>1.7</source>
+                                        <target>1.7</target>
                                 </configuration>
-                        </plugin>
-                </plugins>
+	                    </plugin>
+						<plugin>
+							<groupId>org.apache.tomcat.maven</groupId>
+							<artifactId>tomcat7-maven-plugin</artifactId>
+							<version>2.1</version>
+							<configuration>
+								<path>/admin</path>
+								<port>7070</port>
+							</configuration>
+						</plugin>
+				</plugins>
 
 	</build>
 
