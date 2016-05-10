@@ -34,46 +34,6 @@
 			<h1>Help</h1>
 		</div>
 
-
-		<h2>Experiments</h2>
-
-		<div>
-			Create an experiment and run the Pipeline
-			<p />
-			<ul>
-				<li>Go to the page "Experiments" --&gt; "Create Experiment".</li>
-				<li>Fill out the form, click on "optional parameters" to enter
-					advanced Pipeline parameters</li>
-				<li>Click "Start pipeline" to create the experiment and start the
-					Pipeline.</li>
-
-			</ul>
-
-			View experiment status and download results
-			<p />
-			<ul>
-				<li>Go to the page "Experiments".</li>
-				<li>Click on the experiment you want to view</li>
-				<li>You see the status of the Pipeline job here (e.g. running,
-					completed, failed) as reported by Amazon EMR (where jobs are executed).</li>
-				<li>As soon as the Pipeline is completed the page will show
-					download links to the Pipeline output.</li>
-				<li>The output is available in Json and CSV format</li>
-                                <li>You may also go to the Dataset page and create a dataset based on the
-                                    output of the job without having to save the file locally.</li>
-			</ul>
-
-			Stop the Pipeline and delete experiments
-			<p />
-			<ul>
-				<li>Go to the page "Experiments".</li>
-				<li>Click on the "delete" link next to the experiment</li>
-				<li>This will delete the experiment with all output, log, and temp data</li>
-				<li>If the Pipeline is still running, it will stop the Pipeline
-					immediately</li>
-			</ul>
-		</div>
-
 		<h2>Datasets</h2>
 
 

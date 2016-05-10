@@ -135,25 +135,8 @@
                                 <!--  start features -->
 
                                 <legend>
-                                    Features <small>(choose either experiment output or feature file)</small>
+                                    Features <small>(JSON file from the pipeline in gz format)</small>
                                 </legend>
-
-                                <spring:bind path="experimentId">
-                                    <div class="control-group  ${status.error ? 'error' : ''}">
-                                        <label class="control-label" for="experiment">Experiment output</label>
-                                        <div class="controls">
-                                            <form:select id="experimentId" path="experimentId">
-                                                <option></option>
-                                                <form:options items="${experimentChoices}"></form:options>
-                                            </form:select>
-                                            <span class='help-inline'>${status.errorMessage}</span>
-                                        </div>
-                                    </div>
-                                </spring:bind>
-
-                                <div class="pull-center text-center">
-                                    <strong>-- or --</strong>
-                                </div>
 
                                 <spring:bind path="featureFile">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
@@ -291,7 +274,7 @@
         <!-- Load File upload style -->
         <script>
                 $(":file").filestyle({
-                    buttonText: "Choose .json file",
+                    buttonText: "Choose .gz file",
                     classInput: "input-small"
                 });
         </script>

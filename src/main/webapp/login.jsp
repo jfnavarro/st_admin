@@ -5,7 +5,7 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Spatial Transcriptomics Admin Console</title>
+<title>Spatial Transcriptomics Research Admin Console</title>
 <link href="<c:url value="/css/bootstrap.min.css"/>" rel="stylesheet"
 	media="screen">
 <style type="text/css">

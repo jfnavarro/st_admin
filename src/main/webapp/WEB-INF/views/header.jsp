@@ -37,9 +37,6 @@ body {
 					<ul class="nav">
 						<li id="menuHome"><a href="<c:url value="/home"/>">Home</a></li>
 						<li id="menuDataset"><a href="<c:url value="/dataset"/>">Datasets</a></li>
-						<!--<li id="menuSelection"><a href="<c:url value="/selection"/>">Selections</a></li>-->
-						<!--<li id="menuTask"><a href="<c:url value="/task"/>">Tasks</a></li>-->
-						<li id="menuPipelineExperiment"><a href="<c:url value="/pipelineexperiment"/>">Experiments</a></li>					
 						<li id="menuChip"><a href="<c:url value="/chip"/>">Chips</a></li>
 						<li id="menuImage"><a href="<c:url value="/image"/>">Images</a></li>
 						<li id="menuAligner"><a href="<c:url value="/imagealignment"/>">Alignments</a></li>

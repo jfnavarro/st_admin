@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 
-	<display-name>ST Admin Console</display-name>
+	<display-name>ST Research Admin Console</display-name>
 	
 	<listener>
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
