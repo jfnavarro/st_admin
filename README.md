@@ -1,6 +1,6 @@
 # Spatial Transcriptomics Research Admin
 
-A web based tool to administrate and create Spatial Transcriptomics Researcg datasets 
+A web based tool to administrate and create Spatial Transcriptomics Research datasets 
 
 This is a web based tool that we use to create datasets/accounts and
 grant access to them. This tool works with the Spatial Transcriptomics
