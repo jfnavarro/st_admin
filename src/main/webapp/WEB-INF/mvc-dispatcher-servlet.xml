@@ -45,14 +45,14 @@
 
 	<!-- Enable Annotations -->
 
-	<context:component-scan base-package="com.spatialtranscriptomics.controller" />
-	<context:component-scan base-package="com.spatialtranscriptomics.serviceImpl" />
-	<context:component-scan base-package="com.spatialtranscriptomics.auth" />
+	<context:component-scan base-package="com.st.controller" />
+	<context:component-scan base-package="com.st.serviceImpl" />
+	<context:component-scan base-package="com.st.auth" />
 	
 	<!--  Enable startup bean and some "hacks". -->
 	
-	<bean id="startupHousekeeper" class="com.spatialtranscriptomics.component.StartupHousekeeper"/>
-	<bean id="staticContextAccessor" class="com.spatialtranscriptomics.component.StaticContextAccessor"/>
+	<bean id="startupHousekeeper" class="com.st.component.StartupHousekeeper"/>
+	<bean id="staticContextAccessor" class="com.st.component.StaticContextAccessor"/>
 	
 	<!-- File upload max. filesize -->
 
@@ -96,20 +96,16 @@
 	<bean id="s3Client" class="com.amazonaws.services.s3.AmazonS3Client">
 	</bean>
 
-	<bean id="emrClient"
-		class="com.amazonaws.services.elasticmapreduce.AmazonElasticMapReduceClient">
-	</bean>
-
 	<!-- Error handlers -->
 
 	<bean id="jsonErrorHandler"
-		class="com.spatialtranscriptomics.util.JsonResponseErrorHandler" />
+		class="com.st.util.JsonResponseErrorHandler" />
 
 	<bean
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.spatialtranscriptomics.exceptions.GenericException">error</prop>
+				<prop key="com.st.exceptions.GenericException">error</prop>
 			</props>
 		</property>
 	</bean>

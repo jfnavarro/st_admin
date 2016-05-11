@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import com.st.form.ImageForm;
@@ -74,7 +68,8 @@ public class ImageController {
      * @param id the image name
      * @return the image.
      */
-    @RequestMapping(value = "/compressed/{id:.+}", method = RequestMethod.GET, produces = "image/jpeg")
+    @RequestMapping(value = "/compressed/{id:.+}", 
+            method = RequestMethod.GET, produces = "image/jpeg")
     public @ResponseBody
     byte[] getCompressed(@PathVariable String id) {
         logger.info("Returning " + id + " as JPEG");
@@ -110,7 +105,8 @@ public class ImageController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("imageform") @Valid ImageForm imageForm, BindingResult result) {
+    public ModelAndView submitAdd(@ModelAttribute("imageform") 
+    @Valid ImageForm imageForm, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("imageadd", "imageform", imageForm);
             model.addObject("errors", result.getAllErrors());
@@ -125,12 +121,14 @@ public class ImageController {
         }
         if (imageNames.contains(imageForm.getFileName())) {
             ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
-            model.addObject("err", "An image with this name already exists. Choose another name or delete existing image.");
+            model.addObject("err", "An image with this name already exists. "
+                    + "Choose another name or delete existing image.");
             return model;
         } else {
             try {
                 imageService.addFromFile(imageForm.getImageFile());
-                ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imageService.list());
+                ModelAndView model = new ModelAndView("imagelist", 
+                        "imagemetadata", imageService.list());
                 model.addObject("msg", "Image imported.");
                 logger.info("Successfully imported BufferedImage " + imageForm.getFileName());
                 return model;
@@ -151,7 +149,8 @@ public class ImageController {
      * @return the list view.
      */
     @RequestMapping(value = "/compressed/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAddCompressed(@ModelAttribute("imageform") @Valid ImageForm imageForm, BindingResult result) {
+    public ModelAndView submitAddCompressed(@ModelAttribute("imageform") 
+    @Valid ImageForm imageForm, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("imageadd", "imageform", imageForm);
             model.addObject("errors", result.getAllErrors());
@@ -166,7 +165,8 @@ public class ImageController {
         }
         if (imageNames.contains(imageForm.getFileName())) {
             ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
-            model.addObject("err", "An image with this name already exists. Choose another name or delete existing image.");
+            model.addObject("err", "An image with this name already exists. "
+                    + "Choose another name or delete existing image.");
             return model;
         } else {
             try {

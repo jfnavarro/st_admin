@@ -1,25 +1,12 @@
-/*
- * Copyright © 2012 Spatial Transcriptomics AB
- * Read LICENSE for more information about licensing terms
- * Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.serviceImpl;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-//import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-//import org.springframework.web.bind.annotation.ExceptionHandler;
-//import org.springframework.web.bind.annotation.ResponseBody;
-//import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestOperations;
-//import org.springframework.web.client.RestTemplate;
-//import org.springframework.http.HttpStatus;
-//import com.spatialtranscriptomics.exceptions.GenericException;
 import com.st.model.Account;
 import com.st.service.AccountService;
 

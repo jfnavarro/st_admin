@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import com.st.form.ChipForm;
@@ -86,7 +80,8 @@ public class ChipController {
      * @return the list form.
      */
     @RequestMapping(value = "/submitimport", method = RequestMethod.POST)
-    public ModelAndView submitImport(@ModelAttribute("chipform") @Valid ChipForm chipForm, BindingResult result) {
+    public ModelAndView submitImport(@ModelAttribute("chipform") 
+    @Valid ChipForm chipForm, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("chipimport", "chipform", chipForm);
             model.addObject("errors", result.getAllErrors());

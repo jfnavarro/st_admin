@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import com.st.component.StaticContextAccessor;
@@ -22,9 +16,7 @@ import com.st.serviceImpl.DatasetInfoServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.FeaturesServiceImpl;
 import com.st.serviceImpl.ImageAlignmentServiceImpl;
-import com.st.serviceImpl.S3ServiceImpl;
 import com.st.serviceImpl.SelectionServiceImpl;
-import com.st.util.ByteOperations;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,8 +74,6 @@ public class DatasetController {
     @Autowired
     ImageAlignmentServiceImpl imageAlignmentService;
 
-    @Autowired
-    S3ServiceImpl s3Service;
 
     /**
      * Returns the list view.
@@ -96,7 +86,7 @@ public class DatasetController {
         logger.info("Entering list view of datasets");
         Map<String, FeaturesMetadata> metadata = populateFeaturesMetadata();
 
-        ArrayList<Dataset> l = new ArrayList<Dataset>(datasetService.list());
+        ArrayList<Dataset> l = new ArrayList<>(datasetService.list());
         Iterator<Dataset> i = l.iterator();
         while (i.hasNext()) {
             Dataset d = i.next(); // must be called before you can call i.remove()
@@ -121,7 +111,7 @@ public class DatasetController {
         ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
         List<Account> accounts = accountService.findForDataset(id);
         success.addObject("accounts", accounts);
-        if (dataset.getImage_alignment_id() != null && !dataset.getImage_alignment_id().equals("")) {
+        if (dataset.getImage_alignment_id() != null ) {
             ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
             success.addObject("imagealignment", imal);
         }
@@ -152,7 +142,8 @@ public class DatasetController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("datasetform") @Valid DatasetAddForm datasetAddForm, BindingResult result) {
+    public ModelAndView submitAdd(@ModelAttribute("datasetform") 
+    @Valid DatasetAddForm datasetAddForm, BindingResult result) {
         // form validation
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
@@ -161,15 +152,11 @@ public class DatasetController {
         }
 
         // Validate if either feature file of experiment is selected (exactly one of them).
-        if (datasetAddForm.getFeatureFile().isEmpty() && datasetAddForm.getExperimentId().isEmpty()) {
+        if (datasetAddForm.getFeatureFile().isEmpty()) {
             ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
-            model.addObject("featureerror", "Select either a file or an experiment for feature import.");
+            model.addObject("featureerror", "Select a valid file with the st data to import.");
             return model;
-        } else if (!datasetAddForm.getFeatureFile().isEmpty() && !datasetAddForm.getExperimentId().isEmpty()) {
-            ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
-            model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
-            return model;
-        }
+        } 
         
         // Validate gzip format.
         if (!datasetAddForm.getFeatureFile().isEmpty() &&
@@ -180,23 +167,11 @@ public class DatasetController {
             return model;
         }
 
-        byte[] bytes = null;
-        if (!datasetAddForm.getFeatureFile().isEmpty()) {
-            CommonsMultipartFile ffile = datasetAddForm.getFeatureFile();
-            bytes = ffile.getBytes();
-        } else if (datasetAddForm.getExperimentId() != null) {
-            try {
-                // TODO: This needs to be made zipped already at an earlier stage.
-                bytes = s3Service.getFeaturesAsJson(datasetAddForm.getExperimentId());
-                bytes = ByteOperations.gzip(bytes);
-            } catch (IOException ex) {
-                logger.error("Failed to convert S3 feature stream to byte array when adding dataset.");
-                ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
-                model.addObject("featureerror", "Error trying to access features from chosen experiment.");
-                return model;
-            }
-        }
-
+        // parse the file
+        CommonsMultipartFile ffile = datasetAddForm.getFeatureFile();
+        byte[] bytes = ffile.getBytes();
+   
+        // get the current object
         Dataset beingCreated = datasetAddForm.getDataset();
 
         // Compute quartiles.
@@ -256,7 +231,8 @@ public class DatasetController {
      * @return list form.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public ModelAndView submitEdit(@ModelAttribute("datasetform") @Valid DatasetEditForm datasetEditForm, BindingResult result) {
+    public ModelAndView submitEdit(@ModelAttribute("datasetform") 
+    @Valid DatasetEditForm datasetEditForm, BindingResult result) {
         
         // form validation
         if (result.hasErrors()) {
@@ -266,9 +242,9 @@ public class DatasetController {
         }
 
         // validate if only one feature input is selected.
-        if (!datasetEditForm.getFeatureFile().isEmpty() && !datasetEditForm.getExperimentId().isEmpty()) {
+        if (!datasetEditForm.getFeatureFile().isEmpty()) {
             ModelAndView model = new ModelAndView("datasetedit", "datasetform", datasetEditForm);
-            model.addObject("featureerror", "Select either a file or an experiment for feature import. You cannot select both.");
+            model.addObject("featureerror", "Select a valid file with the st data.");
             return model;
         }
         
@@ -282,22 +258,8 @@ public class DatasetController {
         }
 
         // Read features, if specified.
-        byte[] bytes = null;
-        if (!datasetEditForm.getFeatureFile().isEmpty()) {
-            CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
-            bytes = ffile.getBytes();
-        } else if (!datasetEditForm.getExperimentId().isEmpty()) {
-            try {
-                // TODO: This needs to be made zipped already at an earlier stage.
-                bytes = s3Service.getFeaturesAsJson(datasetEditForm.getExperimentId());
-                bytes = ByteOperations.gzip(bytes);
-            } catch (IOException ex) {
-                logger.error("Failed to convert S3 feature stream to byte array when editing dataset " + datasetEditForm.getDataset().getId());
-                ModelAndView model = new ModelAndView("datasetedit", "datasetform", datasetEditForm);
-                model.addObject("featureerror", "Error creating features from selected experiment.");
-                return model;
-            }
-        }
+        CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
+        byte[] bytes = ffile.getBytes();
 
         Dataset beingUpdated = datasetEditForm.getDataset();
 
@@ -360,59 +322,6 @@ public class DatasetController {
             throw new RuntimeException("IOError writing features file to HTTP response", ex);
         }
     }
-    
-//    /**
-//     * Returns the features parsed into model objects.
-//     *
-//     * @param id dataset ID.
-//     * @return the features parsed.
-//     */
-//    @RequestMapping(value = "/featureslist/{id}", method = RequestMethod.GET)
-//    public @ResponseBody
-//    Feature[] getFeaturesList(@PathVariable String id) {
-//        logger.info("About to download and parse features file for dataset " + id);
-//        S3Resource fw = featuresService.find(id);
-//        List<Feature> features = Feature.parse(fw.getFile(), true);
-//        Feature[] feats = new Feature[features.size()];
-//        return feats;
-//    }
-    
-//     /**
-//     * Returns an image for inspecting the features.
-//     *
-//     * @param id dataset ID.
-//     * @return RGB image with one pixel per feature coordinate.
-//     */
-//    @RequestMapping(value = "/featuresimage/{id}", method = RequestMethod.GET, produces = "image/bmp")
-//    public @ResponseBody
-//    BufferedImage getFeaturesImage(@PathVariable String id) {
-//        logger.info("About to download and parse features file for dataset " + id + " to create inspection image");
-//        Dataset d = datasetService.find(id);
-//        if (d == null) return null;
-//        //System.out.println("Got dataset.");
-//        ImageAlignment imal = imageAlignmentService.find(d.getImage_alignment_id());
-//        //System.out.println("Got imal.");
-//        Chip chip = null;
-//        if (imal != null) {
-//            //System.out.println("Got chip.");
-//            chip = chipService.find(imal.getChip_id());
-//        }
-//        S3Resource fw = featuresService.find(id);
-//        //System.out.println("Got file.");
-//        List<Feature> features = Feature.parse(fw.getFile(), true);
-//        //System.out.println("Got " + features.length);
-//        BufferedImage img;
-//        try {
-//            //System.out.println("Creating image.");
-//            img = ComputeFeatureImage.computeImage(chip, features);
-//            //System.out.println("size: "+ img.getWidth() +  " * " + img.getHeight());
-//        } catch (IOException ex) {
-//            //ex.printStackTrace();
-//            logger.error("Error creating features image for dataset " + id);
-//            throw new RuntimeException("Error constructing features image", ex);
-//        }
-//        return img;
-//    }
 
     /**
      * Helper. Metadata.
@@ -422,7 +331,7 @@ public class DatasetController {
     @ModelAttribute("featuresMetadata")
     public Map<String, FeaturesMetadata> populateFeaturesMetadata() {
         List<FeaturesMetadata> fml = featuresService.listMetadata();
-        Map<String, FeaturesMetadata> metadata = new LinkedHashMap<String, FeaturesMetadata>(fml.size());
+        Map<String, FeaturesMetadata> metadata = new LinkedHashMap<>(fml.size());
         for (FeaturesMetadata t : fml) {
             metadata.put(t.getDatasetId(), t);
         }
@@ -436,7 +345,7 @@ public class DatasetController {
      */
     @ModelAttribute("imageAlignmentChoices")
     public Map<String, String> populateImageAlignmentChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         choices.put(null, "None");
         List<ImageAlignment> l = imageAlignmentService.list();
         for (ImageAlignment t : l) {
@@ -452,7 +361,7 @@ public class DatasetController {
      */
     @ModelAttribute("chipChoices")
     public Map<String, String> populateChipChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         choices.put(null, "None");
         List<Chip> l = chipService.list();
         for (Chip t : l) {
@@ -468,7 +377,7 @@ public class DatasetController {
      */
     @ModelAttribute("accountChoices")
     public Map<String, String> populateAccountChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Account> l = accountService.list();
         for (Account t : l) {
             choices.put(t.getId(), t.getUsername());

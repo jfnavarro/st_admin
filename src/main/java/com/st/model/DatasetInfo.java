@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.model;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -34,34 +28,50 @@ public class DatasetInfo implements IDatasetInfo {
     }
 
     // Auto-set by Mongo.
+    @Override
     public String getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getAccount_id() {
         return account_id;
     }
 
+    @Override
     public void setAccount_id(String account_id) {
         this.account_id = account_id;
     }
 
+    @Override
     public String getDataset_id() {
         return dataset_id;
     }
 
+    @Override
     public void setDataset_id(String dataset_id) {
         this.dataset_id = dataset_id;
     }
 
+    @Override
     public String getComment() {
         return comment;
     }
 
+    /**
+     *
+     * @param comment
+     */
+    @Override
     public void setComment(String comment) {
         this.comment = comment;
     }

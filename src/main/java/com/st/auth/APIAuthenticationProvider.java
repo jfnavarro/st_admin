@@ -1,9 +1,3 @@
-/*
- *Copyright © 2014 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.auth;
 
 import com.st.component.StaticContextAccessor;

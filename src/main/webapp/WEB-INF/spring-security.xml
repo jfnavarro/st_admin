@@ -68,7 +68,7 @@
 		session) because it uses the credentials of the current user -->
 
 	<bean id="secureRestTemplate"
-		class="com.spatialtranscriptomics.auth.CustomOAuth2RestTemplate"
+		class="com.st.auth.CustomOAuth2RestTemplate"
 		scope="session">
 		<property name="messageConverters">
 			<list>

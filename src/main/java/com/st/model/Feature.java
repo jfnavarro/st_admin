@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.model;
 
 import com.st.exceptions.GenericException;
@@ -13,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +43,11 @@ public class Feature implements IFeature {
     
     /**
      * Constructor.
+     * @param x
+     * @param y
+     * @param hits
+     * @param barcode
+     * @param gene
      */
     public Feature(int x, int y, int hits, String barcode, String gene) {
         this.x = x;
@@ -77,10 +77,16 @@ public class Feature implements IFeature {
         this.y = y;
     }
 
+    @Override
     public int getHits() {
         return hits;
     }
 
+    /**
+     *
+     * @param hits
+     */
+    @Override
     public void setHits(int hits) {
         this.hits = hits;
     }
@@ -142,7 +148,8 @@ public class Feature implements IFeature {
     * @param gene_pooled_hit_quartiles return value gene-pooled hit quartiles.
     * @return overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count.
     */
-    public static int[] parse(byte[] bytes, boolean isGZipped, double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) {
+    public static int[] parse(byte[] bytes, boolean isGZipped, 
+            double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) {
         File temp = null;
         int[] stats = null;
         
@@ -152,28 +159,29 @@ public class Feature implements IFeature {
             
             if (isGZipped) {
                                
-                // Unzip and write to file.
-                //System.out.println("Starting unzipping");
-                GZIPInputStream gzis = new GZIPInputStream(new ByteArrayInputStream(bytes));
-                FileOutputStream out = new FileOutputStream(temp);
-                int len;
-                while ((len = gzis.read(buffer)) > 0) {
-                    out.write(buffer, 0, len);
+                FileOutputStream out;
+                try ( // Unzip and write to file.
+                        GZIPInputStream gzis = new GZIPInputStream(new ByteArrayInputStream(bytes))) {
+                    out = new FileOutputStream(temp);
+                    int len;
+                    while ((len = gzis.read(buffer)) > 0) {
+                        out.write(buffer, 0, len);
+                    }
+                    //System.out.println("Finished unzipping");
                 }
-                //System.out.println("Finished unzipping");
-                gzis.close();
                 out.close();
                 
             } else {
                 
-                // Write to file.
-                ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-                FileOutputStream out = new FileOutputStream(temp);
-                int len;
-                while ((len = bin.read(buffer)) > 0) {
-                    out.write(buffer, 0, len);
+                FileOutputStream out;
+                try ( // Write to file.
+                        ByteArrayInputStream bin = new ByteArrayInputStream(bytes)) {
+                    out = new FileOutputStream(temp);
+                    int len;
+                    while ((len = bin.read(buffer)) > 0) {
+                        out.write(buffer, 0, len);
+                    }
                 }
-                bin.close();
                 out.close();
             }
             
@@ -184,7 +192,8 @@ public class Feature implements IFeature {
             //e.printStackTrace();
             GenericExceptionResponse resp = new GenericExceptionResponse();
             resp.setError("Parse error");
-            resp.setError_description("Could not parse JSON feature file. Wrong format?" + e.getStackTrace().toString());
+            resp.setError_description("Could not parse JSON feature file. Wrong format?" 
+                    + Arrays.toString(e.getStackTrace()));
             throw new GenericException(resp);
         } finally {
             if (temp != null) {
@@ -198,7 +207,8 @@ public class Feature implements IFeature {
     /**
      * Helper to parse().
      */
-    private static int[] parseStreamingly(File file, double[] overall_hit_quartiles, double[] gene_pooled_hit_quartiles) throws IOException {
+    private static int[] parseStreamingly(File file, double[] overall_hit_quartiles, 
+            double[] gene_pooled_hit_quartiles) throws IOException {
         
         JsonFactory f = new MappingJsonFactory();
         JsonParser jp = f.createJsonParser(file);
@@ -209,9 +219,9 @@ public class Feature implements IFeature {
         }
         
         int sum = 0;
-        List<Integer> hits = new ArrayList<Integer>(20000000);
-        HashMap<String, Integer> pooledHits = new HashMap<String, Integer>(2000000);
-        HashSet<String> pooledBarcodes = new HashSet<String>(100000);
+        List<Integer> hits = new ArrayList<>(20000000);
+        HashMap<String, Integer> pooledHits = new HashMap<>(2000000);
+        HashSet<String> pooledBarcodes = new HashSet<>(100000);
         
         int n = 0;
         while (jp.nextToken() != JsonToken.END_ARRAY) {
@@ -231,18 +241,15 @@ public class Feature implements IFeature {
                 pooledHits.put(gene, h);
             }
             pooledBarcodes.add(barcode);
-            
-            //feats.add(feat);
         }
         
         Collections.sort(hits);
-        ArrayList<Integer> poolHits = new ArrayList<Integer>(pooledHits.values());
+        ArrayList<Integer> poolHits = new ArrayList<>(pooledHits.values());
         Collections.sort(poolHits);
 
         computeQuartiles(hits, overall_hit_quartiles);
         computeQuartiles(poolHits, gene_pooled_hit_quartiles);
 
-        // overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count
         return new int[]{n, sum, poolHits.size(), pooledBarcodes.size()};
     }
     

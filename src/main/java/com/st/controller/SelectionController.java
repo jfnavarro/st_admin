@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import java.util.LinkedHashMap;
@@ -95,14 +89,16 @@ public class SelectionController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("selection") @Valid Selection sel, BindingResult result) {
+    public ModelAndView submitAdd(@ModelAttribute("selection") 
+    @Valid Selection sel, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("selectionadd", "selection", sel);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         selectionService.add(sel);
-        ModelAndView success = new ModelAndView("selectionlist", "selectionList", selectionService.list());
+        ModelAndView success = new ModelAndView("selectionlist", 
+                "selectionList", selectionService.list());
         success.addObject("msg", "Selection created.");
         logger.info("Successfully added selection");
         return success;
@@ -117,7 +113,8 @@ public class SelectionController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit form for selection " + id);
-        return new ModelAndView("selectionedit", "selection", selectionService.find(id));
+        return new ModelAndView("selectionedit", "selection", 
+                selectionService.find(id));
     }
 
     /**
@@ -127,14 +124,17 @@ public class SelectionController {
      * @return  the list view.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public ModelAndView submitEdit(@ModelAttribute("selection") @Valid Selection sel, BindingResult result) {
+    public ModelAndView submitEdit(@ModelAttribute("selection") 
+    @Valid Selection sel, BindingResult result) {
         if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("selectionedit", "selection", sel);
+            ModelAndView model = new ModelAndView("selectionedit", 
+                    "selection", sel);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         selectionService.update(sel);
-        ModelAndView success = new ModelAndView("selectionlist", "selectionList", selectionService.list());
+        ModelAndView success = new ModelAndView("selectionlist", 
+                "selectionList", selectionService.list());
         success.addObject("msg", "Selection saved.");
         logger.info("Successfully edited selection " + sel.getId());
         return success;
@@ -148,7 +148,8 @@ public class SelectionController {
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable String id) {
         selectionService.delete(id);
-        ModelAndView success = new ModelAndView("selectionlist", "selectionList", selectionService.list());
+        ModelAndView success = new ModelAndView("selectionlist", 
+                "selectionList", selectionService.list());
         success.addObject("msg", "Selection deleted.");
         logger.info("Deleted selection " + id);
         return success;
@@ -157,7 +158,7 @@ public class SelectionController {
     // populate account choice fields for form
     @ModelAttribute("accountChoices")
     public Map<String, String> populateAccountChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Account> l = accountService.list();
         choices.put("", "Unknown");
         for (Account t : l) {
@@ -169,7 +170,7 @@ public class SelectionController {
     // populate dataset choice fields for form
     @ModelAttribute("datasetChoices")
     public Map<String, String> populateDatasetChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Dataset> l = datasetService.list();
         choices.put("", "Unknown");
         for (Dataset t : l) {

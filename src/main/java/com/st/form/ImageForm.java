@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.form;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -23,13 +17,11 @@ public class ImageForm {
     /** Filename. */
     @NotEmpty
     String fileName;
-
     
     public CommonsMultipartFile getImageFile() {
         return imageFile;
     }
 
-    
     public void setImageFile(CommonsMultipartFile imageFile) {
         this.imageFile = imageFile;
         this.fileName = imageFile.getOriginalFilename();

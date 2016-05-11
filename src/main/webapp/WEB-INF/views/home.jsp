@@ -26,8 +26,7 @@
 		<!-- Main hero unit for a primary marketing message or call to action -->
 		<div class="hero-unit">
 			<h1>ST Research Admin Console</h1>
-			<p>Run Pipeline experiments, manage datasets, chips and images,
-				or administrate user accounts.</p>
+			<p>Manage datasets, chips and images or administrate user accounts.</p>
 			<p>
 				<a href="<c:url value="/help"/>" class="btn btn-success btn-large">Learn
 					how &raquo;</a>

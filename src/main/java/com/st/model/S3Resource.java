@@ -1,17 +1,7 @@
 package com.st.model;
 
 import static com.st.util.ByteOperations.gzip;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-import org.apache.commons.io.IOUtils;
 
 /**
  * This class wraps an arbitrary file resource from S3 into JSON.
@@ -55,7 +45,8 @@ public class S3Resource implements IS3Resource {
      * @param filename filename.
      * @param file file contents.
      */
-    public S3Resource(String contentType, String contentEncoding , String filename, byte[] file) {
+    public S3Resource(String contentType, String contentEncoding, 
+            String filename, byte[] file) {
         this.contentType = contentType;
         this.contentEncoding = contentEncoding;
         this.filename = filename;
@@ -70,10 +61,11 @@ public class S3Resource implements IS3Resource {
      * @param filename filename.
      * @param file file contents.
      * @return the resource.
+     * @throws java.io.IOException
      */
-    public static S3Resource createGZipS3Resource(String contentType, String filename, byte[] file) throws IOException {
+    public static S3Resource createGZipS3Resource(String contentType, 
+            String filename, byte[] file) throws IOException {
         byte[] zipbytes = gzip(file);
-        //System.out.println("Suceeded zipping: " + zipbytes.length + " bytes (compression factor " + (bytes.length / (double) zipbytes.length));
         S3Resource wrap = new S3Resource(contentType, "gzip", filename, zipbytes);
         return wrap;
     }

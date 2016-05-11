@@ -1,9 +1,3 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import com.st.component.StaticContextAccessor;
@@ -100,8 +94,6 @@ public class AccountController {
             model.addObject("errors", result.getAllErrors());
             return model;
         }
-        //System.out.println(acc.getPassword());
-        //System.out.println(acc.getPasswordRepeat());
         if (!acc.getPassword().equals(acc.getPasswordRepeat())) {
             ModelAndView model = new ModelAndView("accountadd", "account", acc);
             model.addObject("specerror", "Password repeat mismatch. Please enter again.");
@@ -169,10 +161,11 @@ public class AccountController {
 
     /**
      * Populates dataset choice fields for views.
+     * @return 
      */
     @ModelAttribute("datasetChoices")
     public Map<String, String> populateDatasetChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Dataset> l = datasetService.list();
         for (Dataset t : l) {
             choices.put(t.getId(), t.getName());
@@ -182,6 +175,7 @@ public class AccountController {
 
     /**
      * Static access to the account service.
+     * @return 
      */
     public static AccountServiceImpl getStaticAccountService() {
         return StaticContextAccessor.getBean(AccountController.class).getAccountService();
@@ -189,6 +183,7 @@ public class AccountController {
 
     /**
      * Access to the account service.
+     * @return 
      */
     public AccountServiceImpl getAccountService() {
         return this.accountService;

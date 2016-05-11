@@ -51,7 +51,7 @@ body {
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="brand" href="#">ST Admin Console</a>
+				<a class="brand" href="#">ST Research Admin Console</a>
 
 				<!--/.nav-collapse -->
 			</div>

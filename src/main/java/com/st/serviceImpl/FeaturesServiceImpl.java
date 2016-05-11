@@ -6,28 +6,13 @@
 
 package com.st.serviceImpl;
 
-import com.st.exceptions.GenericException;
-import com.st.exceptions.GenericExceptionResponse;
-import com.st.model.Feature;
 import com.st.model.FeaturesMetadata;
 import com.st.model.S3Resource;
 import com.st.service.FeaturesService;
-import static com.st.util.ByteOperations.gunzip;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.zip.GZIPInputStream;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.annotate.JsonAutoDetect.Visibility;
-import org.codehaus.jackson.annotate.JsonMethod;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

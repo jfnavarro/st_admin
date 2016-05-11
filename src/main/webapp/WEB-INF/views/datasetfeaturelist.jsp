@@ -32,7 +32,7 @@
 
 		<div class="page-header">
 			<h1>
-				Features <small>Dataset ${dataset.name}</small>
+				ST Data <small>Dataset ${dataset.name}</small>
 			</h1>
 		</div>
 
@@ -47,7 +47,6 @@
 			<thead>
 				<tr>
 					<th>Gene nomenclature</th>
-					<th>Annotation</th>
 					<th>Barcode</th>
 					<th>Hits</th>
 					<th>X</th>
@@ -59,7 +58,6 @@
 				<c:forEach var="feature" items="${featureList}">
 					<tr>
 						<td>${feature.gene}</td>
-						<td>${feature.annotation}</td>
 						<td>${feature.barcode}</td>
 						<td>${feature.hits}</td>
 						<td>${feature.x}</td>

@@ -135,38 +135,7 @@
                             </spring:bind>						
 
 
-                            <legend>Features <small>(leave both empty to keep the current features)</small></legend>
-
-                            <spring:bind path="experimentId">
-                                <div class="control-group  ${status.error ? 'error' : ''}">
-                                    <label class="control-label" for="experiment">Experiment output </label>
-                                    <div class="controls">
-                                        <form:select id="experimentId" path="experimentId">
-                                            <option></option>
-                                            <form:options items="${experimentChoices}"></form:options>
-                                        </form:select>
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                    </div>
-                                </div>
-                            </spring:bind>
-
-                            <div class="pull-center text-center">
-                                <strong>-- or --</strong>
-                            </div>
-
-                            <!-- <spring:bind path="featureFile">
-                                    <div class="control-group  ${status.error ? 'error' : ''}">
-                                            <div class="control-group">
-                                                    <label class="control-label" for="featureFile">Feature
-                                                            File </label>
-                                                    <div class="controls">
-                                <form:input type="file" id="featureFile"
-                                            placeholder="Feature file" path="featureFile" />
-                                    <span class="help-inline"></span> <span class='help-inline'>${status.errorMessage}</span>
-                            </div>
-                    </div>
-            </div>
-                            </spring:bind> -->
+                            <legend>ST Data <small>(leave empty to keep the current data)</small></legend>
 
                             <spring:bind path="featureFile">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
@@ -187,18 +156,6 @@
 
                         <div class="span4">
                             <legend>Statistics and comments</legend>
-
-                            <spring:bind path="dataset.obo_foundry_terms">
-                                <div class="control-group  ${status.error ? 'error' : ''}">
-                                    <label class="control-label" for="obo_foundry_terms">OBO Foundry terms</label>
-                                    <div class="controls">
-                                        <form:input type="text" id="obo_foundry_terms"
-                                                    placeholder=""
-                                                    path="dataset.obo_foundry_terms" />
-                                        <span class='help-inline'>${status.errorMessage}</span>
-                                    </div>
-                                </div>
-                            </spring:bind>
 
                             <spring:bind path="dataset.comment">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
@@ -241,7 +198,7 @@
         <!-- Load File upload style -->
         <script>
                 $(":file").filestyle({
-                    buttonText: "Choose .json file",
+                    buttonText: "Choose .json.gz file",
                     classInput: "input-small"
                 });
         </script>

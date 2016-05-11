@@ -82,14 +82,6 @@
 			<dt>Gene-pooled hit quartiles</dt>
 			<dd>[${dataset.gene_pooled_hit_quartiles[0]}, ${dataset.gene_pooled_hit_quartiles[1]}, ${dataset.gene_pooled_hit_quartiles[2]}, ${dataset.gene_pooled_hit_quartiles[3]}, ${dataset.gene_pooled_hit_quartiles[4]}]&nbsp;</dd>
 			
-			<dt>OBO Foundry terms</dt>
-			<dd>
-			<c:forEach var="term" items="${dataset.obo_foundry_terms}">
-				${term}&nbsp;&nbsp;
-			</c:forEach>
-			&nbsp;
-			</dd>
-			
 			<dt>Comments</dt>
 			<dd>${dataset.comment}&nbsp;</dd>
 			
@@ -98,7 +90,7 @@
 			<dt>Last modified</dt>
 			<dd>${dataset.last_modified.toDate()}&nbsp;</dd>
                         
-			<dt>Features file</dt>
+			<dt>ST Data file</dt>
 			<dd>
                                 <a href="<c:url value="/dataset/features/"/>${dataset.id}" target="_blank">Download [${featuresMetadata[dataset.id].getReadableSize()}]</a> (right click and select "Save link as...")
 			</dd>

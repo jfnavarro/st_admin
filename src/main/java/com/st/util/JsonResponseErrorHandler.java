@@ -1,20 +1,11 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.util;
 
 import java.io.IOException;
-
 import org.apache.log4j.Logger;
-//import com.fasterxml.jackson.databind.ObjectMapper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
-
 import com.st.exceptions.GenericException;
 import com.st.exceptions.GenericExceptionResponse;
 
@@ -28,7 +19,7 @@ public class JsonResponseErrorHandler implements ResponseErrorHandler {
     private static final Logger logger = Logger
             .getLogger(JsonResponseErrorHandler.class);
 
-    private ObjectMapper mapper;
+    private final ObjectMapper mapper;
 
     /**
      * Constructor.
@@ -44,6 +35,7 @@ public class JsonResponseErrorHandler implements ResponseErrorHandler {
      * @return true if invalid, false of OK.
      * @throws IOException
      */
+    @Override
     public boolean hasError(ClientHttpResponse response) throws IOException {
 
         if (response.getStatusCode() != HttpStatus.OK) {
@@ -62,6 +54,7 @@ public class JsonResponseErrorHandler implements ResponseErrorHandler {
      * @param response the response.
      * @throws IOException
      */
+    @Override
     public void handleError(ClientHttpResponse response) throws IOException {
 
         GenericExceptionResponse errorResponse = mapper.readValue(response.getBody(),

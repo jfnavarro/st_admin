@@ -1,13 +1,6 @@
-/*
- *Copyright © 2012 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.model;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-//import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -63,52 +56,85 @@ public class ImageAlignment implements IImageAlignment {
     /**
      * Default Constructor is required by Jackson.
      */
-    public ImageAlignment() {}
-    
+    public ImageAlignment() {
+    }
+
+    @Override
     public String getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    /**
+     *
+     * @param name
+     */
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getChip_id() {
         return chip_id;
     }
 
+    @Override
     public void setChip_id(String id) {
         this.chip_id = id;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getFigure_red() {
         return figure_red;
     }
 
+    @Override
     public void setFigure_red(String fig) {
         this.figure_red = fig;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
     public String getFigure_blue() {
         return figure_blue;
     }
 
+    @Override
     public void setFigure_blue(String fig) {
         this.figure_blue = fig;
     }
 
+    @Override
     public double[] getAlignment_matrix() {
         return alignment_matrix;
     }
 
+    /**
+     *
+     * @param arr
+     */
+    @Override
     public void setAlignment_matrix(double[] arr) {
         this.alignment_matrix = arr;
     }
@@ -275,14 +301,17 @@ public class ImageAlignment implements IImageAlignment {
         this.alignment_matrix[8] = d;
     }
 
+    @Override
     public DateTime getCreated_at() {
         return created_at;
     }
 
+    @Override
     public void setCreated_at(DateTime created) {
         this.created_at = created;
     }
 
+    @Override
     public DateTime getLast_modified() {
         return last_modified;
     }

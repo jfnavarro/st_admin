@@ -1,17 +1,9 @@
-/*
- *Copyright © 2014 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -20,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.st.model.ImageAlignment;
 import com.st.model.Chip;
 import com.st.model.ImageMetadata;
@@ -28,7 +19,6 @@ import com.st.serviceImpl.ChipServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.ImageAlignmentServiceImpl;
 import com.st.serviceImpl.ImageServiceImpl;
-import com.st.serviceImpl.S3ServiceImpl;
 import org.apache.log4j.Logger;
 
 /**
@@ -55,9 +45,6 @@ public class ImageAlignmentController {
     @Autowired
     ImageServiceImpl imageService;
 
-    @Autowired
-    S3ServiceImpl s3service;
-
     /**
      * Returns the show view.
      * @param id the image alignment.
@@ -81,7 +68,8 @@ public class ImageAlignmentController {
     public ModelAndView list() {
         logger.info("Entering list view of image alignments");
         ModelAndView success;
-        success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+        success = new ModelAndView("imagealignmentlist", 
+                "imagealignmentList", imagealignmentService.list());
         return success;
     }
 
@@ -102,14 +90,17 @@ public class ImageAlignmentController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("imagealignment") @Valid ImageAlignment imal, BindingResult result) {
+    public ModelAndView submitAdd(@ModelAttribute("imagealignment") 
+    @Valid ImageAlignment imal, BindingResult result) {
         if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("imagealignmentadd", "imagealignment", imal);
+            ModelAndView model = new ModelAndView("imagealignmentadd", 
+                    "imagealignment", imal);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         imagealignmentService.create(imal);
-        ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+        ModelAndView success = new ModelAndView("imagealignmentlist", 
+                "imagealignmentList", imagealignmentService.list());
         success.addObject("msg", "ImageAlignment created.");
         logger.info("Successfully added image alignment");
         return success;
@@ -124,7 +115,8 @@ public class ImageAlignmentController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit view of image alignment " + id);
-        return new ModelAndView("imagealignmentedit", "imagealignment", imagealignmentService.find(id));
+        return new ModelAndView("imagealignmentedit", 
+                "imagealignment", imagealignmentService.find(id));
     }
 
     /**
@@ -135,14 +127,17 @@ public class ImageAlignmentController {
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
     public ModelAndView submitEdit(
-            @ModelAttribute("imagealignment") @Valid ImageAlignment imal, BindingResult result) {
+            @ModelAttribute("imagealignment") 
+            @Valid ImageAlignment imal, BindingResult result) {
         if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("imagealignmentedit", "imagealignment", imal);
+            ModelAndView model = new ModelAndView("imagealignmentedit", 
+                    "imagealignment", imal);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         imagealignmentService.update(imal);
-        ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+        ModelAndView success = new ModelAndView("imagealignmentlist", 
+                "imagealignmentList", imagealignmentService.list());
         success.addObject("msg", "ImageAlignment saved.");
         logger.info("Succesfully edited image alignment " + imal.getId());
         return success;
@@ -159,7 +154,8 @@ public class ImageAlignmentController {
         if (imal != null) {
             imagealignmentService.delete(id);
         }
-        ModelAndView success = new ModelAndView("imagealignmentlist", "imagealignmentList", imagealignmentService.list());
+        ModelAndView success = new ModelAndView("imagealignmentlist", 
+                "imagealignmentList", imagealignmentService.list());
         success.addObject("msg", "ImageAlignment deleted.");
         logger.info("Deleted image alignment " + id);
         return success;
@@ -168,7 +164,7 @@ public class ImageAlignmentController {
     // populate chip choice fields for form
     @ModelAttribute("chipChoices")
     public Map<String, String> populateChipChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Chip> l = chipService.list();
         for (Chip t : l) {
             choices.put(t.getId(), t.getName());
@@ -179,7 +175,7 @@ public class ImageAlignmentController {
     // populate image choice fields for form
     @ModelAttribute("imageChoices")
     public Map<String, String> populateImageChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<ImageMetadata> l = imageService.list();
         for (ImageMetadata t : l) {
             choices.put(t.getFilename(), t.getFilename());

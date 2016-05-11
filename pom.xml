@@ -4,8 +4,8 @@
 	<groupId>spatialtranscriptomics</groupId>
 	<artifactId>admin</artifactId>
 	<packaging>war</packaging>
-	<version>0.4.1</version>
-	<name>Spatial Transcriptomics Admin Console</name>
+	<version>0.4.2</version>
+	<name>Spatial Transcriptomics Research Admin Console</name>
 	<url>http://maven.apache.org</url>
 
 	<!-- VERSION CONFIG -->
@@ -191,6 +191,12 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
+                
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                    <version>1.6.2</version>
+                </dependency>
 
 		<!-- Spring -->
 		<dependency>

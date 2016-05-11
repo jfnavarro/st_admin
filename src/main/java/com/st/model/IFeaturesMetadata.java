@@ -1,6 +1,5 @@
 package com.st.model;
 
-import java.util.Date;
 import org.joda.time.DateTime;
 
 /**
@@ -9,9 +8,9 @@ import org.joda.time.DateTime;
 public interface IFeaturesMetadata {
 
     public String getDatasetId();
-    
+
     public void setDatasetId(String id);
-    
+
     public String getFilename();
 
     public void setFilename(String filename);

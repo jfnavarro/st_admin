@@ -1,9 +1,3 @@
-/*
- *Copyright © 2014 Spatial Transcriptomics AB
- *Read LICENSE for more information about licensing terms
- *Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
- * 
- */
 package com.st.controller;
 
 import java.util.LinkedHashMap;
@@ -92,14 +86,16 @@ public class DatasetInfoController {
      * @return the list view.
      */
     @RequestMapping(value = "/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAdd(@ModelAttribute("datasetinfo") @Valid DatasetInfo ds, BindingResult result) {
+    public ModelAndView submitAdd(@ModelAttribute("datasetinfo") 
+    @Valid DatasetInfo ds, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("datasetinfoadd", "datasetinfo", ds);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         datasetinfoService.add(ds);
-        ModelAndView success = new ModelAndView("datasetinfolist", "datasetinfoList", datasetinfoService.list());
+        ModelAndView success = new ModelAndView("datasetinfolist", 
+                "datasetinfoList", datasetinfoService.list());
         success.addObject("msg", "DatasetInfo created.");
         logger.info("Successfully added datasetinfo ");
         return success;
@@ -124,14 +120,16 @@ public class DatasetInfoController {
      * @return  the list view.
      */
     @RequestMapping(value = "/submitedit", method = RequestMethod.POST)
-    public ModelAndView submitEdit(@ModelAttribute("datasetinfo") @Valid DatasetInfo ds, BindingResult result) {
+    public ModelAndView submitEdit(@ModelAttribute("datasetinfo") 
+    @Valid DatasetInfo ds, BindingResult result) {
         if (result.hasErrors()) {
             ModelAndView model = new ModelAndView("datasetinfoedit", "datasetinfo", ds);
             model.addObject("errors", result.getAllErrors());
             return model;
         }
         datasetinfoService.update(ds);
-        ModelAndView success = new ModelAndView("datasetinfolist", "datasetinfoList", datasetinfoService.list());
+        ModelAndView success = new ModelAndView("datasetinfolist", 
+                "datasetinfoList", datasetinfoService.list());
         success.addObject("msg", "DatasetInfo saved.");
         logger.info("Successfully edited datasetinfo");
         return success;
@@ -145,7 +143,8 @@ public class DatasetInfoController {
     @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable String id) {
         datasetinfoService.delete(id);
-        ModelAndView success = new ModelAndView("datasetinfolist", "datasetinfoList", datasetinfoService.list());
+        ModelAndView success = new ModelAndView("datasetinfolist", 
+                "datasetinfoList", datasetinfoService.list());
         success.addObject("msg", "DatasetInfo deleted.");
         logger.info("Deleted datasetinfo");
         return success;
@@ -165,7 +164,7 @@ public class DatasetInfoController {
     // populate dataset choice fields for form
     @ModelAttribute("datasetChoices")
     public Map<String, String> populateDatasetChoices() {
-        Map<String, String> choices = new LinkedHashMap<String, String>();
+        Map<String, String> choices = new LinkedHashMap<>();
         List<Dataset> l = datasetService.list();
         for (Dataset t : l) {
             choices.put(t.getId(), t.getName());

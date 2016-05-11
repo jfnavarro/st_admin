@@ -1,10 +1,3 @@
-/*
-*Copyright © 2012 Spatial Transcriptomics AB
-*Read LICENSE for more information about licensing terms
-*Contact: Jose Fernandez Navarro <jose.fernandez.navarro@scilifelab.se>
-* 
-*/
-
 package com.st.model;
 
 import java.util.List;
@@ -14,183 +7,224 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.joda.time.DateTime;
 
-
 /**
- * This bean class maps the Account data retrieved from the ST API to the application data model. 
- * This data model has to be aligned with the ST API data model.
- * Does data validation using Hibernate validator constraints.
+ * This bean class maps the Account data retrieved from the ST API to the
+ * application data model. This data model has to be aligned with the ST API
+ * data model. Does data validation using Hibernate validator constraints.
  */
 public class Account implements IAccount {
 
-	String id;
-	
-	@NotBlank
-	@Email(message = "Username must be a valid email address.")
-	String username;
-	
-	@Length(min = 4, message = "Password must have at least 4 characters.")
-	String password;
-	
-        @JsonIgnore
-        String passwordRepeat;
-        
-	@NotBlank
-	String role;
-        
-	boolean enabled;
-	
-	String institution;
-	
-	String first_name;
-	
-	String last_name;
-	
-	String street_address;
-	
-	String city;
-	
-	String postcode;
-	
-	String country;
-	
-        // Transient in API.
-	List<String> granted_datasets;
-        
-        DateTime created_at;
-	
-        DateTime last_modified;
-        
-        /**
-         * Default Constructor is required by Jackson.
-         */
-        public Account() {}
-        
-	// id is set automatically by MongoDB
-	public String getId() {
-		return id;
-	}
+    String id;
 
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public boolean isEnabled() {
-		return this.enabled;
-	}
+    @NotBlank
+    @Email(message = "Username must be a valid email address.")
+    String username;
 
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-	
-	public String getPassword() {
-		return password;
-	}
+    @Length(min = 4, message = "Password must have at least 4 characters.")
+    String password;
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-        
-        @JsonIgnore
-        public String getPasswordRepeat() {
-		return passwordRepeat;
-	}
+    @JsonIgnore
+    String passwordRepeat;
 
-        @JsonIgnore
-	public void setPasswordRepeat(String password) {
-            this.passwordRepeat = password;
-	}
-	
-	public String getRole() {
-		return this.role;
-	}
+    @NotBlank
+    String role;
 
-	public void setRole(String role) {
-		this.role = role;
-	}
-	
-	public String getUsername() {
-		return this.username;
-	}
+    boolean enabled;
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	
-	public String getInstitution() {
-		return institution;
-	}
+    String institution;
 
-	public void setInstitution(String institution) {
-		this.institution = institution;
-	}
+    String first_name;
 
-	public String getFirst_name() {
-		return first_name;
-	}
+    String last_name;
 
-	public void setFirst_name(String first_name) {
-		this.first_name = first_name;
-	}
+    String street_address;
 
-	public String getLast_name() {
-		return last_name;
-	}
+    String city;
 
-	public void setLast_name(String last_name) {
-		this.last_name = last_name;
-	}
+    String postcode;
 
-	public String getStreet_address() {
-		return street_address;
-	}
+    String country;
 
-	public void setStreet_address(String street_address) {
-		this.street_address = street_address;
-	}
+    // Transient in API.
+    List<String> granted_datasets;
 
-	public String getCity() {
-		return city;
-	}
+    DateTime created_at;
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    DateTime last_modified;
 
-	public String getPostcode() {
-		return postcode;
-	}
+    /**
+     * Default Constructor is required by Jackson.
+     */
+    public Account() {
+    }
 
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
+    // id is set automatically by MongoDB
+    @Override
+    public String getId() {
+        return id;
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	public void setCountry(String country) {
-		this.country = country;
-	}
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 
-        // Transient in API.
-	public List<String> getGranted_datasets() {
-		return this.granted_datasets;
-	}
-	
-        // Transient in API.
-	public void setGranted_datasets(List<String> grantedDatasets) {
-		this.granted_datasets = grantedDatasets;
-	}
-        
-        public DateTime getCreated_at() {
-		return created_at;
-	}
-	
-	public void setCreated_at(DateTime created) {
-		this.created_at = created;
-	}
+    /**
+     *
+     * @param enabled
+     */
+    @Override
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	public DateTime getLast_modified() {
-		return last_modified;
-	}
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @JsonIgnore
+    public String getPasswordRepeat() {
+        return passwordRepeat;
+    }
+
+    @JsonIgnore
+    public void setPasswordRepeat(String password) {
+        this.passwordRepeat = password;
+    }
+
+    @Override
+    public String getRole() {
+        return this.role;
+    }
+
+    @Override
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public String getInstitution() {
+        return institution;
+    }
+
+    @Override
+    public void setInstitution(String institution) {
+        this.institution = institution;
+    }
+
+    @Override
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    @Override
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    @Override
+    public String getLast_name() {
+        return last_name;
+    }
+
+    @Override
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    @Override
+    public String getStreet_address() {
+        return street_address;
+    }
+
+    /**
+     *
+     * @param street_address
+     */
+    @Override
+    public void setStreet_address(String street_address) {
+        this.street_address = street_address;
+    }
+
+    @Override
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     *
+     * @param city
+     */
+    @Override
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    @Override
+    public String getPostcode() {
+        return postcode;
+    }
+
+    @Override
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+
+    @Override
+    public String getCountry() {
+        return country;
+    }
+
+    @Override
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    // Transient in API.
+    @Override
+    public List<String> getGranted_datasets() {
+        return this.granted_datasets;
+    }
+
+    // Transient in API.
+    @Override
+    public void setGranted_datasets(List<String> grantedDatasets) {
+        this.granted_datasets = grantedDatasets;
+    }
+
+    @Override
+    public DateTime getCreated_at() {
+        return created_at;
+    }
+
+    @Override
+    public void setCreated_at(DateTime created) {
+        this.created_at = created;
+    }
+
+    @Override
+    public DateTime getLast_modified() {
+        return last_modified;
+    }
 }
