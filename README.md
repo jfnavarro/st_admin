@@ -1,5 +1,7 @@
 # Spatial Transcriptomics Research Admin
 
+"ADD TRAVIS BUILD STATUS HERE"
+
 A web based tool to administrate and create Spatial Transcriptomics Research datasets 
 
 This is a web based tool that we use to create datasets/accounts and
@@ -11,6 +13,12 @@ with the OAuth2 protocol.
 All the users and datasets created trough this tool 
 will be accessible using the ST Viewer (link here) if it is
 configured to connect to the same ST API. 
+
+The ST Data consist of tissue images, spot-gene counts and a transformation
+from array coordinates (spots) to pixel image coordinates and 
+information on the dataset (stats, general info, user, etc..).
+
+## License
 
 See LICENSE file for licensing and references. 
 
