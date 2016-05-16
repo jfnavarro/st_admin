@@ -40,8 +40,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> list() {
         String url = appConfig.getProperty("url.account") + "all/";
-        Account[] accountArray = secureRestTemplate.getForObject(url,
-                Account[].class);
+        Account[] accountArray = secureRestTemplate.getForObject(url, Account[].class);
         List<Account> accountList = Arrays.asList(accountArray);
         return accountList;
     }

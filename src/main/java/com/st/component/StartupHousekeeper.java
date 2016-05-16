@@ -21,6 +21,7 @@ public class StartupHousekeeper implements ApplicationListener<ContextRefreshedE
      *
      * @param event refresh event.
      */
+    @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("Setting the default time zone to UTC.");
         DateTimeZone.setDefault(DateTimeZone.UTC);

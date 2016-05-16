@@ -49,6 +49,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      * @throws AuthenticationException a bad credentials object, should
      * authentication fail.
      */
+    @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
         String username = null;
@@ -67,7 +68,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
 
         if (role != null) {
             logger.info("Authenticated account " + username + " as having role " + role);
-            List<GrantedAuthority> grantedAuths = new ArrayList<GrantedAuthority>();
+            List<GrantedAuthority> grantedAuths = new ArrayList<>();
             grantedAuths.add(new SimpleGrantedAuthority(role));
             Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
             return auth;
@@ -84,6 +85,7 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      * @param authentication authentication.
      * @return true if correct type.
      */
+    @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
@@ -99,7 +101,6 @@ public class APIAuthenticationProvider implements AuthenticationProvider {
      */
     private String authenticateAgainstAPI(String username, String password) {
         try {
-            
             // set the given credentials to the secureRestTemplate
             secureRestTemplate.setResourceCredentials(username, password);
 

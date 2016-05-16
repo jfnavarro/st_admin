@@ -36,8 +36,6 @@ public class Selection implements ISelection {
 
     String comment;
 
-    String[] obo_foundry_terms;
-
     DateTime created_at;
 
     DateTime last_modified;
@@ -148,16 +146,6 @@ public class Selection implements ISelection {
     @Override
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    @Override
-    public String[] getObo_foundry_terms() {
-        return obo_foundry_terms;
-    }
-
-    @Override
-    public void setObo_foundry_terms(String[] obo_foundry_terms) {
-        this.obo_foundry_terms = obo_foundry_terms;
     }
 
     @Override

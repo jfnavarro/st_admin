@@ -18,7 +18,7 @@
 
             <!-- Script to set the highlight the active menu in the header -->
             <script>
-                $(document).ready(function(event) {
+                $(document).ready(function (event) {
                     $("#menuDataset").addClass("active");
                 });
             </script>

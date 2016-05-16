@@ -33,7 +33,6 @@ public class Dataset implements IDataset {
     int unique_barcode_count;
     double[] overall_hit_quartiles;
     double[] gene_pooled_hit_quartiles;
-    String[] obo_foundry_terms;
     String comment;
 
     // Transient in API.
@@ -165,16 +164,6 @@ public class Dataset implements IDataset {
     @Override
     public void setGene_pooled_hit_quartiles(double[] quartiles) {
         this.gene_pooled_hit_quartiles = quartiles;
-    }
-
-    @Override
-    public String[] getObo_foundry_terms() {
-        return obo_foundry_terms;
-    }
-
-    @Override
-    public void setObo_foundry_terms(String[] obo_foundry_terms) {
-        this.obo_foundry_terms = obo_foundry_terms;
     }
 
     @Override

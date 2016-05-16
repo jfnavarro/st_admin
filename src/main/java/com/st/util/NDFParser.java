@@ -29,11 +29,12 @@ public class NDFParser {
 
     /**
      * Parses the class input stream and returns a Chip object.
-     * @return 
+     *
+     * @return
      */
     public Chip readChip() {
         logger.info("About to read .ndf file with chip details.");
-        
+
         int x1 = Integer.MAX_VALUE; // probes
         int y1 = Integer.MAX_VALUE;
         int x2 = Integer.MIN_VALUE;
@@ -51,9 +52,9 @@ public class NDFParser {
             try (CSVReader reader = new CSVReader(new InputStreamReader(fis), '\t',
                     '\'', 2)) {
                 String[] nextLine;
-                
+
                 while ((nextLine = reader.readNext()) != null) {
-                    
+
                     String containerValue = nextLine[1];
                     int xValue = -1;
                     int yValue = -1;
@@ -63,7 +64,7 @@ public class NDFParser {
                     if (nextLine[16] != null) {
                         yValue = Integer.parseInt(nextLine[16]);
                     }
-                    
+
                     if (containerValue.equals("BORDER")) {
                         if (xValue < x1_border) {
                             x1_border = xValue;
@@ -90,7 +91,7 @@ public class NDFParser {
                         if (yValue > y2) {
                             y2 = yValue;
                         }
-                        
+
                         // set barcodes if not yet set
                         if (barcodes < 0) {
                             // get number part before "K"

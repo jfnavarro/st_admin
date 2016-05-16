@@ -48,16 +48,6 @@ public class DatasetEditForm {
         this.featureFile = featureFile;
     }
 
-    
-    public String getExperimentId() {
-        return experimentId;
-    }
-
-    
-    public void setExperimentId(String experimentId) {
-        this.experimentId = experimentId;
-    }
-
     public Dataset getDataset() {
         return dataset;
     }

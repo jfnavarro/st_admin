@@ -155,7 +155,8 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
     @Override
     protected <T> T doExecute(URI url, HttpMethod method,
             RequestCallback requestCallback,
-            ResponseExtractor<T> responseExtractor) throws RestClientException {
+            ResponseExtractor<T> responseExtractor) 
+            throws RestClientException, OAuth2AccessDeniedException {
         OAuth2AccessToken accessToken = context.getAccessToken();
         RuntimeException rethrow = null;
         String invalidTokenMessage = "Invalid token for client=" + getClientId();
@@ -202,6 +203,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
      *
      * @return an access token
      */
+    @Override
     public OAuth2AccessToken getAccessToken()
             throws UserRedirectRequiredException {
 
@@ -231,6 +233,7 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
     /**
      * @return the context for this template
      */
+    @Override
     public OAuth2ClientContext getOAuth2ClientContext() {
         return context;
     }
@@ -247,12 +250,12 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
             OAuth2ClientContext oauth2Context)
             throws UserRedirectRequiredException {
 
-        //System.out.println("Acquiring access token");
         AccessTokenRequest accessTokenRequest = oauth2Context
                 .getAccessTokenRequest();
         if (accessTokenRequest == null) {
             String id = this.oauthResource == null ? null : this.oauthResource.getId();
-            String message = "No OAuth 2 security context has been established. Unable to access resource '"+ id + "'.";
+            String message = "No OAuth 2 security context has been established. "
+                    + "Unable to access resource '"+ id + "'.";
             logger.info(message);
             throw new AccessTokenRequiredException(message, oauthResource);
             
@@ -274,7 +277,8 @@ public class CustomOAuth2RestTemplate extends RestTemplate implements OAuth2Rest
         OAuth2AccessToken accessToken = null;
         accessToken = accessTokenProvider.obtainAccessToken(oauthResource, accessTokenRequest);
         if (accessToken == null || accessToken.getValue() == null) {
-            String message = "Access token provider returned a null access token, which is illegal according to the contract.";
+            String message = "Access token provider returned a null access "
+                    + "token, which is illegal according to the contract.";
             logger.info(message);
             throw new IllegalStateException(message);
         }

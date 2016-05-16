@@ -45,10 +45,6 @@ public interface ISelection {
 
     public void setComment(String comment);
 
-    public String[] getObo_foundry_terms();
-
-    public void setObo_foundry_terms(String[] obo_foundry_terms);
-
     public String getGene(int i);
 
     public int getHit_count(int i);
