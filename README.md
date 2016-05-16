@@ -1,5 +1,7 @@
 # Spatial Transcriptomics Research Admin
 
+"ADD TRAVIS BUILD STATUS HERE"
+
 A web based tool to administrate and create Spatial Transcriptomics Research datasets 
 
 This is a web based tool that we use to create datasets/accounts and
@@ -11,6 +13,12 @@ with the OAuth2 protocol.
 All the users and datasets created trough this tool 
 will be accessible using the ST Viewer (link here) if it is
 configured to connect to the same ST API. 
+
+The ST Data consist of tissue images, spot-gene counts and a transformation
+from array coordinates (spots) to pixel image coordinates and 
+information on the dataset (stats, general info, user, etc..).
+
+## License
 
 See LICENSE file for licensing and references. 
 
@@ -61,18 +69,16 @@ You have to define one of these profiles (local, dev, prod) when you build the a
 
 ###### Build and deploy to server, e.g. for a release
 
-*Right-click project -> Clean and build
-*Make a copy of the generated .war file in the target folder (see in your file system) (most likely to be inside the *repository in the folder target).
-*Alternatively you can use the Tomcat manager SERVER:8080/manager 
-*You will need an admin account (check Server documentation for admin password in DEV and PROD)
-*You will need the role manager-gui in the tomcat configuration
-*Deploy this .war with the Tomcat manager 
-*SSH into the server.
-*Enter the webapps directory, e.g. /var/lib/tomcat7/webapps
-*Stop the services, e.g. sudo service tomcat7 stop
-*Delete a previous deployed folder if desired, and make a backup of its war file.
-*Upload the new war file into this directory.
-*Start the service, e.g. sudo service tomcat7 start
+* Right-click project -> Clean and build
+* Make a copy of the generated .war file in the target folder (see in your file system) (most likely to be inside the repository in the folder target). 
+* Alternatively you can use the Tomcat manager SERVER:8080/manager. You will need an admin account (check Server documentation for admin password in DEV and PROD). You will need the role manager-gui in the tomcat configuration
+* Deploy this .war with the Tomcat manager 
+     - SSH into the server.
+     - Enter the webapps directory, e.g. /var/lib/tomcat7/webapps
+     - Stop the services, e.g. sudo service tomcat7 stop
+     - Delete a previous deployed folder if desired, and make a backup of its war file.
+     - Upload the new war file into this directory.
+     - Start the service, e.g. sudo service tomcat7 start
 
 Note: We had Java heap space errors after re-deploying applications sometimes without restarting the services, although this might not be required in theory.
 
