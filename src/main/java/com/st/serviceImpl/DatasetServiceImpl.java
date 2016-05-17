@@ -62,8 +62,7 @@ public class DatasetServiceImpl implements DatasetService {
     @Override
     public Dataset add(Dataset dataset) {
         String url = appConfig.getProperty("url.dataset");
-        Dataset dsResponse = secureRestTemplate.postForObject(url, dataset,
-                Dataset.class);
+        Dataset dsResponse = secureRestTemplate.postForObject(url, dataset, Dataset.class);
         return dsResponse;
     }
 

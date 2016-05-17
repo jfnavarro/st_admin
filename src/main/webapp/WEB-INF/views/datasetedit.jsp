@@ -55,9 +55,6 @@
                 </div>
             </c:if>
 
-            <!--<c:forEach var="err" items="${errors}" varStatus="idx">
-                    <div class="alert alert-error">${err.defaultMessage}</div>
-            </c:forEach> -->
 
             <div class="row">
                 <form:form method="POST" commandName="datasetform"
@@ -139,9 +136,8 @@
 
                             <spring:bind path="featureFile">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
-                                    <label class="control-label" for="featureFile">Feature file</label>
+                                    <label class="control-label" for="featureFile">ST Data file</label>
                                     <div class="control-group">
-
                                         <div class="controls">
                                             <form:input type="file" id="featureFile"
                                                         placeholder="Feature file" path="featureFile"

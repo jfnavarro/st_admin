@@ -177,8 +177,14 @@ public class DatasetController {
         // Compute quartiles.
         computeStats(bytes, true, beingCreated);
 
-        // add dataset
-        beingCreated.setCreated_by_account_id(StaticContextAccessor.getCurrentUser().getId());
+        final String user_id = StaticContextAccessor.getCurrentUser().getId();
+        // add created by and the current user to granted accounts
+        beingCreated.setCreated_by_account_id(user_id);
+        List<String> current_users = beingCreated.getGranted_accounts();
+        if (!current_users.contains(user_id)) {
+            current_users.add(user_id);
+            beingCreated.setGranted_accounts(current_users);
+        }
         Dataset dsResult = datasetService.add(beingCreated);
 
         // update features file, now that we know the ID.
@@ -206,7 +212,7 @@ public class DatasetController {
         ds.setOverall_hit_count(stats[1]);
         ds.setUnique_gene_count(stats[2]);
         ds.setUnique_barcode_count(stats[3]);
-        ds.setOverall_hit_quartiles(overall_hit_quartiles);;
+        ds.setOverall_hit_quartiles(overall_hit_quartiles);
         ds.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
     }
 
@@ -258,8 +264,11 @@ public class DatasetController {
         }
 
         // Read features, if specified.
-        CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
-        byte[] bytes = ffile.getBytes();
+        byte[] bytes = null;
+        if (!datasetEditForm.getFeatureFile().isEmpty()) {
+            CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
+            bytes = ffile.getBytes();
+        }
 
         Dataset beingUpdated = datasetEditForm.getDataset();
 
