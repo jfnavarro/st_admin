@@ -181,7 +181,12 @@ public class DatasetController {
         // add created by and the current user to granted accounts
         beingCreated.setCreated_by_account_id(user_id);
         List<String> current_users = beingCreated.getGranted_accounts();
-        if (!current_users.contains(user_id)) {
+        if (current_users == null) {
+            List<String> new_users = new ArrayList<>();
+            new_users.add(user_id);
+            beingCreated.setGranted_accounts(new_users);
+        }
+        else if (!current_users.contains(user_id)) {
             current_users.add(user_id);
             beingCreated.setGranted_accounts(current_users);
         }
