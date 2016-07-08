@@ -115,7 +115,7 @@ public class ImageController {
 
         // Check if image already exists
         List<ImageMetadata> imd = imageService.list();
-        List<String> imageNames = new ArrayList<String>();
+        List<String> imageNames = new ArrayList<>();
         for (ImageMetadata im : imd) {
             imageNames.add(im.getFilename());
         }
@@ -159,7 +159,7 @@ public class ImageController {
 
         // Check if image already exists
         List<ImageMetadata> imd = imageService.list();
-        List<String> imageNames = new ArrayList<String>();
+        List<String> imageNames = new ArrayList<>();
         for (ImageMetadata im : imd) {
             imageNames.add(im.getFilename());
         }

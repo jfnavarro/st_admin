@@ -83,7 +83,6 @@ public class ImageServiceImpl implements ImageService {
     public void addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
         String url = appConfig.getProperty("url.image");
         url += ("/compressedjson/" + imageFile.getOriginalFilename());
-
         S3Resource img = new S3Resource();
         img.setFilename(imageFile.getOriginalFilename());
         byte[] bytes = IOUtils.toByteArray(imageFile.getInputStream());

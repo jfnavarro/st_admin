@@ -6,7 +6,6 @@ import com.st.form.DatasetEditForm;
 import com.st.model.Account;
 import com.st.model.Chip;
 import com.st.model.Dataset;
-import com.st.model.Feature;
 import com.st.model.FeaturesMetadata;
 import com.st.model.ImageAlignment;
 import com.st.model.S3Resource;
@@ -174,9 +173,6 @@ public class DatasetController {
         // get the current object
         Dataset beingCreated = datasetAddForm.getDataset();
 
-        // Compute quartiles.
-        computeStats(bytes, true, beingCreated);
-
         final String user_id = StaticContextAccessor.getCurrentUser().getId();
         // add created by and the current user to granted accounts
         beingCreated.setCreated_by_account_id(user_id);
@@ -185,8 +181,7 @@ public class DatasetController {
             List<String> new_users = new ArrayList<>();
             new_users.add(user_id);
             beingCreated.setGranted_accounts(new_users);
-        }
-        else if (!current_users.contains(user_id)) {
+        } else if (!current_users.contains(user_id)) {
             current_users.add(user_id);
             beingCreated.setGranted_accounts(current_users);
         }
@@ -202,23 +197,6 @@ public class DatasetController {
         logger.info("Successfully added dataset " + dsResult.getId());
         return success;
 
-    }
-    
-    /**
-     * Updates quartiles.
-     * @param ds dataset.
-     */
-    private void computeStats(byte[] bytes, boolean isGzipped, Dataset ds) {
-        double[] overall_hit_quartiles = new double[5];
-        double[] gene_pooled_hit_quartiles = new double[5];
-        // [overall_feature_count, overall_hit_count, unique_gene_count, unique_barcode_count]
-        int[] stats = Feature.parse(bytes, isGzipped, overall_hit_quartiles, gene_pooled_hit_quartiles);
-        ds.setOverall_feature_count(stats[0]);
-        ds.setOverall_hit_count(stats[1]);
-        ds.setUnique_gene_count(stats[2]);
-        ds.setUnique_barcode_count(stats[3]);
-        ds.setOverall_hit_quartiles(overall_hit_quartiles);
-        ds.setGene_pooled_hit_quartiles(gene_pooled_hit_quartiles);
     }
 
     /**
@@ -279,9 +257,6 @@ public class DatasetController {
 
         // Add file to S3, update quartiles.
         if (bytes != null) {
-            // Compute quartiles.
-            computeStats(bytes, true, beingUpdated);
-
             // Update file.
             S3Resource s3res = new S3Resource("application/json", "gzip", beingUpdated.getId(), bytes);
             featuresService.addUpdate(beingUpdated.getId(), s3res);
@@ -327,7 +302,6 @@ public class DatasetController {
             S3Resource fw = featuresService.find(id);
             response.setContentType("application/json");
             response.setHeader("Content-Encoding", "gzip");
-
             InputStream is = new ByteArrayInputStream(fw.getFile());
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();

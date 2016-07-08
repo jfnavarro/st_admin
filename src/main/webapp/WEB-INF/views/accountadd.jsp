@@ -40,12 +40,9 @@
 
             <div class="container">
 
-
-
                 <div class="page-header">
                     <h1>Create account</h1>
                 </div>
-
 
             <c:if test="${not empty errors}">
                 <div class="alert alert-error">
@@ -59,14 +56,6 @@
                     <strong>Error: </strong>Your input is not valid: ${specerror}
                 </div>
             </c:if>
-
-
-            <!--
-            <c:forEach var="err" items="${errors}" varStatus="idx">
-                    <div class="alert alert-error">${err.defaultMessage}</div>
-            </c:forEach>-->
-
-
 
             <div>
                 <form:form method="POST" commandName="account"
