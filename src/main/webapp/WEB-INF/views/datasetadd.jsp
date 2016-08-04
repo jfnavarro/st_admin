@@ -159,7 +159,7 @@
 
                             <div class="span4">
 
-                                <legend>Information and statistics</legend>
+                                <legend>Comments</legend>
 
                                 <spring:bind path="dataset.comment">
                                     <div class="control-group  ${status.error ? 'error' : ''}">

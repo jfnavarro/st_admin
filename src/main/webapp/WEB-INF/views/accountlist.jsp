@@ -73,12 +73,10 @@
                         <th>Last name</th>
                         <th>Created</th>
                         <th>Last modified</th>
-                        <!--
                         <th>Street address</th>
                         <th>City</th>
                         <th>Post code</th>
                         <th>Country</th>
-                        -->
                         <th></th>
                     </tr>
 
@@ -103,12 +101,10 @@
                             <td>${account.last_name}</td>
                             <td><small>${account.created_at.toDate()}</small></td>
                             <td><small>${account.last_modified.toDate()}</small></td>
-                            <!--
                             <td>${account.street_address}</td>
                             <td>${account.city}</td>
                             <td>${account.postcode}</td>
                             <td>${account.country}</td>
-                            -->
                             <sec:authorize ifAnyGranted="ROLE_ADMIN">
                                 <td><a href="#deleteModal" data-toggle="modal"
                                        data-id="${account.id}" class="open-DeleteDialog btn btn-danger btn-small">Delete</a>

@@ -66,8 +66,6 @@
                         <th>Enabled</th>
                         <th>Tissue</th>
                         <th>Species</th>
-                        <th>No. of unique events</th>
-                        <th>Account creator</th>
                         <th>Created</th>
                         <th>Last modified</th>
                     </tr>
@@ -89,8 +87,6 @@
                             </td>
                             <td>${dataset.tissue}</td>
                             <td>${dataset.species}</td>
-                            <td>${dataset.overall_feature_count}</td>
-                            <td>${accountChoices[dataset.created_by_account_id]}</td>
                             <td><small><fmt:formatDate value="${dataset.created_at.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                             <td><small><fmt:formatDate value="${dataset.last_modified.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
                             <td><a href="#deleteModal" data-toggle="modal"

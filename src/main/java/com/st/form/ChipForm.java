@@ -10,15 +10,15 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 public class ChipForm {
 
-    /** Chip name, not filename. */
+    // Chip name, not filename. 
     @NotEmpty
     String name;
 
-    /** Filename. */
+    // Filename.
     @NotEmpty
     String fileName;
 
-    /** Uploaded file. */
+    // Uploaded file. 
     CommonsMultipartFile chipFile;
 
     public CommonsMultipartFile getChipFile() {

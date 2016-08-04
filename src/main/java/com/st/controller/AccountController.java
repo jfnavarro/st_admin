@@ -4,9 +4,8 @@ import com.st.component.StaticContextAccessor;
 import com.st.model.Account;
 import com.st.model.Dataset;
 import com.st.serviceImpl.AccountServiceImpl;
-import com.st.serviceImpl.DatasetInfoServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
-import com.st.serviceImpl.SelectionServiceImpl;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +38,6 @@ public class AccountController {
 
     @Autowired
     DatasetServiceImpl datasetService;
-
-    @Autowired
-    DatasetInfoServiceImpl datasetinfoService;
-
-    @Autowired
-    SelectionServiceImpl selectionService;
 
     /**
      * Returns the show view of a specified account.
@@ -116,8 +109,14 @@ public class AccountController {
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit view of account " + id);
         Account acc = accountService.find(id);
-        acc.setPasswordRepeat(acc.getPassword());
-        return new ModelAndView("accountedit", "account", acc);
+        if (acc != null) {
+            acc.setPasswordRepeat(acc.getPassword());
+            return new ModelAndView("accountedit", "account", acc);
+        } else {
+            ModelAndView model = new ModelAndView("accountedit", "account", acc);
+            model.addObject("errors", "Could not retrieve account information.");
+            return model;
+        }
     }
 
     /**
@@ -166,9 +165,11 @@ public class AccountController {
     @ModelAttribute("datasetChoices")
     public Map<String, String> populateDatasetChoices() {
         Map<String, String> choices = new LinkedHashMap<>();
-        List<Dataset> l = datasetService.list();
-        for (Dataset t : l) {
-            choices.put(t.getId(), t.getName());
+        List<Dataset> datasets = datasetService.list();
+        if (datasets != null) {
+            for (Dataset dataset : datasets) {
+                choices.put(dataset.getId(), dataset.getName());
+            }
         }
         return choices;
     }

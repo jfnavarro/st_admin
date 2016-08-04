@@ -33,24 +33,28 @@ public class DatasetServiceImpl implements DatasetService {
 
     @Override
     public Dataset find(String id) {
-        String url = appConfig.getProperty("url.dataset") + "all/";
-        url += id;
+        // include non enabled datasets
+        String url = appConfig.getProperty("url.dataset") + id + "?onlyEnabled=false";
         Dataset dataset = secureRestTemplate.getForObject(url, Dataset.class);
         return dataset;
     }
 
     @Override
     public List<Dataset> list() {
-        String url = appConfig.getProperty("url.dataset") + "all/";
-        Dataset[] dsArray = secureRestTemplate.getForObject(url,
-                Dataset[].class);
+        // include non enabled datasets
+        String url = appConfig.getProperty("url.dataset") + "?onlyEnabled=false";
+        Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
+        if (dsArray == null) {
+            return null;
+        }
         List<Dataset> dsList = Arrays.asList(dsArray);
         return dsList;
     }
 
     @Override
     public List<Dataset> listForAccount(String accountId) {
-        String url = appConfig.getProperty("url.dataset") + "all/?account=" + accountId;
+        // do not include disabled datasets
+        String url = appConfig.getProperty("url.dataset") + "?account=" + accountId;
         Dataset[] dsArray = secureRestTemplate.getForObject(url, Dataset[].class);
         if (dsArray == null) {
             return null;
@@ -68,15 +72,14 @@ public class DatasetServiceImpl implements DatasetService {
 
     @Override
     public void update(Dataset dataset) {
-        String url = appConfig.getProperty("url.dataset");
-        String id = dataset.getId();
-        secureRestTemplate.put(url + id, dataset);
+        String url = appConfig.getProperty("url.dataset") + dataset.getId();
+        secureRestTemplate.put(url, dataset);
     }
 
     @Override
     public void delete(String id) {
-        String url = appConfig.getProperty("url.dataset");
-        secureRestTemplate.delete(url + id + "?cascade=true");
+        String url = appConfig.getProperty("url.dataset") + id;
+        secureRestTemplate.delete(url);
     }
 
 }

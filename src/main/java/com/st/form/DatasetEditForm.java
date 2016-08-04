@@ -15,15 +15,12 @@ import com.st.model.Dataset;
  */
 public class DatasetEditForm {
 
-    /** Dataset being created. */
+    // Dataset being created. 
     @Valid
     Dataset dataset;
 
-    /** User uploaded features file. Empty if experiment output is fetched instead. */
+    // User uploaded features file. 
     CommonsMultipartFile featureFile;   // not required when editing a dataset
-
-    /** Features file is fetched from experiment output. Empty if user uploaded file is used instead. */
-    String experimentId; // not required when editing a dataset
 
     /**
      * Constructor.

@@ -11,10 +11,10 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
  */
 public class ImageForm {
 
-    /** User uploaded image file. */
+    // User uploaded image file. 
     CommonsMultipartFile imageFile;
 
-    /** Filename. */
+    // Filename. 
     @NotEmpty
     String fileName;
     

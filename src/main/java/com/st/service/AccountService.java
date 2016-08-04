@@ -3,6 +3,7 @@ package com.st.service;
 import java.util.List;
 
 import com.st.model.Account;
+import com.st.model.AccountId;
 
 /**
  * Interface for the account service.
@@ -17,17 +18,29 @@ public interface AccountService {
     public Account find(String id);
 
     /**
+     * Returns the currently logged account.
+     * @return account.
+     */
+    public Account current();
+    
+    /**
      * Returns all accounts. 
      * @return the accounts.
      */
     public List<Account> list();
 
     /**
-     * Finds all accounts for a dataset.
-     * @param datasetId the dataset.
-     * @return the accounts.
+     * Returns all accounts ids. 
+     * @return the accounts ids.
      */
-    public List<Account> findForDataset(String datasetId);
+    public List<AccountId> listIds();
+    
+    /**
+     * Finds all accounts ids for a dataset.
+     * @param datasetId the dataset.
+     * @return the accounts ids.
+     */
+    public List<AccountId> findForDataset(String datasetId);
 
     /**
      * Adds an account.

@@ -45,7 +45,6 @@ public class Account implements IAccount {
 
     String country;
 
-    // Transient in API.
     List<String> granted_datasets;
 
     DateTime created_at;
@@ -74,10 +73,6 @@ public class Account implements IAccount {
         return this.enabled;
     }
 
-    /**
-     *
-     * @param enabled
-     */
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -158,10 +153,6 @@ public class Account implements IAccount {
         return street_address;
     }
 
-    /**
-     *
-     * @param street_address
-     */
     @Override
     public void setStreet_address(String street_address) {
         this.street_address = street_address;
@@ -172,10 +163,6 @@ public class Account implements IAccount {
         return city;
     }
 
-    /**
-     *
-     * @param city
-     */
     @Override
     public void setCity(String city) {
         this.city = city;
@@ -201,13 +188,11 @@ public class Account implements IAccount {
         this.country = country;
     }
 
-    // Transient in API.
     @Override
     public List<String> getGranted_datasets() {
         return this.granted_datasets;
     }
 
-    // Transient in API.
     @Override
     public void setGranted_datasets(List<String> grantedDatasets) {
         this.granted_datasets = grantedDatasets;

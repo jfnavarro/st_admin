@@ -151,8 +151,7 @@
 
 
                         <div class="span4">
-                            <legend>Statistics and comments</legend>
-
+                            <legend>Comments</legend>
                             <spring:bind path="dataset.comment">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
                                     <label class="control-label" for="comment">Comments</label>
@@ -174,12 +173,6 @@
 
                     <form:input type="hidden" path="dataset.id" />
                     <form:input type="hidden" path="dataset.created_by_account_id" />
-                    <form:input type="hidden" path="dataset.overall_feature_count" />
-                    <form:input type="hidden" path="dataset.unique_gene_count" />
-                    <form:input type="hidden" path="dataset.unique_barcode_count" />
-                    <form:input type="hidden" path="dataset.overall_hit_count" />
-                    <form:input type="hidden" path="dataset.overall_hit_quartiles" />
-                    <form:input type="hidden" path="dataset.gene_pooled_hit_quartiles" />
                     <form:input type="hidden" path="dataset.created_at" />
                     <form:input type="hidden" path="dataset.last_modified" />
 

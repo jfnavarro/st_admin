@@ -60,24 +60,6 @@
                 <dt>Created by</dt>
                 <dd>${accountcreator}&nbsp;</dd>
 
-                <dt>Overall # of features (# of unique events)</dt>
-                <dd>${dataset.overall_feature_count}&nbsp;</dd>
-
-                <dt>Unique # of genes</dt>
-                <dd>${dataset.unique_gene_count}&nbsp;</dd>
-
-                <dt>Unique # of barcodes</dt>
-                <dd>${dataset.unique_barcode_count}&nbsp;</dd>
-
-                <dt>Overall # of hits</dt>
-                <dd>${dataset.overall_hit_count}&nbsp;</dd>
-
-                <dt>Hit quartiles</dt>
-                <dd>[${dataset.overall_hit_quartiles[0]}, ${dataset.overall_hit_quartiles[1]}, ${dataset.overall_hit_quartiles[2]}, ${dataset.overall_hit_quartiles[3]}, ${dataset.overall_hit_quartiles[4]}]&nbsp;</dd>
-
-                <dt>Gene-pooled hit quartiles</dt>
-                <dd>[${dataset.gene_pooled_hit_quartiles[0]}, ${dataset.gene_pooled_hit_quartiles[1]}, ${dataset.gene_pooled_hit_quartiles[2]}, ${dataset.gene_pooled_hit_quartiles[3]}, ${dataset.gene_pooled_hit_quartiles[4]}]&nbsp;</dd>
-
                 <dt>Comments</dt>
                 <dd>${dataset.comment}&nbsp;</dd>
 

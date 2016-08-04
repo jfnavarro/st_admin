@@ -32,10 +32,8 @@
 
                 <div class="page-header">
                     <div></div>
-                    <h1>
-                        Account <small>${account.username}</small>
-                </h1>
-            </div>
+                    <h1> Account <small>${account.username}</small> </h1>
+                </div>
 
             <div>
                 <a href="<c:url value="/account/"/>">Back</a> | <a

@@ -63,6 +63,7 @@
                         </div>
                     </spring:bind>
 
+                    <sec:authorize ifAnyGranted="ROLE_ADMIN">
                     <spring:bind path="role">
                         <div class="control-group">
                             <label class="control-label" for="inputRole">Role</label>
@@ -70,14 +71,13 @@
                                 <form:select id="inputRole" path="role">
                                     <form:option label="User (default)" value="ROLE_USER"></form:option>
                                     <form:option label="Content manager" value="ROLE_CM"></form:option>
-                                    <sec:authorize ifAnyGranted="ROLE_ADMIN">
-                                        <form:option label="Administrator" value="ROLE_ADMIN"></form:option>
-                                    </sec:authorize>
+                                    <form:option label="Administrator" value="ROLE_ADMIN"></form:option>                             
                                 </form:select>
                             </div>
                         </div>
                     </spring:bind>
-
+                    </sec:authorize>
+                            
                     <spring:bind path="password">
                         <div class="control-group  ${status.error ? 'error' : ''}">
                             <label class="control-label" for="inputPassword">Password</label>
@@ -190,9 +190,8 @@
                                 </form:select>
                             </div>
                         </div>
-                    </spring:bind>
-
-
+                    </spring:bind>                          
+                            
                     <button type="submit" class="btn">Save</button>
                     <form:input type="hidden" path="id" />
                     <form:input type="hidden" path="created_at" />

@@ -4,6 +4,7 @@ import com.st.component.StaticContextAccessor;
 import com.st.form.DatasetAddForm;
 import com.st.form.DatasetEditForm;
 import com.st.model.Account;
+import com.st.model.AccountId;
 import com.st.model.Chip;
 import com.st.model.Dataset;
 import com.st.model.FeaturesMetadata;
@@ -11,11 +12,9 @@ import com.st.model.ImageAlignment;
 import com.st.model.S3Resource;
 import com.st.serviceImpl.AccountServiceImpl;
 import com.st.serviceImpl.ChipServiceImpl;
-import com.st.serviceImpl.DatasetInfoServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.FeaturesServiceImpl;
 import com.st.serviceImpl.ImageAlignmentServiceImpl;
-import com.st.serviceImpl.SelectionServiceImpl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,12 +61,6 @@ public class DatasetController {
     FeaturesServiceImpl featuresService;
 
     @Autowired
-    SelectionServiceImpl selectionService;
-
-    @Autowired
-    DatasetInfoServiceImpl datasetinfoService;
-
-    @Autowired
     ChipServiceImpl chipService;
 
     @Autowired
@@ -84,7 +77,7 @@ public class DatasetController {
     ModelAndView list() {
         logger.info("Entering list view of datasets");
         Map<String, FeaturesMetadata> metadata = populateFeaturesMetadata();
-
+        // Remove datasets from the list that do not contain ST data
         ArrayList<Dataset> l = new ArrayList<>(datasetService.list());
         Iterator<Dataset> i = l.iterator();
         while (i.hasNext()) {
@@ -108,15 +101,15 @@ public class DatasetController {
         logger.info("Entering show view of dataset" + id);
         Dataset dataset = datasetService.find(id);
         ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
-        List<Account> accounts = accountService.findForDataset(id);
-        success.addObject("accounts", accounts);
+        List<AccountId> accounts_ids = accountService.findForDataset(id);
+        logger.info("List of account ids for dataset " + id + " " + accounts_ids.toString());
+        success.addObject("accounts", accounts_ids);
         if (dataset.getImage_alignment_id() != null ) {
             ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
             success.addObject("imagealignment", imal);
         }
         Account creator = accountService.find(dataset.getCreated_by_account_id());
-        success.addObject("accountcreator", creator == null ?
-                "Unknown" : creator.getUsername());
+        success.addObject("accountcreator", creator == null ? "Unknown" : creator.getUsername());
         return success;
 
     }
@@ -129,8 +122,7 @@ public class DatasetController {
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public ModelAndView add() {
         logger.info("Entering add form of dataset");
-        return new ModelAndView("datasetadd", "datasetform",
-                new DatasetAddForm());
+        return new ModelAndView("datasetadd", "datasetform", new DatasetAddForm());
     }
 
     /**
@@ -149,14 +141,12 @@ public class DatasetController {
             model.addObject("errors", result.getAllErrors());
             return model;
         }
-
-        // Validate if either feature file of experiment is selected (exactly one of them).
+        // Validate if ST Data file is present
         if (datasetAddForm.getFeatureFile().isEmpty()) {
             ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
             model.addObject("featureerror", "Select a valid file with the st data to import.");
             return model;
         } 
-        
         // Validate gzip format.
         if (!datasetAddForm.getFeatureFile().isEmpty() &&
             !datasetAddForm.getFeatureFile().getOriginalFilename().endsWith("gz") &&
@@ -208,7 +198,11 @@ public class DatasetController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit form for dataset " + id);
-        return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(datasetService.find(id)));
+        Dataset d = datasetService.find(id);
+        if (d == null) {
+            logger.error("Editing dataset. Got null dataset " + id);
+        } 
+        return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(d));
     }
 
     /**
@@ -229,13 +223,6 @@ public class DatasetController {
             model.addObject("errors", result.getAllErrors());
             return model;
         }
-
-        // validate if only one feature input is selected.
-        if (!datasetEditForm.getFeatureFile().isEmpty()) {
-            ModelAndView model = new ModelAndView("datasetedit", "datasetform", datasetEditForm);
-            model.addObject("featureerror", "Select a valid file with the st data.");
-            return model;
-        }
         
         // Validate gzip format.
         if (!datasetEditForm.getFeatureFile().isEmpty() &&
@@ -246,7 +233,8 @@ public class DatasetController {
             return model;
         }
 
-        // Read features, if specified.
+        // Read features, if specified (in edit mode, leaving the ST data empty
+        // means keeping the current file)
         byte[] bytes = null;
         if (!datasetEditForm.getFeatureFile().isEmpty()) {
             CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
@@ -258,11 +246,20 @@ public class DatasetController {
         // Add file to S3, update quartiles.
         if (bytes != null) {
             // Update file.
-            S3Resource s3res = new S3Resource("application/json", "gzip", beingUpdated.getId(), bytes);
+            S3Resource s3res = new S3Resource("application/json", "gzip", 
+                    beingUpdated.getId(), bytes);
             featuresService.addUpdate(beingUpdated.getId(), s3res);
                 
         }
 
+        // Just in case enforce to always be granted to the creator
+        final String user_id = StaticContextAccessor.getCurrentUser().getId();
+        List<String> granted_accounts = beingUpdated.getGranted_accounts();
+        if (granted_accounts != null && !granted_accounts.contains(user_id)) {
+            granted_accounts.add(user_id);
+            beingUpdated.setGranted_accounts(granted_accounts);
+        }
+        
         // Update dataset.
         datasetService.update(beingUpdated);
 
@@ -366,9 +363,12 @@ public class DatasetController {
     @ModelAttribute("accountChoices")
     public Map<String, String> populateAccountChoices() {
         Map<String, String> choices = new LinkedHashMap<>();
-        List<Account> l = accountService.list();
-        for (Account t : l) {
-            choices.put(t.getId(), t.getUsername());
+        List<AccountId> accounts = accountService.listIds();
+        final String user_id = StaticContextAccessor.getCurrentUser().getId();
+        for (AccountId account : accounts) {
+            if (!account.getId().equals(user_id)) {
+                choices.put(account.getId(), account.getUsername());
+            }
         }
         return choices;
     }

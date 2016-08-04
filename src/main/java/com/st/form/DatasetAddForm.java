@@ -16,11 +16,11 @@ import com.st.model.Dataset;
  */
 public class DatasetAddForm {
 
-    /** Dataset being created. */
+    // Dataset being created. 
     @Valid
     Dataset dataset;
 
-    /** User uploaded features file. Empty if experiment output is fetched instead. */
+    // User uploaded features file. 
     CommonsMultipartFile featureFile;
 
     /**

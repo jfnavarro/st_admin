@@ -35,7 +35,6 @@ public class Dataset implements IDataset {
     double[] gene_pooled_hit_quartiles;
     String comment;
 
-    // Transient in API.
     List<String> granted_accounts;
 
     String created_by_account_id;
@@ -90,10 +89,6 @@ public class Dataset implements IDataset {
         this.species = species;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getOverall_feature_count() {
         return overall_feature_count;
@@ -114,10 +109,6 @@ public class Dataset implements IDataset {
         this.unique_gene_count = count;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getUnique_barcode_count() {
         return this.unique_barcode_count;
@@ -128,10 +119,6 @@ public class Dataset implements IDataset {
         this.unique_barcode_count = count;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public int getOverall_hit_count() {
         return this.overall_hit_count;
@@ -142,10 +129,6 @@ public class Dataset implements IDataset {
         this.overall_hit_count = count;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public double[] getOverall_hit_quartiles() {
         return this.overall_hit_quartiles;
@@ -186,13 +169,11 @@ public class Dataset implements IDataset {
         this.enabled = b;
     }
 
-    // Transient in API.
     @Override
     public List<String> getGranted_accounts() {
         return this.granted_accounts;
     }
-
-    // Transient in API.
+    
     @Override
     public void setGranted_accounts(List<String> grantedAccounts) {
         this.granted_accounts = grantedAccounts;
