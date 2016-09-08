@@ -7,7 +7,6 @@
 package com.st.serviceImpl;
 
 import com.st.model.FeaturesMetadata;
-import com.st.model.S3Resource;
 import com.st.service.FeaturesService;
 import java.util.Arrays;
 import java.util.List;
@@ -37,28 +36,26 @@ public class FeaturesServiceImpl implements FeaturesService {
 
     @Autowired
     Properties appConfig;
-    
-    
+      
     @Override
-    public void addUpdate(String id, S3Resource resource) {
+    public void addUpdate(String id, byte[] gzipfile) {
         String url = appConfig.getProperty("url.features");
-        secureRestTemplate.put(url + id, resource);
+        secureRestTemplate.put(url + id, gzipfile);
     }
-    
     
     @Override
     public List<FeaturesMetadata> listMetadata() {
         String url = appConfig.getProperty("url.features");
-        FeaturesMetadata[] feats = secureRestTemplate.getForObject(url, FeaturesMetadata[].class);
+        FeaturesMetadata[] feats = secureRestTemplate.getForObject(url, 
+                FeaturesMetadata[].class);
         return Arrays.asList(feats);
     }
     
     
     @Override
-    public S3Resource find(String id) {
-        String url = appConfig.getProperty("url.features") + "json/" + id;
-        S3Resource fw = secureRestTemplate.getForObject(url, S3Resource.class);
-        return fw;
+    public byte[] find(String id) {
+        String url = appConfig.getProperty("url.features") + id;
+        return secureRestTemplate.getForObject(url, byte[].class);
     }
     
 }

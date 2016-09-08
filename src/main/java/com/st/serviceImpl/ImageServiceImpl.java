@@ -1,7 +1,6 @@
 package com.st.serviceImpl;
 
 import com.st.model.ImageMetadata;
-import com.st.model.S3Resource;
 import com.st.service.ImageService;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -9,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import javax.imageio.ImageIO;
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,22 +43,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public S3Resource findCompressedAsJSON(String id) {
-        String url = appConfig.getProperty("url.image");
-        url += "/compressedjson/" + id;
-        S3Resource img = secureRestTemplate.getForObject(url, S3Resource.class);
+    public BufferedImage find(String id) {
+        String url = appConfig.getProperty("url.image") + id;
+        BufferedImage img = secureRestTemplate.getForObject(url, BufferedImage.class);
         return img;
     }
 
     @Override
-    public BufferedImage find(String id) {
-        String url = appConfig.getProperty("url.image");
-        url += id;
-        BufferedImage img = secureRestTemplate.getForObject(url,
-                BufferedImage.class);
-        return img;
+    public byte[] findCompressed(String id) {
+        String url = appConfig.getProperty("url.image/compressed/") + id;
+        return secureRestTemplate.getForObject(url, byte[].class);
     }
-
+    
     @Override
     public void delete(String id) {
         String url = appConfig.getProperty("url.image");
@@ -71,26 +65,10 @@ public class ImageServiceImpl implements ImageService {
     public void addFromFile(CommonsMultipartFile imageFile) throws IOException {
         String url = appConfig.getProperty("url.image");
         url += imageFile.getOriginalFilename();
-
         BufferedImage bi = ImageIO.read(imageFile.getInputStream());
         if (bi == null) {
             throw new IOException("Empty or incorrect image file.");
         }
         secureRestTemplate.put(url, bi);
     }
-
-    @Override
-    public void addFromFileCompressedAsJSON(CommonsMultipartFile imageFile) throws IOException {
-        String url = appConfig.getProperty("url.image");
-        url += ("/compressedjson/" + imageFile.getOriginalFilename());
-        S3Resource img = new S3Resource();
-        img.setFilename(imageFile.getOriginalFilename());
-        byte[] bytes = IOUtils.toByteArray(imageFile.getInputStream());
-        img.setFile(bytes);
-        img.setContentType("image/jpeg");
-        img.setContentEncoding("");
-        img.setSize(bytes.length);
-        secureRestTemplate.put(url, img);
-    }
-
 }

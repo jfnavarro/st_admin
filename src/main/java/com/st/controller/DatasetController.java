@@ -9,7 +9,6 @@ import com.st.model.Chip;
 import com.st.model.Dataset;
 import com.st.model.FeaturesMetadata;
 import com.st.model.ImageAlignment;
-import com.st.model.S3Resource;
 import com.st.serviceImpl.AccountServiceImpl;
 import com.st.serviceImpl.ChipServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
@@ -178,8 +177,7 @@ public class DatasetController {
         Dataset dsResult = datasetService.add(beingCreated);
 
         // update features file, now that we know the ID.
-        S3Resource s3res = new S3Resource("application/json", "gzip", dsResult.getId(), bytes);
-        featuresService.addUpdate(dsResult.getId(), s3res);
+        featuresService.addUpdate(dsResult.getId(), bytes);
 
         // Return list view.
         ModelAndView success = list();
@@ -246,9 +244,7 @@ public class DatasetController {
         // Add file to S3, update quartiles.
         if (bytes != null) {
             // Update file.
-            S3Resource s3res = new S3Resource("application/json", "gzip", 
-                    beingUpdated.getId(), bytes);
-            featuresService.addUpdate(beingUpdated.getId(), s3res);
+            featuresService.addUpdate(beingUpdated.getId(), bytes);
                 
         }
 
@@ -296,10 +292,10 @@ public class DatasetController {
     public void getFeatures(@PathVariable String id, HttpServletResponse response) {
         try {
             logger.info("About to download features file for dataset " + id);
-            S3Resource fw = featuresService.find(id);
-            response.setContentType("application/json");
+            byte[] fw = featuresService.find(id);
+            response.setContentType("text/plain");
             response.setHeader("Content-Encoding", "gzip");
-            InputStream is = new ByteArrayInputStream(fw.getFile());
+            InputStream is = new ByteArrayInputStream(fw);
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {

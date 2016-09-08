@@ -1,7 +1,6 @@
 package com.st.service;
 
 import com.st.model.FeaturesMetadata;
-import com.st.model.S3Resource;
 import java.util.List;
 
 /**
@@ -10,11 +9,11 @@ import java.util.List;
 public interface FeaturesService {
     
     /**
-     * Adds or (for an existing file) updates a features file.
+     * Adds or updates a features file.
      * @param id the dataset ID.
-     * @param file the file.
+     * @param gzipfile the file, gzipped in BASE64-encoding.
      */
-    public void addUpdate(String id, S3Resource file);
+    public void addUpdate(String id, byte[] gzipfile);
     
     /**
      * Lists features metadata for all datasets.
@@ -27,6 +26,6 @@ public interface FeaturesService {
      * @param id the dataset ID.
      * @return the features file.
      */
-    public S3Resource find(String id);
+    public byte[] find(String id);
     
 }

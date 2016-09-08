@@ -2,7 +2,6 @@ package com.st.controller;
 
 import com.st.form.ImageForm;
 import com.st.model.ImageMetadata;
-import com.st.model.S3Resource;
 import com.st.serviceImpl.ImageServiceImpl;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -73,8 +72,7 @@ public class ImageController {
     public @ResponseBody
     byte[] getCompressed(@PathVariable String id) {
         logger.info("Returning " + id + " as JPEG");
-        S3Resource img = imageService.findCompressedAsJSON(id);
-        byte[] imgdata = img.getFile();
+        byte[] imgdata = imageService.findCompressed(id);
         return imgdata;
     }
 
@@ -140,48 +138,6 @@ public class ImageController {
             }
         }
         
-    }
-
-    /**
-     * Invoked on submit of the add compressed JPEG form.
-     * @param imageForm the form.
-     * @param result binding.
-     * @return the list view.
-     */
-    @RequestMapping(value = "/compressed/submitadd", method = RequestMethod.POST)
-    public ModelAndView submitAddCompressed(@ModelAttribute("imageform") 
-    @Valid ImageForm imageForm, BindingResult result) {
-        if (result.hasErrors()) {
-            ModelAndView model = new ModelAndView("imageadd", "imageform", imageForm);
-            model.addObject("errors", result.getAllErrors());
-            return model;
-        }
-
-        // Check if image already exists
-        List<ImageMetadata> imd = imageService.list();
-        List<String> imageNames = new ArrayList<>();
-        for (ImageMetadata im : imd) {
-            imageNames.add(im.getFilename());
-        }
-        if (imageNames.contains(imageForm.getFileName())) {
-            ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
-            model.addObject("err", "An image with this name already exists. "
-                    + "Choose another name or delete existing image.");
-            return model;
-        } else {
-            try {
-                imageService.addFromFileCompressedAsJSON(imageForm.getImageFile());
-                ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imageService.list());
-                model.addObject("msg", "Image imported.");
-                logger.info("Successfully imported JPEG " + imageForm.getFileName());
-                return model;
-            } catch (IOException ex) {
-                ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
-                model.addObject("err", "Error importing image. Format seems invalid.");
-                logger.error("Error importing image. Format seems invalid.");
-                return model;
-            }
-        }
     }
 
     /**

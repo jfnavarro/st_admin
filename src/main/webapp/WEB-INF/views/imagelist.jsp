@@ -69,7 +69,6 @@
             <table class="table">
                 <thead>
                     <tr>
-
                         <th>Name</th>
                         <th>Size</th>
                         <th>Created</th>
@@ -81,8 +80,6 @@
                 <tbody>
                     <c:forEach var="image" items="${imagemetadata}">
                         <tr>
-
-
                             <td><a href="<c:url value="/image/compressed/"/>${image.filename}" target="_blank">${image.filename}</a></td>
                             <td>${image.getReadableSize()}</td>
                             <td><small><fmt:formatDate value="${image.created.toDate()}" pattern="yyyy-MM-dd HH:mm:ss" /></small></td>
