@@ -1,28 +1,27 @@
 package com.st.service;
 
-import com.st.model.FeaturesMetadata;
 import java.util.List;
 
 /**
  * Interface for the features service.
  */
-public interface FeaturesService {
+public interface FileService {
     
     /**
-     * Adds or updates a features file.
-     * @param id the dataset ID.
+     * Adds or updates a file.
+     * @param id the file ID.
      * @param gzipfile the file, gzipped in BASE64-encoding.
      */
     public void addUpdate(String id, byte[] gzipfile);
     
     /**
-     * Lists features metadata for all datasets.
+     * Lists metadata for all files.
      * @return the metadata.
      */
-    public List<FeaturesMetadata> listMetadata();
+    public List<FileMetadata> listMetadata();
     
     /**
-     * Finds the features file of a dataset.
+     * Finds the file of a dataset.
      * @param id the dataset ID.
      * @return the features file.
      */

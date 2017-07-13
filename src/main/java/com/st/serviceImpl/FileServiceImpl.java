@@ -7,7 +7,7 @@
 package com.st.serviceImpl;
 
 import com.st.model.FeaturesMetadata;
-import com.st.service.FeaturesService;
+import com.st.service.FileService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -25,11 +25,11 @@ import org.springframework.web.client.RestTemplate;
  */
 
 @Service
-public class FeaturesServiceImpl implements FeaturesService {
+public class FileServiceImpl implements FileService {
  
     // Note: General service URI logging is performed in CustomOAuth2RestTemplate.
     private static final Logger logger = Logger
-            .getLogger(FeaturesServiceImpl.class);
+            .getLogger(FileServiceImpl.class);
 
     @Autowired
     RestTemplate secureRestTemplate;
@@ -39,22 +39,22 @@ public class FeaturesServiceImpl implements FeaturesService {
       
     @Override
     public void addUpdate(String id, byte[] gzipfile) {
-        String url = appConfig.getProperty("url.features");
+        String url = appConfig.getProperty("url.files");
         secureRestTemplate.put(url + id, gzipfile);
     }
     
     @Override
-    public List<FeaturesMetadata> listMetadata() {
-        String url = appConfig.getProperty("url.features");
+    public List<FileMetadata> listMetadata() {
+        String url = appConfig.getProperty("url.files");
         FeaturesMetadata[] feats = secureRestTemplate.getForObject(url, 
-                FeaturesMetadata[].class);
+                FileMetadata[].class);
         return Arrays.asList(feats);
     }
     
     
     @Override
     public byte[] find(String id) {
-        String url = appConfig.getProperty("url.features") + id;
+        String url = appConfig.getProperty("url.files") + id;
         return secureRestTemplate.getForObject(url, byte[].class);
     }
     

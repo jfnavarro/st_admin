@@ -5,15 +5,10 @@ import com.st.form.DatasetAddForm;
 import com.st.form.DatasetEditForm;
 import com.st.model.Account;
 import com.st.model.AccountId;
-import com.st.model.Chip;
 import com.st.model.Dataset;
-import com.st.model.FeaturesMetadata;
-import com.st.model.ImageAlignment;
 import com.st.serviceImpl.AccountServiceImpl;
-import com.st.serviceImpl.ChipServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
-import com.st.serviceImpl.FeaturesServiceImpl;
-import com.st.serviceImpl.ImageAlignmentServiceImpl;
+import com.st.serviceImpl.FileServiceImpl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -57,13 +52,7 @@ public class DatasetController {
     AccountServiceImpl accountService;
 
     @Autowired
-    FeaturesServiceImpl featuresService;
-
-    @Autowired
-    ChipServiceImpl chipService;
-
-    @Autowired
-    ImageAlignmentServiceImpl imageAlignmentService;
+    FileServiceImpl featuresService;
 
 
     /**
@@ -103,10 +92,6 @@ public class DatasetController {
         List<AccountId> accounts_ids = accountService.findForDataset(id);
         logger.info("List of account ids for dataset " + id + " " + accounts_ids.toString());
         success.addObject("accounts", accounts_ids);
-        if (dataset.getImage_alignment_id() != null ) {
-            ImageAlignment imal = imageAlignmentService.find(dataset.getImage_alignment_id());
-            success.addObject("imagealignment", imal);
-        }
         Account creator = accountService.find(dataset.getCreated_by_account_id());
         success.addObject("accountcreator", creator == null ? "Unknown" : creator.getUsername());
         return success;
@@ -317,38 +302,6 @@ public class DatasetController {
             metadata.put(t.getDatasetId(), t);
         }
         return metadata;
-    }
-
-    /**
-     * Helper. Populates image alignments.
-     *
-     * @return alignments.
-     */
-    @ModelAttribute("imageAlignmentChoices")
-    public Map<String, String> populateImageAlignmentChoices() {
-        Map<String, String> choices = new LinkedHashMap<>();
-        choices.put(null, "None");
-        List<ImageAlignment> l = imageAlignmentService.list();
-        for (ImageAlignment t : l) {
-            choices.put(t.getId(), t.getName());
-        }
-        return choices;
-    }
-
-    /**
-     * Helper. Populates chips.
-     *
-     * @return chips.
-     */
-    @ModelAttribute("chipChoices")
-    public Map<String, String> populateChipChoices() {
-        Map<String, String> choices = new LinkedHashMap<>();
-        choices.put(null, "None");
-        List<Chip> l = chipService.list();
-        for (Chip t : l) {
-            choices.put(t.getId(), t.getName());
-        }
-        return choices;
     }
 
     /**
