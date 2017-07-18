@@ -1,5 +1,6 @@
 package com.st.service;
 
+import com.st.model.FileMetadata;
 import java.util.List;
 
 /**

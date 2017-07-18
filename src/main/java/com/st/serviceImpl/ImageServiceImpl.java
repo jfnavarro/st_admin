@@ -1,6 +1,6 @@
 package com.st.serviceImpl;
 
-import com.st.model.ImageMetadata;
+import com.st.model.FileMetadata;
 import com.st.service.ImageService;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -35,10 +35,10 @@ public class ImageServiceImpl implements ImageService {
     Properties appConfig;
 
     @Override
-    public List<ImageMetadata> list() {
+    public List<FileMetadata> list() {
         String url = appConfig.getProperty("url.image");
-        ImageMetadata[] imgMetadataArray = secureRestTemplate.getForObject(url,
-                ImageMetadata[].class);
+        FileMetadata[] imgMetadataArray = secureRestTemplate.getForObject(url,
+                FileMetadata[].class);
         return Arrays.asList(imgMetadataArray);
     }
 

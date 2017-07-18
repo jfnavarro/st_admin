@@ -91,11 +91,6 @@
 		</property>
 	</bean>
 
-	<!-- Amazon AWS Configuration -->
-
-	<bean id="s3Client" class="com.amazonaws.services.s3.AmazonS3Client">
-	</bean>
-
 	<!-- Error handlers -->
 
 	<bean id="jsonErrorHandler"

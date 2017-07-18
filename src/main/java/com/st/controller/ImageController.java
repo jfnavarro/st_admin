@@ -1,7 +1,7 @@
 package com.st.controller;
 
 import com.st.form.ImageForm;
-import com.st.model.ImageMetadata;
+import com.st.model.FileMetadata;
 import com.st.serviceImpl.ImageServiceImpl;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -44,7 +44,7 @@ public class ImageController {
     public @ResponseBody
     ModelAndView listMetadata() {
         logger.info("Entering list view of image metadata ");
-        List<ImageMetadata> imageMetadata = imageService.list();
+        List<FileMetadata> imageMetadata = imageService.list();
         return new ModelAndView("imagelist", "imagemetadata", imageMetadata);
     }
 
@@ -112,9 +112,9 @@ public class ImageController {
         }
 
         // Check if image already exists
-        List<ImageMetadata> imd = imageService.list();
+        List<FileMetadata> imd = imageService.list();
         List<String> imageNames = new ArrayList<>();
-        for (ImageMetadata im : imd) {
+        for (FileMetadata im : imd) {
             imageNames.add(im.getFilename());
         }
         if (imageNames.contains(imageForm.getFileName())) {
@@ -148,7 +148,7 @@ public class ImageController {
     @RequestMapping(value = "/{id:.+}/delete", method = RequestMethod.GET)
     public ModelAndView delete(@PathVariable String id) {
         imageService.delete(id);
-        List<ImageMetadata> imageMetadata = imageService.list();
+        List<FileMetadata> imageMetadata = imageService.list();
         ModelAndView success = new ModelAndView("imagelist", "imagemetadata", imageMetadata);
         success.addObject("msg", "Image deleted.");
         logger.info("Deleted image "+ id);

@@ -6,6 +6,7 @@ import com.st.form.DatasetEditForm;
 import com.st.model.Account;
 import com.st.model.AccountId;
 import com.st.model.Dataset;
+import com.st.model.FileMetadata;
 import com.st.serviceImpl.AccountServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.FileServiceImpl;
@@ -64,7 +65,7 @@ public class DatasetController {
     public @ResponseBody
     ModelAndView list() {
         logger.info("Entering list view of datasets");
-        Map<String, FeaturesMetadata> metadata = populateFeaturesMetadata();
+        Map<String, FileMetadata> metadata = populateFeaturesMetadata();
         // Remove datasets from the list that do not contain ST data
         ArrayList<Dataset> l = new ArrayList<>(datasetService.list());
         Iterator<Dataset> i = l.iterator();
@@ -95,7 +96,6 @@ public class DatasetController {
         Account creator = accountService.find(dataset.getCreated_by_account_id());
         success.addObject("accountcreator", creator == null ? "Unknown" : creator.getUsername());
         return success;
-
     }
 
     /**
@@ -295,10 +295,10 @@ public class DatasetController {
      * @return metadata.
      */
     @ModelAttribute("featuresMetadata")
-    public Map<String, FeaturesMetadata> populateFeaturesMetadata() {
-        List<FeaturesMetadata> fml = featuresService.listMetadata();
-        Map<String, FeaturesMetadata> metadata = new LinkedHashMap<>(fml.size());
-        for (FeaturesMetadata t : fml) {
+    public Map<String, FileMetadata> populateFeaturesMetadata() {
+        List<FileMetadata> fml = featuresService.listMetadata();
+        Map<String, FileMetadata> metadata = new LinkedHashMap<>(fml.size());
+        for (FileMetadata t : fml) {
             metadata.put(t.getDatasetId(), t);
         }
         return metadata;

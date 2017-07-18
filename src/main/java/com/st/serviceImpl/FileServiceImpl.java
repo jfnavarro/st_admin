@@ -6,7 +6,7 @@
 
 package com.st.serviceImpl;
 
-import com.st.model.FeaturesMetadata;
+import com.st.model.FileMetadata;
 import com.st.service.FileService;
 import java.util.Arrays;
 import java.util.List;
@@ -39,14 +39,14 @@ public class FileServiceImpl implements FileService {
       
     @Override
     public void addUpdate(String id, byte[] gzipfile) {
-        String url = appConfig.getProperty("url.files");
+        String url = appConfig.getProperty("url.file");
         secureRestTemplate.put(url + id, gzipfile);
     }
     
     @Override
     public List<FileMetadata> listMetadata() {
-        String url = appConfig.getProperty("url.files");
-        FeaturesMetadata[] feats = secureRestTemplate.getForObject(url, 
+        String url = appConfig.getProperty("url.file");
+        FileMetadata[] feats = secureRestTemplate.getForObject(url, 
                 FileMetadata[].class);
         return Arrays.asList(feats);
     }
@@ -54,7 +54,7 @@ public class FileServiceImpl implements FileService {
     
     @Override
     public byte[] find(String id) {
-        String url = appConfig.getProperty("url.files") + id;
+        String url = appConfig.getProperty("url.file") + id;
         return secureRestTemplate.getForObject(url, byte[].class);
     }
     
