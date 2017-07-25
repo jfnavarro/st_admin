@@ -6,7 +6,6 @@ import com.st.form.DatasetEditForm;
 import com.st.model.Account;
 import com.st.model.AccountId;
 import com.st.model.Dataset;
-import com.st.model.FileMetadata;
 import com.st.serviceImpl.AccountServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.FileServiceImpl;
@@ -14,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +27,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,8 +42,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class DatasetController {
 
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger
-            .getLogger(DatasetController.class);
+    private static final Logger logger = Logger.getLogger(DatasetController.class);
 
     @Autowired
     DatasetServiceImpl datasetService;
@@ -53,7 +51,7 @@ public class DatasetController {
     AccountServiceImpl accountService;
 
     @Autowired
-    FileServiceImpl featuresService;
+    FileServiceImpl filesService;
 
 
     /**
@@ -65,17 +63,7 @@ public class DatasetController {
     public @ResponseBody
     ModelAndView list() {
         logger.info("Entering list view of datasets");
-        Map<String, FileMetadata> metadata = populateFeaturesMetadata();
-        // Remove datasets from the list that do not contain ST data
-        ArrayList<Dataset> l = new ArrayList<>(datasetService.list());
-        Iterator<Dataset> i = l.iterator();
-        while (i.hasNext()) {
-            Dataset d = i.next(); // must be called before you can call i.remove()
-            if (!metadata.containsKey(d.getId())) {
-                i.remove();
-            }
-        }
-        return new ModelAndView("datasetlist", "datasetList", l);
+        return new ModelAndView("datasetlist", "datasetList", datasetService.list());
     }
 
     /**
@@ -89,6 +77,10 @@ public class DatasetController {
     ModelAndView get(@PathVariable String id) {
         logger.info("Entering show view of dataset" + id);
         Dataset dataset = datasetService.find(id);
+        if (dataset == null) {
+            logger.error("Getting dataset. Got null dataset " + id);
+            throw new RuntimeException("Could not find the dataset");
+        } 
         ModelAndView success = new ModelAndView("datasetshow", "dataset", dataset);
         List<AccountId> accounts_ids = accountService.findForDataset(id);
         logger.info("List of account ids for dataset " + id + " " + accounts_ids.toString());
@@ -126,43 +118,42 @@ public class DatasetController {
             return model;
         }
         // Validate if ST Data file is present
-        if (datasetAddForm.getFeatureFile().isEmpty()) {
+        if (datasetAddForm.getDataFile().isEmpty()) {
             ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
             model.addObject("featureerror", "Select a valid file with the st data to import.");
             return model;
         } 
-        // Validate gzip format.
-        if (!datasetAddForm.getFeatureFile().isEmpty() &&
-            !datasetAddForm.getFeatureFile().getOriginalFilename().endsWith("gz") &&
-            !datasetAddForm.getFeatureFile().getOriginalFilename().endsWith("gzip")) {
-            ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetAddForm);
-            model.addObject("featureerror", "The selected file must be gzipped with suffix .gz");
-            return model;
-        }
-
-        // parse the file
-        CommonsMultipartFile ffile = datasetAddForm.getFeatureFile();
-        byte[] bytes = ffile.getBytes();
    
         // get the current object
         Dataset beingCreated = datasetAddForm.getDataset();
-
+        // get the user id
         final String user_id = StaticContextAccessor.getCurrentUser().getId();
         // add created by and the current user to granted accounts
         beingCreated.setCreated_by_account_id(user_id);
-        List<String> current_users = beingCreated.getGranted_accounts();
+        List<String> current_users = beingCreated.getGrantedAccounts();
         if (current_users == null) {
             List<String> new_users = new ArrayList<>();
             new_users.add(user_id);
-            beingCreated.setGranted_accounts(new_users);
+            beingCreated.setGrantedAccounts(new_users);
         } else if (!current_users.contains(user_id)) {
             current_users.add(user_id);
-            beingCreated.setGranted_accounts(current_users);
+            beingCreated.setGrantedAccounts(current_users);
         }
+        
+        // add the dataset
         Dataset dsResult = datasetService.add(beingCreated);
 
+        // parse the data file
+        CommonsMultipartFile data_file = datasetAddForm.getDataFile();
         // update features file, now that we know the ID.
-        featuresService.addUpdate(dsResult.getId(), bytes);
+        filesService.addUpdate(data_file.getName(), 
+                dsResult.getId(), data_file.getBytes());
+        
+        // parse extra files
+        for (CommonsMultipartFile extra_file : datasetAddForm.getExtraFiles()) {
+            filesService.addUpdate(extra_file.getName(), 
+                    dsResult.getId(), extra_file.getBytes());
+        }
 
         // Return list view.
         ModelAndView success = list();
@@ -181,11 +172,12 @@ public class DatasetController {
     @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
     public ModelAndView edit(@PathVariable String id) {
         logger.info("Entering edit form for dataset " + id);
-        Dataset d = datasetService.find(id);
-        if (d == null) {
+        Dataset dataset = datasetService.find(id);
+        if (dataset == null) {
             logger.error("Editing dataset. Got null dataset " + id);
+            throw new RuntimeException("Could not find the dataset");
         } 
-        return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(d));
+        return new ModelAndView("datasetedit", "datasetform", new DatasetEditForm(dataset));
     }
 
     /**
@@ -206,39 +198,27 @@ public class DatasetController {
             model.addObject("errors", result.getAllErrors());
             return model;
         }
-        
-        // Validate gzip format.
-        if (!datasetEditForm.getFeatureFile().isEmpty() &&
-            !datasetEditForm.getFeatureFile().getOriginalFilename().endsWith("gz") &&
-            !datasetEditForm.getFeatureFile().getOriginalFilename().endsWith("gzip")) {
-            ModelAndView model = new ModelAndView("datasetadd", "datasetform", datasetEditForm);
-            model.addObject("featureerror", "The selected file must be gzipped with suffix .gz");
-            return model;
-        }
-
-        // Read features, if specified (in edit mode, leaving the ST data empty
-        // means keeping the current file)
-        byte[] bytes = null;
-        if (!datasetEditForm.getFeatureFile().isEmpty()) {
-            CommonsMultipartFile ffile = datasetEditForm.getFeatureFile();
-            bytes = ffile.getBytes();
-        }
 
         Dataset beingUpdated = datasetEditForm.getDataset();
-
-        // Add file to S3, update quartiles.
-        if (bytes != null) {
-            // Update file.
-            featuresService.addUpdate(beingUpdated.getId(), bytes);
-                
+        
+        // Read the st data (empty means keeping the current file)
+        if (!datasetEditForm.getDataFile().isEmpty()) {
+            CommonsMultipartFile data_file = datasetEditForm.getDataFile();
+            filesService.addUpdate(data_file.getName(), 
+                    beingUpdated.getId(), data_file.getBytes());
+        }
+        // parse extra files (empty means keeping the current file)
+        for (CommonsMultipartFile extra_file : datasetEditForm.getExtraFiles()) {
+            filesService.addUpdate(extra_file.getName(), 
+                    beingUpdated.getId(), extra_file.getBytes());
         }
 
         // Just in case enforce to always be granted to the creator
         final String user_id = StaticContextAccessor.getCurrentUser().getId();
-        List<String> granted_accounts = beingUpdated.getGranted_accounts();
+        List<String> granted_accounts = beingUpdated.getGrantedAccounts();
         if (granted_accounts != null && !granted_accounts.contains(user_id)) {
             granted_accounts.add(user_id);
-            beingUpdated.setGranted_accounts(granted_accounts);
+            beingUpdated.setGrantedAccounts(granted_accounts);
         }
         
         // Update dataset.
@@ -271,37 +251,26 @@ public class DatasetController {
      * Returns the zipped features file.
      *
      * @param id dataset ID.
+     * @param filename the name of the file
      * @param response HTTP response containing the file.
      */
-    @RequestMapping(value = "/features/{id}", method = RequestMethod.GET)
-    public void getFeatures(@PathVariable String id, HttpServletResponse response) {
+    @RequestMapping(value = "/files/{id}", method = RequestMethod.GET)
+    public void getFile(
+            @PathVariable String id,
+            @RequestParam(value = "filename", required = true) String filename,
+            HttpServletResponse response) {
         try {
-            logger.info("About to download features file for dataset " + id);
-            byte[] fw = featuresService.find(id);
+            logger.info("About to download file for dataset " + id);
+            byte[] fw = filesService.find(filename, id);
             response.setContentType("text/plain");
             response.setHeader("Content-Encoding", "gzip");
             InputStream is = new ByteArrayInputStream(fw);
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
         } catch (IOException ex) {
-            logger.error("Error getting or parsing features file for dataset " + id + " from API.");
-            throw new RuntimeException("IOError writing features file to HTTP response", ex);
+            logger.error("Error getting or parsing file for dataset " + id, ex);
+            throw new RuntimeException("IOError writing file to HTTP response", ex);
         }
-    }
-
-    /**
-     * Helper. Metadata.
-     *
-     * @return metadata.
-     */
-    @ModelAttribute("featuresMetadata")
-    public Map<String, FileMetadata> populateFeaturesMetadata() {
-        List<FileMetadata> fml = featuresService.listMetadata();
-        Map<String, FileMetadata> metadata = new LinkedHashMap<>(fml.size());
-        for (FileMetadata t : fml) {
-            metadata.put(t.getDatasetId(), t);
-        }
-        return metadata;
     }
 
     /**

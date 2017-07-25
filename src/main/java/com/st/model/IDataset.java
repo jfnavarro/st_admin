@@ -17,10 +17,22 @@ public interface IDataset {
 
     public void setName(String name);
 
-    public String getImage_alignment_id();
+    public String getImageHE();
 
-    public void setImage_alignment_id(String imal);
+    public void setImageHE(String filename);
 
+    public String getImageCy3();
+
+    public void setImageCy3(String filename);
+    
+    public double[] getAlignmentMatrix();
+    
+    public void setAlignmentMatrix(double[] arr);
+
+    public List<String> getFiles();
+
+    public void setFiles(List<String> files);
+    
     public String getTissue();
 
     public void setTissue(String tissue);
@@ -28,30 +40,6 @@ public interface IDataset {
     public String getSpecies();
 
     public void setSpecies(String species);
-
-    public int getOverall_feature_count();
-
-    public void setOverall_feature_count(int count);
-
-    public int getUnique_gene_count();
-
-    public void setUnique_gene_count(int count);
-
-    public int getUnique_barcode_count();
-
-    public void setUnique_barcode_count(int count);
-
-    public int getOverall_hit_count();
-
-    public void setOverall_hit_count(int count);
-
-    public double[] getOverall_hit_quartiles();
-
-    public void setOverall_hit_quartiles(double[] quartiles);
-
-    public double[] getGene_pooled_hit_quartiles();
-
-    public void setGene_pooled_hit_quartiles(double[] quartiles);
 
     public String getComment();
 
@@ -61,13 +49,18 @@ public interface IDataset {
 
     public void setEnabled(boolean b);
 
-    public List<String> getGranted_accounts();
+    public List<String> getGrantedAccounts();
 
-    public void setGranted_accounts(List<String> grantedAccounts);
+    public void setGrantedAccounts(List<String> grantedAccounts);
 
     public DateTime getCreated_at();
 
     public void setCreated_at(DateTime created);
 
     public DateTime getLast_modified();
+
+    public String getCreated_by_account_id();
+
+    public void setCreated_by_account_id(String id);
 }
+

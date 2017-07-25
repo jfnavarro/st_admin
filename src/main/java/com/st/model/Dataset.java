@@ -24,27 +24,31 @@ public class Dataset implements IDataset {
     @NotBlank(message = "Species must not be blank.")
     String species;
 
-    @NotBlank(message = "Image alignment must not be blank.")
-    String image_alignment_id;
+    double[] alignmentMatrix;
+    
+    @NotBlank(message = "HE image must not be blank.")
+    String imageHE;
+
+    String imageCy3;
         
-    int overall_feature_count;
-    int overall_hit_count;
-    int unique_gene_count;
-    int unique_barcode_count;
-    double[] overall_hit_quartiles;
-    double[] gene_pooled_hit_quartiles;
+    @NotBlank(message = "Files must contain at least one.")
+    List<String> files;
+    
     String comment;
 
-    List<String> granted_accounts;
-
+    @NotBlank(message = "Created by must not be blank.")
     String created_by_account_id;
 
     DateTime created_at;
 
     DateTime last_modified;
 
+    @NotBlank(message = "Granted account must contain at least one.")
+    List<String> grantedAccounts;
+
     /**
-     * Default Constructor is required by Jackson.
+     * Default constructor is needed by Jackson, in
+     * case other constructors are added.
      */
     public Dataset() {}
     
@@ -70,6 +74,46 @@ public class Dataset implements IDataset {
     }
 
     @Override
+    public String getImageHE() {
+        return this.imageHE;
+    }
+
+    @Override
+    public void setImageHE(String filename) {
+        this.imageHE = filename;
+    }
+
+    @Override
+    public String getImageCy3() {
+        return this.imageCy3;
+    }
+
+    @Override
+    public void setImageCy3(String filename) {
+        this.imageCy3 = filename;
+    }
+    
+    @Override
+    public double[] getAlignmentMatrix() {
+        return this.alignmentMatrix;
+    }
+    
+    @Override
+    public void setAlignmentMatrix(double[] arr) {
+        this.alignmentMatrix = arr;
+    }
+    
+    @Override
+    public List<String> getFiles() {
+        return this.files;
+    }
+
+    @Override
+    public void setFiles(List<String> files) {
+        this.files = files;
+    }
+
+    @Override
     public String getTissue() {
         return this.tissue;
     }
@@ -87,66 +131,6 @@ public class Dataset implements IDataset {
     @Override
     public void setSpecies(String species) {
         this.species = species;
-    }
-
-    @Override
-    public int getOverall_feature_count() {
-        return overall_feature_count;
-    }
-
-    @Override
-    public void setOverall_feature_count(int count) {
-        this.overall_feature_count = count;
-    }
-
-    @Override
-    public int getUnique_gene_count() {
-        return this.unique_gene_count;
-    }
-
-    @Override
-    public void setUnique_gene_count(int count) {
-        this.unique_gene_count = count;
-    }
-
-    @Override
-    public int getUnique_barcode_count() {
-        return this.unique_barcode_count;
-    }
-
-    @Override
-    public void setUnique_barcode_count(int count) {
-        this.unique_barcode_count = count;
-    }
-
-    @Override
-    public int getOverall_hit_count() {
-        return this.overall_hit_count;
-    }
-
-    @Override
-    public void setOverall_hit_count(int count) {
-        this.overall_hit_count = count;
-    }
-
-    @Override
-    public double[] getOverall_hit_quartiles() {
-        return this.overall_hit_quartiles;
-    }
-
-    @Override
-    public void setOverall_hit_quartiles(double[] quartiles) {
-        this.overall_hit_quartiles = quartiles;
-    }
-
-    @Override
-    public double[] getGene_pooled_hit_quartiles() {
-        return this.gene_pooled_hit_quartiles;
-    }
-
-    @Override
-    public void setGene_pooled_hit_quartiles(double[] quartiles) {
-        this.gene_pooled_hit_quartiles = quartiles;
     }
 
     @Override
@@ -170,21 +154,25 @@ public class Dataset implements IDataset {
     }
 
     @Override
-    public List<String> getGranted_accounts() {
-        return this.granted_accounts;
-    }
-    
-    @Override
-    public void setGranted_accounts(List<String> grantedAccounts) {
-        this.granted_accounts = grantedAccounts;
-    }
-
     public String getCreated_by_account_id() {
         return this.created_by_account_id;
     }
 
+    @Override
     public void setCreated_by_account_id(String id) {
         this.created_by_account_id = id;
+    }
+
+    @Override
+    public List<String> getGrantedAccounts() {
+        // Controller must assure to synch these in the DB with DatasetInfo objects
+        return grantedAccounts;
+    }
+
+    @Override
+    public void setGrantedAccounts(List<String> grantedAccounts) {
+        // Controller must assure to synch these in the DB with DatasetInfo objects
+        this.grantedAccounts = grantedAccounts;
     }
 
     @Override
@@ -201,15 +189,4 @@ public class Dataset implements IDataset {
     public DateTime getLast_modified() {
         return last_modified;
     }
-
-    @Override
-    public String getImage_alignment_id() {
-        return image_alignment_id;
-    }
-
-    @Override
-    public void setImage_alignment_id(String imal) {
-        this.image_alignment_id = imal;
-    }
-
 }

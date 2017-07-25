@@ -60,31 +60,26 @@
 
         <div class="container">
 
-
             <c:if test="${not empty param.authentication_error}">
                 <div class="alert alert-error">Login failed. Wrong credentials?
                 </div>
             </c:if>
             <c:if test="${not empty param.authorization_error}">
                 <div class="alert alert-error">Login failed. You have to have
-                    permissions to access this resource.</div>
-                </c:if>
+                    permissions to access this resource.
+                </div>
+            </c:if>
 
 
             <form class="form-signin" id="loginForm" name="loginForm"
                   action="<c:url value="/login.do"/>" method="post">
                 <h2 class="form-signin-heading">Please sign in</h2>
-                <input type="text" class="input-block-level" placeholder="Username (email)"
-                       name='j_username'> <input type="password"
-                                          class="input-block-level" placeholder="Password" name='j_password'>
+                <input type="text" class="input-block-level" placeholder="Username (email)" name='j_username'> 
+                <input type="password" class="input-block-level" placeholder="Password" name='j_password'>
+                <button class="btn btn-large btn-primary" type="submit" name="login">Sign in</button>
+            </form>
 
-                        <button class="btn btn-large btn-primary" type="submit" name="login">Sign
-                            in</button>
-                        </form>
-
-                        </div>
-                        <!-- /container -->
-
-
-                        </body>
-                        </html>
+        </div>
+         <!-- /container -->
+    </body>
+</html>

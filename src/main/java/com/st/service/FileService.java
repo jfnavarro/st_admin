@@ -1,8 +1,5 @@
 package com.st.service;
 
-import com.st.model.FileMetadata;
-import java.util.List;
-
 /**
  * Interface for the features service.
  */
@@ -10,22 +7,18 @@ public interface FileService {
     
     /**
      * Adds or updates a file.
+     * @param filename the name of the file
      * @param id the file ID.
      * @param gzipfile the file, gzipped in BASE64-encoding.
      */
-    public void addUpdate(String id, byte[] gzipfile);
-    
-    /**
-     * Lists metadata for all files.
-     * @return the metadata.
-     */
-    public List<FileMetadata> listMetadata();
+    public void addUpdate(String filename, String id, byte[] gzipfile);
     
     /**
      * Finds the file of a dataset.
+     * @param filename the name of the file
      * @param id the dataset ID.
      * @return the features file.
      */
-    public byte[] find(String id);
+    public byte[] find(String filename, String id);
     
 }

@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.st.model.Dataset;
+import java.util.List;
 
 /**
  * This class implements the model for the "edit dataset form" (used to edit
@@ -19,8 +20,11 @@ public class DatasetEditForm {
     @Valid
     Dataset dataset;
 
-    // User uploaded features file. 
-    CommonsMultipartFile featureFile;   // not required when editing a dataset
+    // User uploaded st data file. 
+    CommonsMultipartFile dataFile;   // not required when editing a dataset
+    
+    // User uploaded extra files
+    List<CommonsMultipartFile> extraFiles; // not required when editing
 
     /**
      * Constructor.
@@ -37,14 +41,22 @@ public class DatasetEditForm {
         this.dataset = dataset;
     }
 
-    public CommonsMultipartFile getFeatureFile() {
-        return featureFile;
+    public CommonsMultipartFile getDataFile() {
+        return dataFile;
     }
 
     public void setFeatureFile(CommonsMultipartFile featureFile) {
-        this.featureFile = featureFile;
+        this.dataFile = featureFile;
     }
 
+    public List<CommonsMultipartFile> getExtraFiles() {
+        return extraFiles;
+    }
+
+    public void setFeatureFile(List<CommonsMultipartFile> extraFiles) {
+        this.extraFiles = extraFiles;
+    }
+    
     public Dataset getDataset() {
         return dataset;
     }

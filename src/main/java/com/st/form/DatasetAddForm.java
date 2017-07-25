@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import com.st.model.Dataset;
+import java.util.List;
 
 /**
  * This class implements the model for the "add dataset form" (used to add
@@ -20,9 +21,12 @@ public class DatasetAddForm {
     @Valid
     Dataset dataset;
 
-    // User uploaded features file. 
-    CommonsMultipartFile featureFile;
+    // User uploaded data file. 
+    CommonsMultipartFile dataFile;
 
+    // User uploaded extra files
+    List<CommonsMultipartFile> extraFiles;
+    
     /**
      * Constructor.
      */
@@ -38,13 +42,20 @@ public class DatasetAddForm {
         this.dataset = dataset;
     }
 
-    
-    public CommonsMultipartFile getFeatureFile() {
-        return featureFile;
+    public CommonsMultipartFile getDataFile() {
+        return dataFile;
     }
     
-    public void setFeatureFile(CommonsMultipartFile featureFile) {
-        this.featureFile = featureFile;
+    public void setDataFile(CommonsMultipartFile file) {
+        this.dataFile = file;
+    }
+    
+    public List<CommonsMultipartFile> getExtraFiles() {
+        return extraFiles;
+    }
+    
+    public void setExtraFiles(List<CommonsMultipartFile> files) {
+        this.extraFiles = files;
     }
 
     public Dataset getDataset() {

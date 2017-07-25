@@ -58,8 +58,7 @@ public class ImageController {
     public @ResponseBody
     BufferedImage get(@PathVariable String id) {
         logger.info("Returning " + id + " as BufferedImage");
-        BufferedImage img = imageService.find(id);
-        return img;
+        return imageService.find(id);
     }
 
     /**
@@ -72,8 +71,7 @@ public class ImageController {
     public @ResponseBody
     byte[] getCompressed(@PathVariable String id) {
         logger.info("Returning " + id + " as JPEG");
-        byte[] imgdata = imageService.findCompressed(id);
-        return imgdata;
+        return imageService.findCompressed(id);
     }
 
     /**
@@ -133,7 +131,7 @@ public class ImageController {
             } catch (IOException ex) {
                 ModelAndView model = new ModelAndView("imagelist", "imagemetadata", imd);
                 model.addObject("err", "Error importing image. Format seems invalid.");
-                logger.error("Error importing image. Format seems invalid.");
+                logger.error("Error importing image. Format seems invalid.", ex);
                 return model;
             }
         }
