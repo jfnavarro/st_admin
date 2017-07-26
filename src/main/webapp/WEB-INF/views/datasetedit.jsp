@@ -137,7 +137,8 @@
                                 </div>
                             </spring:bind>
                             
-                            <spring:bind path="dataset.files">
+                            <legend>Files <small>(leave empty to keep the current data)</small></legend>
+                            <spring:bind path="extraFiles">
                                 <div class="control-group  ${status.error ? 'error' : ''}">
                                     
                                     <c:forEach var="filename" items="${dataset.files}">
@@ -149,11 +150,11 @@
                                         </tr>                 
                                     </c:forEach>
                                 
-                                    <label class="control-label" for="featureFile">Add file...</label>
+                                    <label class="control-label" for="extraFiles">Add file...</label>
                                     <div class="control-group">
                                         <div class="controls">
-                                            <form:input type="file" id="featureFile"
-                                                        placeholder="Feature file" path="featureFile"
+                                            <form:input type="file" id="extraFiles"
+                                                        placeholder="extraFiles" path="extraFiles"
                                                         class="filestyle" />
                                             <span class='help-inline'>${status.errorMessage}</span>
                                         </div>
@@ -216,12 +217,11 @@
                                 </div>
                             </spring:bind>
 
-
-                            <spring:bind path="dataset.granted_accounts">
+                            <spring:bind path="dataset.grantedAccounts">
                                 <div class="control-group">
                                     <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
                                     <div class="controls">
-                                        <form:select id="inputGrantedAccounts" path="dataset.granted_accounts" class="multiselect" multiple="multiple">
+                                        <form:select id="inputGrantedAccounts" path="dataset.grantedAccounts" class="multiselect" multiple="multiple">
                                             <form:options items="${accountChoices}"></form:options>
                                         </form:select>
                                     </div>

@@ -6,9 +6,11 @@ import com.st.form.DatasetEditForm;
 import com.st.model.Account;
 import com.st.model.AccountId;
 import com.st.model.Dataset;
+import com.st.model.FileMetadata;
 import com.st.serviceImpl.AccountServiceImpl;
 import com.st.serviceImpl.DatasetServiceImpl;
 import com.st.serviceImpl.FileServiceImpl;
+import com.st.serviceImpl.ImageServiceImpl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,6 +55,8 @@ public class DatasetController {
     @Autowired
     FileServiceImpl filesService;
 
+     @Autowired
+    ImageServiceImpl imageService;
 
     /**
      * Returns the list view.
@@ -303,6 +307,17 @@ public class DatasetController {
             if (!account.getId().equals(user_id)) {
                 choices.put(account.getId(), account.getUsername());
             }
+        }
+        return choices;
+    }
+    
+    // populate image choice fields for form
+    @ModelAttribute("imageChoices")
+    public Map<String, String> populateImageChoices() {
+        Map<String, String> choices = new LinkedHashMap<>();
+        List<FileMetadata> l = imageService.list();
+        for (FileMetadata t : l) {
+            choices.put(t.getFilename(), t.getFilename());
         }
         return choices;
     }

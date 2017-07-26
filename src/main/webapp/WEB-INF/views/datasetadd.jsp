@@ -143,19 +143,17 @@ a
                                     </div>
                                 </spring:bind>
 
-                                <!--  start features -->
-
                                 <legend>
                                     ST Data <small>(Data file from the pipeline in TSV format)</small>
                                 </legend>
 
                                 <spring:bind path="dataset.dataFile">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
-                                        <label class="control-label" for="featureFile">ST Data file</label>
+                                        <label class="control-label" for="dataFile">ST Data file</label>
                                         <div class="control-group">
                                             <div class="controls">
-                                                <form:input type="file" id="featureFile"
-                                                            placeholder="Feature file" path="featureFile"
+                                                <form:input type="file" id="dataFile"
+                                                            placeholder="Feature file" path="dataFile"
                                                             class="filestyle" />
                                                 <span class='help-inline'>${status.errorMessage}</span>
                                             </div>
@@ -163,13 +161,39 @@ a
                                     </div>
                                 </spring:bind>
 
-                                <!-- end features -->
-
                             </div>
 
-
-                            <div class="span4">
-
+                            <div class="span4">  
+                                <spring:bind path="alignment_field1">
+                                    <div class="control-group  ${status.error ? 'error' : ''}">
+                                        <label class="control-label" for="alignment">Alignment matrix</label>
+                                        <div class="controls controls-row">
+                                            <form:input class="span1" type="text" id="alignmentField1"
+                                                        path="alignment_field1" />
+                                            <form:input class="span1" type="text" id="alignmentField2"
+                                                        path="alignment_field2" />
+                                            <form:input class="span1" type="text" id="alignmentField3"
+                                                        path="alignment_field3" />
+                                        </div>
+                                        <div class="controls controls-row">
+                                            <form:input class="span1" type="text" id="alignmentField4"
+                                                        path="alignment_field4" />
+                                            <form:input class="span1" type="text" id="alignmentField5"
+                                                        path="alignment_field5" />
+                                            <form:input class="span1" type="text" id="alignmentField6"
+                                                        path="alignment_field6" />
+                                        </div>
+                                        <div class="controls controls-row">
+                                            <form:input class="span1" type="text" id="alignmentField7"
+                                                        path="alignment_field7" />
+                                            <form:input class="span1" type="text" id="alignmentField8"
+                                                        path="alignment_field8" />
+                                            <form:input class="span1" type="text" id="alignmentField9"
+                                                        path="alignment_field9" />
+                                        </div>
+                                    </div>
+                                </spring:bind>
+                                
                                 <legend>Comments</legend>
 
                                 <spring:bind path="dataset.comment">
