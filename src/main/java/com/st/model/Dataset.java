@@ -31,7 +31,9 @@ public class Dataset implements IDataset {
 
     String imageCy3;
         
-    @NotBlank(message = "Files must contain at least one.")
+    @NotBlank(message = "Data file must not be blank.")
+    String dataFile;
+    
     List<String> files;
     
     String comment;
@@ -101,6 +103,16 @@ public class Dataset implements IDataset {
     @Override
     public void setAlignmentMatrix(double[] arr) {
         this.alignmentMatrix = arr;
+    }
+ 
+    @Override
+    public String getDataFile() {
+        return this.dataFile;
+    }
+
+    @Override
+    public void setDataFile(String file) {
+        this.dataFile = file;
     }
     
     @Override

@@ -27,6 +27,20 @@
             <script type="text/javascript"
             src="<c:url value="/js/bootstrap-filestyle.min.js"/>"></script>
 
+            <!-- Script for Delete dialog -->
+            <script>
+                $(document).on(
+                        "click",
+                        ".open-DeleteDialog",
+                        function () {
+                            var theId = $(this).data('id');
+                            var theFileName = $(this).data('filename')
+                            $(".modal-footer #deleteBtn")
+                                    .html('<a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</a> \n\
+                                           <a href="<c:url value="/dataset/files/delete/"/>'
+                                            + theId + '?filename=' + theFileName + 'class="btn btn-danger">Delete</a>');
+                        });
+            </script>
 
     </head>
     <body>
@@ -108,13 +122,96 @@
                                 </div>
                             </spring:bind>
 
-                            <spring:bind path="dataset.image_alignment_id">
-                                <div class="control-group">
-                                    <label class="control-label" for="inputImageAlignmentId">Image alignment ID</label>
+                            <legend>ST Data <small>(leave empty to keep the current data)</small></legend>
+                            <spring:bind path="dataFile">
+                                <div class="control-group  ${status.error ? 'error' : ''}">
+                                    <label class="control-label" for="dataFile">ST Data file</label>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <form:input type="file" id="dataFile"
+                                                        placeholder="dataFile" path="dataFile"
+                                                        class="filestyle" />
+                                            <span class='help-inline'>${status.errorMessage}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </spring:bind>
+                            
+                            <spring:bind path="dataset.files">
+                                <div class="control-group  ${status.error ? 'error' : ''}">
+                                    
+                                    <c:forEach var="filename" items="${dataset.files}">
+                                        <tr>
+                                            <td>${filename}</td>
+                                            <td><a href="#deleteModal" data-toggle="modal"
+                                                accesskey="" data-id="${dataset.id}" data-filename="${filename}"
+                                                class="open-DeleteDialog btn btn-danger btn-small">Delete</a></td>
+                                        </tr>                 
+                                    </c:forEach>
+                                
+                                    <label class="control-label" for="featureFile">Add file...</label>
+                                    <div class="control-group">
+                                        <div class="controls">
+                                            <form:input type="file" id="featureFile"
+                                                        placeholder="Feature file" path="featureFile"
+                                                        class="filestyle" />
+                                            <span class='help-inline'>${status.errorMessage}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </spring:bind>
+                            
+                            <spring:bind path="dataset.figureHE">
+                                <div class="control-group  ${status.error ? 'error' : ''}">
+                                    <label class="control-label" for="figureHE">Image HE</label>
                                     <div class="controls">
-                                        <form:select id="inputImageAlignmentId" path="dataset.image_alignment_id" multiple="false">
-                                            <form:options items="${imageAlignmentChoices}"></form:options>
+                                        <form:select id="figureHE" path="figureHE">
+                                            <form:options items="${imageChoices}"></form:options>
                                         </form:select>
+                                        <span class='help-inline'>${status.errorMessage}</span>
+                                    </div>
+                                </div>
+                            </spring:bind>
+
+                            <spring:bind path="dataset.figureCy3">
+                                <div class="control-group  ${status.error ? 'error' : ''}">
+                                    <label class="control-label" for="figureCy3">Image blue</label>
+                                    <div class="controls">
+                                        <form:select id="figureCy3" path="figureCy3">
+                                            <form:options items="${imageChoices}"></form:options>
+                                        </form:select>
+                                        <span class='help-inline'>${status.errorMessage}</span>
+                                    </div>
+                                </div>
+                            </spring:bind>
+
+                            <spring:bind path="dataset.imageAlignment">
+                                <div class="control-group  ${status.error ? 'error' : ''}">
+                                    <label class="control-label" for="alignment">Alignment matrix</label>
+                                    <div class="controls controls-row">
+                                        <form:input class="span1" type="text" id="imageAlignment1"
+                                                    path="imageAlignment1" />
+                                        <form:input class="span1" type="text" id="imageAlignment2"
+                                                    path="imageAlignment2" />
+                                        <form:input class="span1" type="text" id="imageAlignment3"
+                                                    path="imageAlignment3" />
+                                    </div>
+                                    <div class="controls controls-row">
+                                        <form:input class="span1" type="text" id="imageAlignment4"
+                                                    path="imageAlignment4" />
+                                        <form:input class="span1" type="text" id="imageAlignment5"
+                                                    path="imageAlignment5" />
+                                        <form:input class="span1" type="text" id="imageAlignment6"
+                                                    path="imageAlignment6" />
+                                    </div>
+                                    <div class="controls controls-row">
+                                        <form:input class="span1" type="text" id="imageAlignment7"
+                                                    path="imageAlignment7" />
+                                        <form:input class="span1" type="text" id="imageAlignment8"
+                                                    path="imageAlignment8" />
+                                        <form:input class="span1" type="text" id="imageAlignment9"
+                                                    path="imageAlignment9" />
                                     </div>
                                 </div>
                             </spring:bind>

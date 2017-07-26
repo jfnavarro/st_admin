@@ -32,6 +32,10 @@ public interface IDataset {
     public List<String> getFiles();
 
     public void setFiles(List<String> files);
+ 
+    public String getDataFile();
+
+    public void setDataFile(String file);
     
     public String getTissue();
 

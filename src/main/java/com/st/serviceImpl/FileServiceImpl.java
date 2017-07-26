@@ -34,6 +34,13 @@ public class FileServiceImpl implements FileService {
     }
     
     @Override
+    public void remove(String filename, String id) {
+        final String url = appConfig.getProperty("url.file");
+        logger.info("Removing file for dataset " + id);
+        secureRestTemplate.delete(url + id + "?filename=" + filename);
+    }
+    
+    @Override
     public byte[] find(String filename, String id) {
         final String url = appConfig.getProperty("url.file");
         logger.info("Getting file for dataset " + id);

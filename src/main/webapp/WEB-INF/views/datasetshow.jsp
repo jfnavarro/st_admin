@@ -67,21 +67,52 @@
                 <dd>${dataset.created_at.toDate()}&nbsp;</dd>
                 <dt>Last modified</dt>
                 <dd>${dataset.last_modified.toDate()}&nbsp;</dd>
-
+                
                 <dt>ST Data file</dt>
                 <dd>
-                    <a href="<c:url value="/dataset/features/"/>${dataset.id}" target="_blank">Download [${featuresMetadata[dataset.id].getReadableSize()}]</a> (right click and select "Save link as...")
+                    <a href="<c:url value="/dataset/files/"/>${dataset.id}?=filename=${dataset.dataFile}" 
+                       target="_blank">Download ${dataset.dataFile}
+                    </a> (right click and select "Save link as...")
                 </dd>
 
             </dl>
 
             <dl class="dl-horizontal">
+                
+                <dt>Figure (HE)</dt>
+                <dd>
+                    <td><a href="<c:url value="/image/compressed/"/>${dataset.figureHE}" target="_blank">${dataset.figureHE}</a></td>
+                </dd>
+                    
+                <dt>Figure (Cy3) (optional)</dt>
+                <dd>
+                    <td><a href="<c:url value="/image/compressed/"/>${dataset.figureCy3}" target="_blank">${dataset.figureCy3}</a></td>
+                </dd>
+                    
+                <dt>Alignment matrix (optional)</dt>
+                <dd>
+                    <table border="1">
+                        <tr><td>${dataset.alignmentMatrix[0]}</td><td>${dataset.alignmentMatrix[1]}</td><td>${dataset.alignmentMatrix[2]}</td></tr>
+                        <tr><td>${dataset.alignmentMatrix[3]}</td><td>${dataset.alignmentMatrix[4]}</td><td>${dataset.alignmentMatrix[5]}</td></tr>
+                        <tr><td>${dataset.alignmentMatrix[6]}</td><td>${dataset.alignmentMatrix[7]}</td><td>${dataset.alignmentMatrix[8]}</td></tr>
+                    </table>
+                </dd>
+
+                <dt>Files</dt>
+                <dd>
+                    <c:forEach var="filename" items="${dataset.files}">
+                        <a href="<c:url value="/dataset/files/"/>${dataset.id}?filename=${filename}" 
+                           target="_blank">Download ${filename} 
+                        </a> (right click and select "Save link as...")
+                    </c:forEach>    
+                </dd>
+                
                 <dt>Granted accounts</dt>
                 <dd>
-                    <c:forEach var="account" items="${accounts}">
-                        ${account.username} <br/>
+                    <c:forEach var="account" items="${accounts}"> ${account.username} <br/>
                     </c:forEach>
                 </dd>
+                
             </dl>
 
         </div>

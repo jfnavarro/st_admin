@@ -61,7 +61,6 @@
                                action="${contextPath}/dataset/submitadd" class="form-horizontal"
                                enctype="multipart/form-data">
 
-
                         <fieldset>
 
                             <div class="span6">
@@ -109,23 +108,35 @@
                                     </div>
                                 </spring:bind>
 
-                                <spring:bind path="dataset.image_alignment_id">
+                                <spring:bind path="dataset.tissueHE">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
-                                        <label class="control-label" for="inputImageAlignment">Image alignment</label>
+                                        <label class="control-label" for="tissueHE">Image HE</label>
                                         <div class="controls">
-                                            <form:select id="inputImageAlignment" path="dataset.image_alignment_id">
-                                                <form:options items="${imageAlignmentChoices}"></form:options>
+                                            <form:select id="tissueHE" path="tissueHE">
+                                                <form:options items="${imageChoices}"></form:options>
                                             </form:select>
                                             <span class='help-inline'>${status.errorMessage}</span>
                                         </div>
                                     </div>
                                 </spring:bind>
 
-                                <spring:bind path="dataset.granted_accounts">
+                                <spring:bind path="dataset.tissueCy3">
+                                    <div class="control-group  ${status.error ? 'error' : ''}">
+                                        <label class="control-label" for="tissueCy3">Image Cy3 (Optional)</label>
+                                        <div class="controls">
+                                            <form:select id="tissueCy3" path="tissueCy3">
+                                                <form:options items="${imageChoices}"></form:options>
+                                            </form:select>
+                                            <span class='help-inline'>${status.errorMessage}</span>
+                                        </div>
+                                    </div>
+                                </spring:bind>
+a
+                                <spring:bind path="dataset.grantedAccounts">
                                     <div class="control-group">
                                         <label class="control-label" for="inputGrantedAccounts">Granted accounts</label>
                                         <div class="controls">
-                                            <form:select id="inputGrantedAccounts" path="dataset.granted_accounts" class="multiselect" multiple="multiple">
+                                            <form:select id="inputGrantedAccounts" path="dataset.grantedAccounts" class="multiselect" multiple="multiple">
                                                 <form:options items="${accountChoices}"></form:options>
                                             </form:select>
                                         </div>
@@ -135,10 +146,10 @@
                                 <!--  start features -->
 
                                 <legend>
-                                    ST Data <small>(JSON file from the pipeline in gz format)</small>
+                                    ST Data <small>(Data file from the pipeline in TSV format)</small>
                                 </legend>
 
-                                <spring:bind path="featureFile">
+                                <spring:bind path="dataset.dataFile">
                                     <div class="control-group  ${status.error ? 'error' : ''}">
                                         <label class="control-label" for="featureFile">ST Data file</label>
                                         <div class="control-group">

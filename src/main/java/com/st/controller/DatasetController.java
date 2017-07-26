@@ -238,7 +238,7 @@ public class DatasetController {
      * @param id dataset ID.
      * @return list form.
      */
-    @RequestMapping(value = "/{id}/delete", method = RequestMethod.GET)
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public ModelAndView delete(@PathVariable String id) {
         datasetService.delete(id);
         ModelAndView success = list();
@@ -248,7 +248,7 @@ public class DatasetController {
     }
 
     /**
-     * Returns the zipped features file.
+     * Returns a file.
      *
      * @param id dataset ID.
      * @param filename the name of the file
@@ -273,6 +273,22 @@ public class DatasetController {
         }
     }
 
+    /**
+     * Deletes a file.
+     *
+     * @param id dataset ID.
+     * @param filename the name of the file
+     * @param response HTTP response containing the file.
+     */
+    @RequestMapping(value = "/files/{id}", method = RequestMethod.DELETE)
+    public void removeFile(
+            @PathVariable String id,
+            @RequestParam(value = "filename", required = true) String filename,
+            HttpServletResponse response) {
+        filesService.remove(filename, id);
+        //TODO return the list of files?
+    }
+    
     /**
      * Helper populates accounts.
      *
